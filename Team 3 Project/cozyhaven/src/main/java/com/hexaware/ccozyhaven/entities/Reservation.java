@@ -1,21 +1,12 @@
 package com.hexaware.ccozyhaven.entities;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "Reservation_Details")
@@ -26,7 +17,7 @@ public class Reservation {
     @Pattern(regexp = "^[0-9]+$")
     @Column(name = "reservation_id")
     private Long reservationId;
-    
+
     @NotNull(message = "Check-in date cannot be null")
     @Column(name = "check_in_date")
     private Date checkInDate;
@@ -50,29 +41,32 @@ public class Reservation {
     @NotNull(message = "Reservation status cannot be null")
     @Column(name = "reservation_status")
     private String reservationStatus;
+   
+
+    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL)
+    private Set<Room> rooms = new HashSet<>();
+
+
+    public Reservation() {
+        super();
+    }
+
+    public Reservation(Long reservationId, Date checkInDate, Date checkOutDate, int numberOfAdults,
+                       int numberOfChildren, double totalAmount, String reservationStatus, Set<Room> rooms) {
+        super();
+        this.reservationId = reservationId;
+        this.checkInDate = checkInDate;
+        this.checkOutDate = checkOutDate;
+        this.numberOfAdults = numberOfAdults;
+        this.numberOfChildren = numberOfChildren;
+        this.totalAmount = totalAmount;
+        this.reservationStatus = reservationStatus;
+        this.rooms = rooms;
+    }
+
     
-    @OneToMany(mappedBy = "Reservation", cascade = CascadeType.ALL)
-    @JoinColumn(name="Reservation_id")
-    private Set<Room>room= new HashSet<Room>() ;
 
-	public Reservation() {
-		super();
-	}
-
-	public Reservation(Long reservationId, Date checkInDate, Date checkOutDate, int numberOfAdults,
-			int numberOfChildren, double totalAmount, String reservationStatus, Set<Room> reservation) {
-		super();
-		this.reservationId = reservationId;
-		this.checkInDate = checkInDate;
-		this.checkOutDate = checkOutDate;
-		this.numberOfAdults = numberOfAdults;
-		this.numberOfChildren = numberOfChildren;
-		this.totalAmount = totalAmount;
-		this.reservationStatus = reservationStatus;
-		this.room = reservation;
-	}
-
-	public Long getReservationId() {
+    public Long getReservationId() {
 		return reservationId;
 	}
 
@@ -128,23 +122,18 @@ public class Reservation {
 		this.reservationStatus = reservationStatus;
 	}
 
-	public Set<Room> getReservation() {
-		return room;
+	public Set<Room> getRooms() {
+		return rooms;
 	}
 
-	public void setReservation(Set<Room> reservation) {
-		this.room = reservation;
+	public void setRooms(Set<Room> rooms) {
+		this.rooms = rooms;
 	}
 
 	@Override
-	public String toString() {
-		return "Reservation [reservationId=" + reservationId + ", checkInDate=" + checkInDate + ", checkOutDate="
-				+ checkOutDate + ", numberOfAdults=" + numberOfAdults + ", numberOfChildren=" + numberOfChildren
-				+ ", totalAmount=" + totalAmount + ", reservationStatus=" + reservationStatus + ", reservation="
-				+ room + "]";
-	}
-
-	
-   
+    public String toString() {
+        return "Reservation [reservationId=" + reservationId + ", checkInDate=" + checkInDate + ", checkOutDate="
+                + checkOutDate + ", numberOfAdults=" + numberOfAdults + ", numberOfChildren=" + numberOfChildren
+                + ", totalAmount=" + totalAmount + ", reservationStatus=" + reservationStatus + ", rooms=" + rooms + "]";
+    }
 }
-

@@ -1,15 +1,12 @@
 package com.hexaware.ccozyhaven.entities;
 
-import java.math.BigDecimal;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
+import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "Room_Details")
@@ -44,7 +41,8 @@ public class Room {
     @Size(max = 20, message = "Availability status must be at most 20 characters")
     @Column(name = "availability_status")
     private String availabilityStatus;
-
+   
+   
     public Room() {
         super();
     }
@@ -61,7 +59,63 @@ public class Room {
         this.availabilityStatus = availabilityStatus;
     }
 
-    // Getter and Setter methods...
+    
+
+    public Long getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(Long roomId) {
+        this.roomId = roomId;
+    }
+
+    public String getRoomSize() {
+        return roomSize;
+    }
+
+    public void setRoomSize(String roomSize) {
+        this.roomSize = roomSize;
+    }
+
+    public String getBedType() {
+        return bedType;
+    }
+
+    public void setBedType(String bedType) {
+        this.bedType = bedType;
+    }
+
+    public int getMaxOccupancy() {
+        return maxOccupancy;
+    }
+
+    public void setMaxOccupancy(int maxOccupancy) {
+        this.maxOccupancy = maxOccupancy;
+    }
+
+    public BigDecimal getBaseFare() {
+        return baseFare;
+    }
+
+    public void setBaseFare(BigDecimal baseFare) {
+        this.baseFare = baseFare;
+    }
+
+    public boolean isAC() {
+        return isAC;
+    }
+
+    public void setAC(boolean isAC) {
+        this.isAC = isAC;
+    }
+
+    public String getAvailabilityStatus() {
+        return availabilityStatus;
+    }
+
+    public void setAvailabilityStatus(String availabilityStatus) {
+        this.availabilityStatus = availabilityStatus;
+    }
 
     @Override
     public String toString() {

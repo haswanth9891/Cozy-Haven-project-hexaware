@@ -3,8 +3,14 @@ package com.hexaware.ccozyhaven.entities;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.util.Date;
 
@@ -29,6 +35,8 @@ public class Review {
     @NotNull(message = "Review date is required")
     @Column(name = "review_date")
     private Date reviewDate;
+    
+  
 
     public Review() {
         super();
@@ -42,7 +50,39 @@ public class Review {
         this.reviewDate = reviewDate;
     }
 
-    // Getter and Setter methods...
+    
+
+    public Long getReviewId() {
+        return reviewId;
+    }
+
+    public void setReviewId(Long reviewId) {
+        this.reviewId = reviewId;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
+    public String getReviewText() {
+        return reviewText;
+    }
+
+    public void setReviewText(String reviewText) {
+        this.reviewText = reviewText;
+    }
+
+    public Date getReviewDate() {
+        return reviewDate;
+    }
+
+    public void setReviewDate(Date reviewDate) {
+        this.reviewDate = reviewDate;
+    }
 
     @Override
     public String toString() {

@@ -1,31 +1,25 @@
 package com.hexaware.ccozyhaven.entities;
-import java.util.HashSet;
-import java.util.Set;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Entity
 @Table(name = "HotelOwner_Details")
 public class HotelOwner {
-	
-	@Column(name ="hotelOwnerId")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id
+    @Column(name ="hotelOwnerId")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Pattern(regexp = "^[0-9]+$")
-	private Long hotelOwnerId;
-	
+    private Long hotelOwnerId;
+
     @Column(name = "user_name")
     @NotBlank(message = "Username cannot be blank")
     @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
@@ -40,23 +34,24 @@ public class HotelOwner {
     @NotBlank(message = "Email cannot be blank")
     @Email(message = "Invalid email format")
     private String email;
-     
+
     @OneToMany(mappedBy = "HotelOwner", cascade = CascadeType.ALL)
     @JoinColumn(name="hotel_id")
     private Set<Hotel> hotel = new HashSet<Hotel>();
 
-	public HotelOwner() {
-		super();
-	}
 
-	public HotelOwner(Long hotelOwnerId, String hotelOwnerName, String password, String email, Set<Hotel> hotel) {
-		super();
-		this.hotelOwnerId = hotelOwnerId;
-		this.hotelOwnerName = hotelOwnerName;
-		this.password = password;
-		this.email = email;
-		this.hotel = hotel;
-	}
+    public HotelOwner() {
+        super();
+    }
+
+    public HotelOwner(Long hotelOwnerId, String hotelOwnerName, String password, String email, Set<Hotel> hotel) {
+        super();
+        this.hotelOwnerId = hotelOwnerId;
+        this.hotelOwnerName = hotelOwnerName;
+        this.password = password;
+        this.email = email;
+        this.hotel = hotel;
+    }
 
 	public Long getHotelOwnerId() {
 		return hotelOwnerId;
@@ -104,5 +99,6 @@ public class HotelOwner {
 				+ password + ", email=" + email + ", hotel=" + hotel + "]";
 	}
 
-	
+    
+
 }
