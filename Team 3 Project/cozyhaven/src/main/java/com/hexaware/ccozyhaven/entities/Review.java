@@ -42,9 +42,41 @@ public class Review {
         this.reviewDate = reviewDate;
     }
 
-    // Getter and Setter methods...
+     
 
-    @Override
+    public Long getReviewId() {
+		return reviewId;
+	}
+
+	public void setReviewId(Long reviewId) {
+		this.reviewId = reviewId;
+	}
+
+	public int getRating() {
+		return rating;
+	}
+
+	public void setRating(int rating) {
+		this.rating = rating;
+	}
+
+	public String getReviewText() {
+		return reviewText;
+	}
+
+	public void setReviewText(String reviewText) {
+		this.reviewText = reviewText;
+	}
+
+	public Date getReviewDate() {
+		return reviewDate;
+	}
+
+	public void setReviewDate(Date reviewDate) {
+		this.reviewDate = reviewDate;
+	}
+
+	@Override
     public String toString() {
         return "Review [reviewId=" + reviewId + ", rating=" + rating + ", reviewText=" + reviewText + ", reviewDate="
                 + reviewDate + "]";

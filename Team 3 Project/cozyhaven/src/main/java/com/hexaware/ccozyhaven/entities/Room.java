@@ -61,9 +61,65 @@ public class Room {
         this.availabilityStatus = availabilityStatus;
     }
 
-    // Getter and Setter methods...
+     
 
-    @Override
+    public Long getRoomId() {
+		return roomId;
+	}
+
+	public void setRoomId(Long roomId) {
+		this.roomId = roomId;
+	}
+
+	public String getRoomSize() {
+		return roomSize;
+	}
+
+	public void setRoomSize(String roomSize) {
+		this.roomSize = roomSize;
+	}
+
+	public String getBedType() {
+		return bedType;
+	}
+
+	public void setBedType(String bedType) {
+		this.bedType = bedType;
+	}
+
+	public int getMaxOccupancy() {
+		return maxOccupancy;
+	}
+
+	public void setMaxOccupancy(int maxOccupancy) {
+		this.maxOccupancy = maxOccupancy;
+	}
+
+	public BigDecimal getBaseFare() {
+		return baseFare;
+	}
+
+	public void setBaseFare(BigDecimal baseFare) {
+		this.baseFare = baseFare;
+	}
+
+	public boolean isAC() {
+		return isAC;
+	}
+
+	public void setAC(boolean isAC) {
+		this.isAC = isAC;
+	}
+
+	public String getAvailabilityStatus() {
+		return availabilityStatus;
+	}
+
+	public void setAvailabilityStatus(String availabilityStatus) {
+		this.availabilityStatus = availabilityStatus;
+	}
+
+	@Override
     public String toString() {
         return "Room [roomId=" + roomId + ", roomSize=" + roomSize + ", bedType=" + bedType + ", maxOccupancy="
                 + maxOccupancy + ", baseFare=" + baseFare + ", isAC=" + isAC + ", availabilityStatus="
