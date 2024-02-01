@@ -4,17 +4,21 @@ package com.hexaware.ccozyhaven.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
+import com.hexaware.ccozyhaven.dto.RoomDTO;
+import com.hexaware.ccozyhaven.dto.UserDTO;
 import com.hexaware.ccozyhaven.entities.Hotel;
 import com.hexaware.ccozyhaven.entities.Reservation;
 import com.hexaware.ccozyhaven.entities.Room;
 import com.hexaware.ccozyhaven.entities.User;
 
 
-
+@Repository
 public interface IUserService {
 
 	// User registration
-    boolean registerUser(User user);
+    User registerUser(UserDTO userDTO);
 
     // User login
     boolean loginUser(String username, String password);
@@ -41,9 +45,9 @@ public interface IUserService {
     List<String> getLocationSuggestions(String partialLocation);
     
     // Calculate the total fare for a room based on the number of people and age
-    double calculateTotalFare(Room room, int numberOfAdults, int numberOfChildren);
+    double calculateTotalFare(RoomDTO roomDTO, int numberOfAdults, int numberOfChildren);
     
  // View facilities available in a hotel
-    List<Hotel> viewHotel(Long hotelId);
+    Hotel viewHotel(Long hotelId);
 }
 

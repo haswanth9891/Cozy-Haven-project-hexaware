@@ -1,21 +1,34 @@
 package com.hexaware.ccozyhaven.service;
 
-
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.hexaware.ccozyhaven.dto.RoomDTO;
+import com.hexaware.ccozyhaven.dto.UserDTO;
 import com.hexaware.ccozyhaven.entities.Hotel;
 import com.hexaware.ccozyhaven.entities.Reservation;
 import com.hexaware.ccozyhaven.entities.Room;
 import com.hexaware.ccozyhaven.entities.User;
+import com.hexaware.ccozyhaven.repository.HotelRepository;
+import com.hexaware.ccozyhaven.repository.ReservationRepository;
+import com.hexaware.ccozyhaven.repository.UserRepository;
 
-
-
-public class UserServiceImp implements IUserService {
+public class UserServiceImp implements IUserService{
+	
+	@Autowired
+	UserRepository userRepo;
+	
+	@Autowired
+	ReservationRepository reservationRepo;
+	
+	@Autowired
+	HotelRepository hotelrepo;
 
 	@Override
-	public boolean registerUser(User user) {
+	public User registerUser(UserDTO userDTO) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	@Override
@@ -68,17 +81,15 @@ public class UserServiceImp implements IUserService {
 	}
 
 	@Override
-	public double calculateTotalFare(Room room, int numberOfAdults, int numberOfChildren) {
+	public double calculateTotalFare(RoomDTO roomDTO, int numberOfAdults, int numberOfChildren) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public List<Hotel> viewHotel(Long hotelId) {
+	public Hotel viewHotel(Long hotelId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	
-	
 }
