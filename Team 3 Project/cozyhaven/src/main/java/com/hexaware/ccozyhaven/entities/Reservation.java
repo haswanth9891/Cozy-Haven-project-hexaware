@@ -43,7 +43,8 @@ public class Reservation {
     private String reservationStatus;
    
 
-    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "reservation_id") // This should be the foreign key column in the Room table
     private Set<Room> rooms = new HashSet<>();
 
 
