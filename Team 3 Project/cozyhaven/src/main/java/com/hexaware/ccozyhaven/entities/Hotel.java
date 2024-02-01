@@ -60,40 +60,40 @@ public class Hotel {
     @Column(name = "has_fitness_center")
     private boolean hasFitnessCenter;
     
-    @OneToMany(mappedBy = "Hotel", cascade = CascadeType.ALL)
-    @JoinColumn(name="Hotel_id")
-    private Set<Room> room = new HashSet<Room>() ;
-   
-    
-    @OneToMany(mappedBy = "Hotel", cascade = CascadeType.ALL)
-    @JoinColumn(name="Hotel_id")
-    private Set<Reservation>reservation= new HashSet<Reservation>() ;  
-    
-    @OneToMany(mappedBy = "Hotel", cascade = CascadeType.ALL)
-    @JoinColumn(name="Hotel_id")
-    private Set<Review>review = new HashSet<Review>() ;
+//    @OneToMany(mappedBy = "Hotel", cascade = CascadeType.ALL)
+//    @JoinColumn(name="Hotel_id")
+//    private Set<Room> room = new HashSet<Room>() ;
+//   
+//    
+//    @OneToMany(mappedBy = "Hotel", cascade = CascadeType.ALL)
+//    
+//    private Set<Reservation>reservation= new HashSet<Reservation>() ;  
+//    
+//    @OneToMany(mappedBy = "Hotel", cascade = CascadeType.ALL)
+//    @JoinColumn(name="Hotel_id")
+//    private Set<Review>review = new HashSet<Review>() ;
 
 	public Hotel() {
 		super();
 	}
 
-	public Hotel(Long hotelId, String hotelName, String location, boolean hasDining, boolean hasParking,
-			boolean hasFreeWiFi, boolean hasRoomService, boolean hasSwimmingPool, boolean hasFitnessCenter,
-			Set<Room> room, Set<Reservation> reservation, Set<Review> review) {
-		super();
-		this.hotelId = hotelId;
-		this.hotelName = hotelName;
-		this.location = location;
-		this.hasDining = hasDining;
-		this.hasParking = hasParking;
-		this.hasFreeWiFi = hasFreeWiFi;
-		this.hasRoomService = hasRoomService;
-		this.hasSwimmingPool = hasSwimmingPool;
-		this.hasFitnessCenter = hasFitnessCenter;
-		this.room = room;
-		this.reservation = reservation;
-		this.review = review;
-	}
+//	public Hotel(Long hotelId, String hotelName, String location, boolean hasDining, boolean hasParking,
+//			boolean hasFreeWiFi, boolean hasRoomService, boolean hasSwimmingPool, boolean hasFitnessCenter,
+//			Set<Room> room, Set<Reservation> reservation, Set<Review> review) {
+//		super();
+//		this.hotelId = hotelId;
+//		this.hotelName = hotelName;
+//		this.location = location;
+//		this.hasDining = hasDining;
+//		this.hasParking = hasParking;
+//		this.hasFreeWiFi = hasFreeWiFi;
+//		this.hasRoomService = hasRoomService;
+//		this.hasSwimmingPool = hasSwimmingPool;
+//		this.hasFitnessCenter = hasFitnessCenter;
+//		this.room = room;
+//		this.reservation = reservation;
+//		this.review = review;
+//	}
 
 	public Long getHotelId() {
 		return hotelId;
@@ -167,37 +167,37 @@ public class Hotel {
 		this.hasFitnessCenter = hasFitnessCenter;
 	}
 
-	public Set<Room> getRoom() {
-		return room;
-	}
-
-	public void setRoom(Set<Room> room) {
-		this.room = room;
-	}
-
-	public Set<Reservation> getReservation() {
-		return reservation;
-	}
-
-	public void setReservation(Set<Reservation> reservation) {
-		this.reservation = reservation;
-	}
-
-	public Set<Review> getReview() {
-		return review;
-	}
-
-	public void setReview(Set<Review> review) {
-		this.review = review;
-	}
-
-	@Override
-	public String toString() {
-		return "Hotel [hotelId=" + hotelId + ", hotelName=" + hotelName + ", location=" + location + ", hasDining="
-				+ hasDining + ", hasParking=" + hasParking + ", hasFreeWiFi=" + hasFreeWiFi + ", hasRoomService="
-				+ hasRoomService + ", hasSwimmingPool=" + hasSwimmingPool + ", hasFitnessCenter=" + hasFitnessCenter
-				+ ", room=" + room + ", reservation=" + reservation + ", review=" + review + "]";
-	}
-    
+//	public Set<Room> getRoom() {
+//		return room;
+//	}
+//
+//	public void setRoom(Set<Room> room) {
+//		this.room = room;
+//	}
+//
+//	public Set<Reservation> getReservation() {
+//		return reservation;
+//	}
+//
+//	public void setReservation(Set<Reservation> reservation) {
+//		this.reservation = reservation;
+//	}
+//
+//	public Set<Review> getReview() {
+//		return review;
+//	}
+//
+//	public void setReview(Set<Review> review) {
+//		this.review = review;
+//	}
+//
+//	@Override
+//	public String toString() {
+//		return "Hotel [hotelId=" + hotelId + ", hotelName=" + hotelName + ", location=" + location + ", hasDining="
+//				+ hasDining + ", hasParking=" + hasParking + ", hasFreeWiFi=" + hasFreeWiFi + ", hasRoomService="
+//				+ hasRoomService + ", hasSwimmingPool=" + hasSwimmingPool + ", hasFitnessCenter=" + hasFitnessCenter
+//				+ ", room=" + room + ", reservation=" + reservation + ", review=" + review + "]";
+//	}
+//    
 
 }

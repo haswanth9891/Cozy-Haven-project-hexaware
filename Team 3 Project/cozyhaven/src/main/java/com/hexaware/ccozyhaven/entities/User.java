@@ -41,32 +41,32 @@ public class User {
     @NotBlank(message = "Address is required")
     private String address;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    private Set<Reservation> reservations = new HashSet<>();
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    private Set<Review> reviews = new HashSet<>();
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//    @JoinColumn(name = "user_id")
+//    private Set<Reservation> reservations = new HashSet<>();
+//
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//    @JoinColumn(name = "user_id")
+//    private Set<Review> reviews = new HashSet<>();
 
     public User() {
         super();
     }
 
-    public User(Long userId, String userName, String password, String email, String firstName, String lastName,
-            String contactNumber, String address, Set<Reservation> reservations, Set<Review> reviews) {
-        super();
-        this.userId = userId;
-        this.userName = userName;
-        this.password = password;
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.contactNumber = contactNumber;
-        this.address = address;
-        this.reservations = reservations;
-        this.reviews = reviews;
-    }
+//    public User(Long userId, String userName, String password, String email, String firstName, String lastName,
+//            String contactNumber, String address, Set<Reservation> reservations, Set<Review> reviews) {
+//        super();
+//        this.userId = userId;
+//        this.userName = userName;
+//        this.password = password;
+//        this.email = email;
+//        this.firstName = firstName;
+//        this.lastName = lastName;
+//        this.contactNumber = contactNumber;
+//        this.address = address;
+//        this.reservations = reservations;
+//        this.reviews = reviews;
+//    }
 
      
 
@@ -133,27 +133,27 @@ public class User {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-
-	public Set<Reservation> getReservations() {
-		return reservations;
-	}
-
-	public void setReservations(Set<Reservation> reservations) {
-		this.reservations = reservations;
-	}
-
-	public Set<Review> getReviews() {
-		return reviews;
-	}
-
-	public void setReviews(Set<Review> reviews) {
-		this.reviews = reviews;
-	}
-
-	@Override
-    public String toString() {
-        return "User [userId=" + userId + ", userName=" + userName + ", password=" + password + ", email=" + email
-                + ", firstName=" + firstName + ", lastName=" + lastName + ", contactNumber=" + contactNumber
-                + ", address=" + address + ", reservations=" + reservations + ", reviews=" + reviews + "]";
-    }
+//
+//	public Set<Reservation> getReservations() {
+//		return reservations;
+//	}
+//
+//	public void setReservations(Set<Reservation> reservations) {
+//		this.reservations = reservations;
+//	}
+//
+//	public Set<Review> getReviews() {
+//		return reviews;
+//	}
+//
+//	public void setReviews(Set<Review> reviews) {
+//		this.reviews = reviews;
+//	}
+//
+//	@Override
+//    public String toString() {
+//        return "User [userId=" + userId + ", userName=" + userName + ", password=" + password + ", email=" + email
+//                + ", firstName=" + firstName + ", lastName=" + lastName + ", contactNumber=" + contactNumber
+//                + ", address=" + address + ", reservations=" + reservations + ", reviews=" + reviews + "]";
+//    }
 }

@@ -11,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Future;
@@ -51,26 +52,30 @@ public class Reservation {
     @Column(name = "reservation_status")
     private String reservationStatus;
     
-    @OneToMany(mappedBy = "Reservation", cascade = CascadeType.ALL)
-    @JoinColumn(name="Reservation_id")
-    private Set<Room>room= new HashSet<Room>() ;
+//    @OneToMany(mappedBy = "Reservation", cascade = CascadeType.ALL)
+//    @JoinColumn(name="reservation_id")
+//    private Set<Room>room= new HashSet<Room>() ;
+//    
+//    @ManyToOne
+//    @JoinColumn(name = "hotel_id")
+//    private Hotel hotel;
 
 	public Reservation() {
 		super();
 	}
-
-	public Reservation(Long reservationId, Date checkInDate, Date checkOutDate, int numberOfAdults,
-			int numberOfChildren, double totalAmount, String reservationStatus, Set<Room> reservation) {
-		super();
-		this.reservationId = reservationId;
-		this.checkInDate = checkInDate;
-		this.checkOutDate = checkOutDate;
-		this.numberOfAdults = numberOfAdults;
-		this.numberOfChildren = numberOfChildren;
-		this.totalAmount = totalAmount;
-		this.reservationStatus = reservationStatus;
-		this.room = reservation;
-	}
+//
+//	public Reservation(Long reservationId, Date checkInDate, Date checkOutDate, int numberOfAdults,
+//			int numberOfChildren, double totalAmount, String reservationStatus, Set<Room> reservation) {
+//		super();
+//		this.reservationId = reservationId;
+//		this.checkInDate = checkInDate;
+//		this.checkOutDate = checkOutDate;
+//		this.numberOfAdults = numberOfAdults;
+//		this.numberOfChildren = numberOfChildren;
+//		this.totalAmount = totalAmount;
+//		this.reservationStatus = reservationStatus;
+//		this.room = reservation;
+//	}
 
 	public Long getReservationId() {
 		return reservationId;
@@ -128,23 +133,23 @@ public class Reservation {
 		this.reservationStatus = reservationStatus;
 	}
 
-	public Set<Room> getReservation() {
-		return room;
-	}
-
-	public void setReservation(Set<Room> reservation) {
-		this.room = reservation;
-	}
-
-	@Override
-	public String toString() {
-		return "Reservation [reservationId=" + reservationId + ", checkInDate=" + checkInDate + ", checkOutDate="
-				+ checkOutDate + ", numberOfAdults=" + numberOfAdults + ", numberOfChildren=" + numberOfChildren
-				+ ", totalAmount=" + totalAmount + ", reservationStatus=" + reservationStatus + ", reservation="
-				+ room + "]";
-	}
-
-	
+//	public Set<Room> getReservation() {
+//		return room;
+//	}
+//
+//	public void setReservation(Set<Room> reservation) {
+//		this.room = reservation;
+//	}
+//
+//	@Override
+//	public String toString() {
+//		return "Reservation [reservationId=" + reservationId + ", checkInDate=" + checkInDate + ", checkOutDate="
+//				+ checkOutDate + ", numberOfAdults=" + numberOfAdults + ", numberOfChildren=" + numberOfChildren
+//				+ ", totalAmount=" + totalAmount + ", reservationStatus=" + reservationStatus + ", reservation="
+//				+ room + "]";
+//	}
+//
+//	
    
 }
 

@@ -7,6 +7,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -20,7 +21,7 @@ import jakarta.validation.constraints.Size;
 @Entity
 @Table(name = "HotelOwner_Details")
 public class HotelOwner {
-	
+	@Id
 	@Column(name ="hotelOwnerId")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Pattern(regexp = "^[0-9]+$")
@@ -40,23 +41,23 @@ public class HotelOwner {
     @NotBlank(message = "Email cannot be blank")
     @Email(message = "Invalid email format")
     private String email;
-     
-    @OneToMany(mappedBy = "HotelOwner", cascade = CascadeType.ALL)
-    @JoinColumn(name="hotel_id")
-    private Set<Hotel> hotel = new HashSet<Hotel>();
+//     
+//    @OneToMany(mappedBy = "HotelOwner", cascade = CascadeType.ALL)
+//    @JoinColumn(name="hotel_id")
+//    private Set<Hotel> hotel = new HashSet<Hotel>();
 
 	public HotelOwner() {
 		super();
 	}
-
-	public HotelOwner(Long hotelOwnerId, String hotelOwnerName, String password, String email, Set<Hotel> hotel) {
-		super();
-		this.hotelOwnerId = hotelOwnerId;
-		this.hotelOwnerName = hotelOwnerName;
-		this.password = password;
-		this.email = email;
-		this.hotel = hotel;
-	}
+//
+//	public HotelOwner(Long hotelOwnerId, String hotelOwnerName, String password, String email, Set<Hotel> hotel) {
+//		super();
+//		this.hotelOwnerId = hotelOwnerId;
+//		this.hotelOwnerName = hotelOwnerName;
+//		this.password = password;
+//		this.email = email;
+//		this.hotel = hotel;
+//	}
 
 	public Long getHotelOwnerId() {
 		return hotelOwnerId;
@@ -90,19 +91,19 @@ public class HotelOwner {
 		this.email = email;
 	}
 
-	public Set<Hotel> getHotel() {
-		return hotel;
-	}
-
-	public void setHotel(Set<Hotel> hotel) {
-		this.hotel = hotel;
-	}
-
-	@Override
-	public String toString() {
-		return "HotelOwner [hotelOwnerId=" + hotelOwnerId + ", hotelOwnerName=" + hotelOwnerName + ", password="
-				+ password + ", email=" + email + ", hotel=" + hotel + "]";
-	}
+//	public Set<Hotel> getHotel() {
+//		return hotel;
+//	}
+//
+//	public void setHotel(Set<Hotel> hotel) {
+//		this.hotel = hotel;
+//	}
+//
+//	@Override
+//	public String toString() {
+//		return "HotelOwner [hotelOwnerId=" + hotelOwnerId + ", hotelOwnerName=" + hotelOwnerName + ", password="
+//				+ password + ", email=" + email + ", hotel=" + hotel + "]";
+//	}
 
 	
 }
