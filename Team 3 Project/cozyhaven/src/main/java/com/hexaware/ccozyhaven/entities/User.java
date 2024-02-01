@@ -14,6 +14,8 @@ public class User {
 
     @Id
     @Column(name = "user_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Pattern(regexp = "^[0-9]+$")
     private Long userId;
 
     @NotBlank(message = "Username is required")
@@ -37,8 +39,43 @@ public class User {
     @Pattern(regexp = "\\d{10}", message = "Invalid contact number")
     @Column(name = "contact_number")
     private String contactNumber;
+    
+	@NotBlank(message = "Address is required")
+    private String address;
 
-    public Long getUserId() {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private Set<Reservation> reservations = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private Set<Review> reviews = new HashSet<>();
+
+	public User() {
+		super();
+	}
+
+	public User(Long userId,
+			@NotBlank(message = "Username is required") @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters") String userName,
+			@NotBlank(message = "Password is required") String password,
+			@Email(message = "Invalid email format") String email,
+			@NotBlank(message = "First name is required") String firstName,
+			@NotBlank(message = "Last name is required") String lastName,
+			@Size(max = 10, message = "Contact number must be at most 10 characters") @Pattern(regexp = "\\d{10}", message = "Invalid contact number") String contactNumber,
+			@NotBlank(message = "Address is required") String address, Set<Reservation> reservations,
+			Set<Review> reviews) {
+		super();
+		this.userId = userId;
+		this.userName = userName;
+		this.password = password;
+		this.email = email;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.contactNumber = contactNumber;
+		this.address = address;
+		this.reservations = reservations;
+		this.reviews = reviews;
+	}
+
+	public Long getUserId() {
 		return userId;
 	}
 
@@ -118,42 +155,13 @@ public class User {
 		this.reviews = reviews;
 	}
 
-
-
-	@NotBlank(message = "Address is required")
-    private String address;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    private Set<Reservation> reservations = new HashSet<>();
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    private Set<Review> reviews = new HashSet<>();
-
-    public User() {
-        super();
-    }
-
-    public User(Long userId, String userName, String password, String email, String firstName, String lastName,
-            String contactNumber, String address, Set<Reservation> reservations, Set<Review> reviews) {
-        super();
-        this.userId = userId;
-        this.userName = userName;
-        this.password = password;
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.contactNumber = contactNumber;
-        this.address = address;
-        this.reservations = reservations;
-        this.reviews = reviews;
-    }
-
+	@Override
+	public String toString() {
+		return "User [userId=" + userId + ", userName=" + userName + ", password=" + password + ", email=" + email
+				+ ", firstName=" + firstName + ", lastName=" + lastName + ", contactNumber=" + contactNumber
+				+ ", address=" + address + ", reservations=" + reservations + ", reviews=" + reviews + "]";
+	}
+    
+    
    
-
-    @Override
-    public String toString() {
-        return "User [userId=" + userId + ", userName=" + userName + ", password=" + password + ", email=" + email
-                + ", firstName=" + firstName + ", lastName=" + lastName + ", contactNumber=" + contactNumber
-                + ", address=" + address + ", reservations=" + reservations + ", reviews=" + reviews + "]";
-    }
 }

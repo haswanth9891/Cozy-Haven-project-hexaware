@@ -3,6 +3,7 @@ package com.hexaware.ccozyhaven.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
@@ -14,6 +15,8 @@ public class Room {
 
     @Id
     @Column(name = "room_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Pattern(regexp = "^[0-9]+$")
     private Long roomId;
 
     @NotBlank(message = "Room size is required")

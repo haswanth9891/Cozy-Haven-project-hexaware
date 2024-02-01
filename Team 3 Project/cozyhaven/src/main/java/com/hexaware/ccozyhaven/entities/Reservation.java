@@ -44,7 +44,7 @@ public class Reservation {
    
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "reservation_id") // This should be the foreign key column in the Room table
+    @JoinColumn(name = "reservation_id") 
     private Set<Room> rooms = new HashSet<>();
 
 
