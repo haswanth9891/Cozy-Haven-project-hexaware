@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,62 +14,84 @@ import java.util.Set;
 @Table(name = "Reservation_Details")
 public class Reservation {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Pattern(regexp = "^[0-9]+$")
-    @Column(name = "reservation_id")
-    private Long reservationId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Pattern(regexp = "^[0-9]+$")
+	// @Column(name = "reservation_id")
+	private Long reservationId;
 
-    @NotNull(message = "Check-in date cannot be null")
-    @Column(name = "check_in_date")
-    private Date checkInDate;
+	@NotNull(message = "Check-in date cannot be null")
+	@Column(name = "check_in_date")
+	private LocalDate checkInDate;
 
-    @NotNull(message = "Check-out date cannot be null")
-    @Future(message = "Check-out date must be in the future")
-    @Column(name = "check_out_date")
-    private Date checkOutDate;
+	@NotNull(message = "Check-out date cannot be null")
+	@Future(message = "Check-out date must be in the future")
+	@Column(name = "check_out_date")
+	private LocalDate checkOutDate;
 
-    @Column(name = "num_adults")
-    @NotNull(message = "Number of adults cannot be null")
-    private int numberOfAdults;
+	@Column(name = "num_adults")
+	@NotNull(message = "Number of adults cannot be null")
+	private int numberOfAdults;
 
-    @Column(name = "num_children")
-    @NotNull(message = "Number of children cannot be null")
-    private int numberOfChildren;
+	@Column(name = "num_children")
+	@NotNull(message = "Number of children cannot be null")
+	private int numberOfChildren;
 
-    @Column(name = "total_amount")
-    private double totalAmount;
+	@Column(name = "total_amount")
+	private double totalAmount;
 
-    @NotNull(message = "Reservation status cannot be null")
-    @Column(name = "reservation_status")
-    private String reservationStatus;
-   
+	@NotNull(message = "Reservation status cannot be null")
+	@Column(name = "reservation_status")
+	private String reservationStatus;
+	
+	@Column(name = "refund_processed")
+    private boolean refundProcessed;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "reservation_id") 
-    private Set<Room> rooms = new HashSet<>();
+	@OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL)
+	private Set<Room> rooms = new HashSet<>();
+
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private User user;
+
+	@ManyToOne
+	@JoinColumn(name = "hotel_id")
+	private Hotel hotel;
+
+	public Reservation() {
+		super();
+	}
+
+	
 
 
-    public Reservation() {
-        super();
-    }
 
-    public Reservation(Long reservationId, Date checkInDate, Date checkOutDate, int numberOfAdults,
-                       int numberOfChildren, double totalAmount, String reservationStatus, Set<Room> rooms) {
-        super();
-        this.reservationId = reservationId;
-        this.checkInDate = checkInDate;
-        this.checkOutDate = checkOutDate;
-        this.numberOfAdults = numberOfAdults;
-        this.numberOfChildren = numberOfChildren;
-        this.totalAmount = totalAmount;
-        this.reservationStatus = reservationStatus;
-        this.rooms = rooms;
-    }
+	public Reservation(@Pattern(regexp = "^[0-9]+$") Long reservationId,
+			@NotNull(message = "Check-in date cannot be null") LocalDate checkInDate,
+			@NotNull(message = "Check-out date cannot be null") @Future(message = "Check-out date must be in the future") LocalDate checkOutDate,
+			@NotNull(message = "Number of adults cannot be null") int numberOfAdults,
+			@NotNull(message = "Number of children cannot be null") int numberOfChildren, double totalAmount,
+			@NotNull(message = "Reservation status cannot be null") String reservationStatus, boolean refundProcessed,
+			Set<Room> rooms, User user, Hotel hotel) {
+		super();
+		this.reservationId = reservationId;
+		this.checkInDate = checkInDate;
+		this.checkOutDate = checkOutDate;
+		this.numberOfAdults = numberOfAdults;
+		this.numberOfChildren = numberOfChildren;
+		this.totalAmount = totalAmount;
+		this.reservationStatus = reservationStatus;
+		this.refundProcessed = refundProcessed;
+		this.rooms = rooms;
+		this.user = user;
+		this.hotel = hotel;
+	}
 
-    
 
-    public Long getReservationId() {
+
+
+
+	public Long getReservationId() {
 		return reservationId;
 	}
 
@@ -75,19 +99,19 @@ public class Reservation {
 		this.reservationId = reservationId;
 	}
 
-	public Date getCheckInDate() {
+	public LocalDate getCheckInDate() {
 		return checkInDate;
 	}
 
-	public void setCheckInDate(Date checkInDate) {
+	public void setCheckInDate(LocalDate checkInDate) {
 		this.checkInDate = checkInDate;
 	}
 
-	public Date getCheckOutDate() {
+	public LocalDate getCheckOutDate() {
 		return checkOutDate;
 	}
 
-	public void setCheckOutDate(Date checkOutDate) {
+	public void setCheckOutDate(LocalDate checkOutDate) {
 		this.checkOutDate = checkOutDate;
 	}
 
@@ -122,6 +146,24 @@ public class Reservation {
 	public void setReservationStatus(String reservationStatus) {
 		this.reservationStatus = reservationStatus;
 	}
+	
+	
+
+	public boolean isRefundProcessed() {
+		return refundProcessed;
+	}
+
+
+
+
+
+	public void setRefundProcessed(boolean refundProcessed) {
+		this.refundProcessed = refundProcessed;
+	}
+
+
+
+
 
 	public Set<Room> getRooms() {
 		return rooms;
@@ -131,10 +173,36 @@ public class Reservation {
 		this.rooms = rooms;
 	}
 
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Hotel getHotel() {
+		return hotel;
+	}
+
+	public void setHotel(Hotel hotel) {
+		this.hotel = hotel;
+	}
+
+
+
+
+
 	@Override
-    public String toString() {
-        return "Reservation [reservationId=" + reservationId + ", checkInDate=" + checkInDate + ", checkOutDate="
-                + checkOutDate + ", numberOfAdults=" + numberOfAdults + ", numberOfChildren=" + numberOfChildren
-                + ", totalAmount=" + totalAmount + ", reservationStatus=" + reservationStatus + ", rooms=" + rooms + "]";
-    }
+	public String toString() {
+		return "Reservation [reservationId=" + reservationId + ", checkInDate=" + checkInDate + ", checkOutDate="
+				+ checkOutDate + ", numberOfAdults=" + numberOfAdults + ", numberOfChildren=" + numberOfChildren
+				+ ", totalAmount=" + totalAmount + ", reservationStatus=" + reservationStatus + ", refundProcessed="
+				+ refundProcessed + ", rooms=" + rooms + ", user=" + user + ", hotel=" + hotel + "]";
+	}
+	
+	
+
+	
+
 }

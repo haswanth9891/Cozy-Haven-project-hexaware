@@ -3,6 +3,8 @@ package com.hexaware.ccozyhaven.entities;
 import java.util.HashSet;
 import java.util.Set;
 
+
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,7 +25,7 @@ import jakarta.validation.constraints.Size;
 public class Hotel {
 
     @Id
-    @Column(name = "hotel_id")
+    
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Pattern(regexp = "^[0-9]+$", message = "Hotel ID must contain only numeric digits")
     private Long hotelId;
@@ -70,8 +72,13 @@ public class Hotel {
 
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
     private Set<Review> review = new HashSet<>();
+    
+    @ManyToOne
+    @JoinColumn(name = "hotel_owner_id")
+    private HotelOwner hotelOwner;
 
-    public Hotel() {
+   
+	public Hotel() {
         super();
     }
 

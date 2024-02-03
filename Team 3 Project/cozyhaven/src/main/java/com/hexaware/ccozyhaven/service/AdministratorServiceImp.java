@@ -5,69 +5,70 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.hexaware.ccozyhaven.dto.AdministratorDTO;
-import com.hexaware.ccozyhaven.entities.Administrator;
 import com.hexaware.ccozyhaven.entities.HotelOwner;
+import com.hexaware.ccozyhaven.entities.Reservation;
 import com.hexaware.ccozyhaven.entities.User;
-import com.hexaware.ccozyhaven.repository.AdministratorRepository;
+import com.hexaware.ccozyhaven.exceptions.InvalidCancellationException;
+import com.hexaware.ccozyhaven.exceptions.ReservationNotFoundException;
+import com.hexaware.ccozyhaven.exceptions.UserNotFoundException;
 import com.hexaware.ccozyhaven.repository.HotelOwnerRepository;
+import com.hexaware.ccozyhaven.repository.ReservationRepository;
 import com.hexaware.ccozyhaven.repository.UserRepository;
 
-import jakarta.transaction.Transactional;
-
 @Service
-@Transactional
 public class AdministratorServiceImp implements IAdministratorService{
 	
-	@Autowired
-	AdministratorRepository adminRepo;
-	
-	@Autowired
-	UserRepository userRepo;
-	
-	@Autowired
-	HotelOwnerRepository hotelOwnerRepo;
+	 @Autowired
+	 private UserRepository userRepository;
+
+	    @Autowired
+	    private HotelOwnerRepository hotelOwnerRepository;
+	   
+	    @Autowired
+	    private ReservationRepository reservationRepository;
+
 
 	@Override
-	public Administrator registerAdministrator(AdministratorDTO adminDTO) {
-		// TODO Auto-generated method stub
-		return null;
+	public void deleteUserAccount(Long userId) throws UserNotFoundException {
+		  User user = userRepository.findById(userId)
+		            .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
+
+		   userRepository.delete(user);
 	}
 
 	@Override
-	public boolean loginAdministrator(String username, String password) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	public void deleteHotelOwnerAccount(Long hotelOwnerId) throws UserNotFoundException {
+		HotelOwner hotelOwner = hotelOwnerRepository.findById(hotelOwnerId)
+	            .orElseThrow(() -> new UserNotFoundException("User not found with id: " + hotelOwnerId));
 
-	@Override
-	public boolean deleteUserAccount(Long userId) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean deleteHotelOwnerAccount(Long hotelOwnerId) {
-		// TODO Auto-generated method stub
-		return false;
+	   hotelOwnerRepository.delete(hotelOwner);
+		
 	}
 
 	@Override
 	public List<User> viewAllUser() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return userRepository.findAll();
 	}
 
 	@Override
 	public List<HotelOwner> viewAllHotelOwner() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return hotelOwnerRepository.findAll();
 	}
 
 	@Override
-	public boolean manageRoomReservation(Long reservationId, String reservationStatus) {
-		// TODO Auto-generated method stub
-		return false;
+	public void manageRoomReservation(Long reservationId, String reservationStatus) throws ReservationNotFoundException, InvalidCancellationException {
+		 Reservation reservation = reservationRepository.findById(reservationId)
+	                .orElseThrow(() -> new ReservationNotFoundException("Reservation not found with id: " + reservationId));
+
+	        // Check if the reservation is in a cancellable state (e.g., not already canceled)
+	        if (reservation.getReservationStatus() !="CANCELLED") {
+	            // Delete the reservation (you might want to perform additional cleanup like updating room availability)
+	            reservationRepository.delete(reservation);
+	        } else {
+	            throw new InvalidCancellationException("Reservation is already cancelled.");
+	        }
 	}
 
 }

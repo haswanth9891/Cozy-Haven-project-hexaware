@@ -10,7 +10,7 @@ public class RoomDTO {
     private String roomSize;
     private String bedType;
     private int maxOccupancy;
-    private BigDecimal baseFare;
+    private double baseFare;
     private boolean isAC;
     private String availabilityStatus;
 
@@ -18,9 +18,8 @@ public class RoomDTO {
 	public RoomDTO() {
 		super();
 	}
-
-
-	public RoomDTO(Long roomId, String roomSize, String bedType, int maxOccupancy, BigDecimal baseFare, boolean isAC,
+	
+	public RoomDTO(Long roomId, String roomSize, String bedType, int maxOccupancy, double baseFare, boolean isAC,
 			String availabilityStatus) {
 		super();
 		this.roomId = roomId;
@@ -31,8 +30,14 @@ public class RoomDTO {
 		this.isAC = isAC;
 		this.availabilityStatus = availabilityStatus;
 	}
+	
+	
 
 
+	
+
+
+	
 	public Long getRoomId() {
 		return roomId;
 	}
@@ -71,17 +76,20 @@ public class RoomDTO {
 	public void setMaxOccupancy(int maxOccupancy) {
 		this.maxOccupancy = maxOccupancy;
 	}
+	
+	
 
 
-	public BigDecimal getBaseFare() {
+	
+
+
+	public double getBaseFare() {
 		return baseFare;
 	}
 
-
-	public void setBaseFare(BigDecimal baseFare) {
+	public void setBaseFare(double baseFare) {
 		this.baseFare = baseFare;
 	}
-
 
 	public boolean isAC() {
 		return isAC;
@@ -102,13 +110,19 @@ public class RoomDTO {
 		this.availabilityStatus = availabilityStatus;
 	}
 
-
 	@Override
 	public String toString() {
 		return "RoomDTO [roomId=" + roomId + ", roomSize=" + roomSize + ", bedType=" + bedType + ", maxOccupancy="
 				+ maxOccupancy + ", baseFare=" + baseFare + ", isAC=" + isAC + ", availabilityStatus="
 				+ availabilityStatus + "]";
 	}
+
+
+
+
+	
+
+
 
     
 }

@@ -10,6 +10,10 @@ import com.hexaware.ccozyhaven.dto.HotelOwnerDTO;
 import com.hexaware.ccozyhaven.dto.RoomDTO;
 import com.hexaware.ccozyhaven.entities.HotelOwner;
 import com.hexaware.ccozyhaven.entities.Room;
+import com.hexaware.ccozyhaven.exceptions.InvalidRefundException;
+import com.hexaware.ccozyhaven.exceptions.RefundProcessedException;
+import com.hexaware.ccozyhaven.exceptions.ReservationNotFoundException;
+import com.hexaware.ccozyhaven.exceptions.RoomNotFoundException;
 import com.hexaware.ccozyhaven.entities.Reservation;
 
 
@@ -19,11 +23,11 @@ import com.hexaware.ccozyhaven.entities.Reservation;
 
 public interface IHotelOwnerService {
 	
-	// HotelOwner registration
-    HotelOwner registerHotelOwner(HotelOwnerDTO hotelOwnerDTO);
-	
-	// Hotel owner login
-    boolean loginHotelOwner(String username, String password);
+//	// HotelOwner registration
+//    HotelOwner registerHotelOwner(HotelOwnerDTO hotelOwnerDTO);
+//	
+//	// Hotel owner login
+//    boolean loginHotelOwner(String username, String password);
     
     //update HotelOwnerDetails
     HotelOwner updateHotelOwner(Long hotelOwnerId, HotelOwnerDTO updatedHotelOwnerDTO);
@@ -32,14 +36,14 @@ public interface IHotelOwnerService {
     Room addRoom(RoomDTO roomDTO);
 
     // Edit details of an existing room in the hotel
-    Room editRoom(Long roomId, RoomDTO updatedRoomDTO);
+    Room editRoom(Long roomId, RoomDTO updatedRoomDTO) throws RoomNotFoundException;
 
     // Remove a room from the hotel
-    boolean removeRoom(Long roomId);
+    void removeRoom(Long roomId) throws RoomNotFoundException;
 
     // View booked reservations by users for rooms in the hotel
     List<Reservation> viewReservation(Long hotelId);
 
     // Refund amount for canceled booked tickets
-    double refundAmount(Long reservationId);
+    double refundAmount(Long reservationId) throws RefundProcessedException, InvalidRefundException, ReservationNotFoundException;
 }

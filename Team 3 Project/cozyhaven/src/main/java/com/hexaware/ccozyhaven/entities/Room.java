@@ -26,6 +26,7 @@ public class Room {
 
     @NotBlank(message = "Bed type is required")
     @Size(max = 20, message = "Bed type must be at most 20 characters")
+    @Pattern(regexp = "single bed|double bed|king size", message = "Invalid bed type")
     @Column(name = "bed_type")
     private String bedType;
 
@@ -35,7 +36,7 @@ public class Room {
 
     @DecimalMin(value = "0.00", inclusive = false, message = "Base fare must be greater than 0.00")
     @Column(name = "base_fare")
-    private BigDecimal baseFare;
+    private double baseFare;
 
     @Column(name = "is_ac")
     private boolean isAC;
@@ -44,27 +45,49 @@ public class Room {
     @Size(max = 20, message = "Availability status must be at most 20 characters")
     @Column(name = "availability_status")
     private String availabilityStatus;
+    
+    @ManyToOne
+    @JoinColumn(name = "reservation_id")
+    private Reservation reservation;
+    
+    @ManyToOne
+    @JoinColumn(name = "hotel_id")
+    private Hotel hotel;
    
    
     public Room() {
         super();
     }
 
-    public Room(Long roomId, String roomSize, String bedType, int maxOccupancy, BigDecimal baseFare, boolean isAC,
-            String availabilityStatus) {
-        super();
-        this.roomId = roomId;
-        this.roomSize = roomSize;
-        this.bedType = bedType;
-        this.maxOccupancy = maxOccupancy;
-        this.baseFare = baseFare;
-        this.isAC = isAC;
-        this.availabilityStatus = availabilityStatus;
-    }
+  
 
     
 
-    public Long getRoomId() {
+    public Room(@Pattern(regexp = "^[0-9]+$") Long roomId,
+			@NotBlank(message = "Room size is required") @Size(max = 20, message = "Room size must be at most 20 characters") String roomSize,
+			@NotBlank(message = "Bed type is required") @Size(max = 20, message = "Bed type must be at most 20 characters") String bedType,
+			@Positive(message = "Max occupancy must be a positive number") int maxOccupancy,
+			@DecimalMin(value = "0.00", inclusive = false, message = "Base fare must be greater than 0.00") double baseFare,
+			boolean isAC,
+			@NotBlank(message = "Availability status is required") @Size(max = 20, message = "Availability status must be at most 20 characters") String availabilityStatus,
+			Reservation reservation, Hotel hotel) {
+		super();
+		this.roomId = roomId;
+		this.roomSize = roomSize;
+		this.bedType = bedType;
+		this.maxOccupancy = maxOccupancy;
+		this.baseFare = baseFare;
+		this.isAC = isAC;
+		this.availabilityStatus = availabilityStatus;
+		this.reservation = reservation;
+		this.hotel = hotel;
+	}
+
+
+
+
+
+	public Long getRoomId() {
         return roomId;
     }
 
@@ -96,15 +119,33 @@ public class Room {
         this.maxOccupancy = maxOccupancy;
     }
 
-    public BigDecimal getBaseFare() {
-        return baseFare;
-    }
+   
 
-    public void setBaseFare(BigDecimal baseFare) {
-        this.baseFare = baseFare;
-    }
+    public double getBaseFare() {
+		return baseFare;
+	}
 
-    public boolean isAC() {
+	public void setBaseFare(double baseFare) {
+		this.baseFare = baseFare;
+	}
+
+	public Reservation getReservation() {
+		return reservation;
+	}
+
+	public void setReservation(Reservation reservation) {
+		this.reservation = reservation;
+	}
+
+	public Hotel getHotel() {
+		return hotel;
+	}
+
+	public void setHotel(Hotel hotel) {
+		this.hotel = hotel;
+	}
+
+	public boolean isAC() {
         return isAC;
     }
 
@@ -121,9 +162,22 @@ public class Room {
     }
 
     @Override
-    public String toString() {
-        return "Room [roomId=" + roomId + ", roomSize=" + roomSize + ", bedType=" + bedType + ", maxOccupancy="
-                + maxOccupancy + ", baseFare=" + baseFare + ", isAC=" + isAC + ", availabilityStatus="
-                + availabilityStatus + "]";
-    }
+	public String toString() {
+		return "Room [roomId=" + roomId + ", roomSize=" + roomSize + ", bedType=" + bedType + ", maxOccupancy="
+				+ maxOccupancy + ", baseFare=" + baseFare + ", isAC=" + isAC + ", availabilityStatus="
+				+ availabilityStatus + ", reservation=" + reservation + ", hotel=" + hotel + "]";
+	}
+
+
+
+
+
+	
+
+
+
+
+
+	
+    
 }
