@@ -13,20 +13,23 @@ import com.hexaware.ccozyhaven.entities.Reservation;
 
 public interface ReservationRepository extends JpaRepository<Reservation,Long>{
 	
-	List<Reservation> findByUserId(Long userId);
-	Optional<Reservation> findByIdAndUserId(Long reservationId, Long userId);
+	List<Reservation> findByUser_UserId(Long userId);
+	
+	Optional<Reservation> findByReservationIdAndUser_UserId(Long reservationId, Long userId);
 	
 	
-	
-	@Query("SELECT r FROM Reservation r " +
-		       "WHERE r.room.roomId = :roomId " +
-		       "AND (:checkInDate BETWEEN r.checkInDate AND r.checkOutDate " +
-		       "OR :checkOutDate BETWEEN r.checkInDate AND r.checkOutDate " +
-		       "OR r.checkInDate BETWEEN :checkInDate AND :checkOutDate " +
-		       "OR r.checkOutDate BETWEEN :checkInDate AND :checkOutDate)")
+	@Query(value = "SELECT * FROM Reservation r " +
+		       "WHERE r.room_id = :roomId " +
+		       "AND (:checkInDate BETWEEN r.check_in_date AND r.check_out_date " +
+		       "OR :checkOutDate BETWEEN r.check_in_date AND r.check_out_date " +
+		       "OR r.check_in_date BETWEEN :checkInDate AND :checkOutDate " +
+		       "OR r.check_out_date BETWEEN :checkInDate AND :checkOutDate)",
+		       nativeQuery = true)
 		List<Reservation> findOverlappingReservations(@Param("roomId") Long roomId,
 		                                              @Param("checkInDate") LocalDate checkInDate,
 		                                              @Param("checkOutDate") LocalDate checkOutDate);
+
+
 
 	
 

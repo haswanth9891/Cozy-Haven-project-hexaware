@@ -10,10 +10,12 @@ import com.hexaware.ccozyhaven.dto.RoomDTO;
 import com.hexaware.ccozyhaven.entities.HotelOwner;
 import com.hexaware.ccozyhaven.entities.Reservation;
 import com.hexaware.ccozyhaven.entities.Room;
+import com.hexaware.ccozyhaven.exceptions.HotelOwnerNotFoundException;
 import com.hexaware.ccozyhaven.exceptions.InvalidRefundException;
 import com.hexaware.ccozyhaven.exceptions.RefundProcessedException;
 import com.hexaware.ccozyhaven.exceptions.ReservationNotFoundException;
 import com.hexaware.ccozyhaven.exceptions.RoomNotFoundException;
+import com.hexaware.ccozyhaven.repository.HotelOwnerRepository;
 import com.hexaware.ccozyhaven.repository.ReservationRepository;
 import com.hexaware.ccozyhaven.repository.RoomRepository;
 
@@ -28,6 +30,9 @@ public class HotelOwnerServiceImp implements IHotelOwnerService{
 	
 	@Autowired
 	ReservationRepository reservationRepository;
+	
+	@Autowired
+	HotelOwnerRepository hotelOwnerRepository;
 
 	
 //	@Override
@@ -51,16 +56,27 @@ public class HotelOwnerServiceImp implements IHotelOwnerService{
         newRoom.setMaxOccupancy(roomDTO.getMaxOccupancy());
         newRoom.setBaseFare(roomDTO.getBaseFare());
         newRoom.setAC(roomDTO.isAC());
-        newRoom.setAvailabilityStatus(roomDTO.getAvailabilityStatus());
+        newRoom.setAvailabilityStatus(roomDTO.isAvailabilityStatus());
 
         // Save the new room to the database
         return roomRepository.save(newRoom);
 	}
 
 	@Override
-	public HotelOwner updateHotelOwner(Long hotelOwnerId, HotelOwnerDTO updatedHotelOwnerDTO) {
-		// TODO Auto-generated method stub
-		return null;
+	public HotelOwner updateHotelOwner(Long hotelOwnerId, HotelOwnerDTO updatedHotelOwnerDTO) throws HotelOwnerNotFoundException {
+		
+		HotelOwner existingHotelOwner = hotelOwnerRepository.findById(hotelOwnerId)
+                .orElseThrow(() -> new HotelOwnerNotFoundException("HotelOwner not found with id: " + hotelOwnerId));
+
+        
+        existingHotelOwner.setHotelOwnerName(updatedHotelOwnerDTO.getHotelOwnerName());
+       
+        existingHotelOwner.setEmail(updatedHotelOwnerDTO.getEmail());
+       
+        existingHotelOwner.setHotel(updatedHotelOwnerDTO.getHotel());
+      
+        return hotelOwnerRepository.save(existingHotelOwner);
+		
 	}
 
 	
@@ -76,7 +92,7 @@ public class HotelOwnerServiceImp implements IHotelOwnerService{
 	        existingRoom.setMaxOccupancy(updatedRoomDTO.getMaxOccupancy());
 	        existingRoom.setBaseFare(updatedRoomDTO.getBaseFare());
 	        existingRoom.setAC(updatedRoomDTO.isAC());
-	        existingRoom.setAvailabilityStatus(updatedRoomDTO.getAvailabilityStatus());
+	        existingRoom.setAvailabilityStatus(updatedRoomDTO.isAvailabilityStatus());
 
 	        // Save the updated room to the database
 	        return roomRepository.save(existingRoom);
@@ -94,7 +110,7 @@ public class HotelOwnerServiceImp implements IHotelOwnerService{
 	@Override
 	public List<Reservation> viewReservation(Long hotelId) {
 		
-		return reservationRepository.findByUserId(hotelId);
+		return reservationRepository.findByUser_UserId(hotelId);
 	}
 
 	@Override

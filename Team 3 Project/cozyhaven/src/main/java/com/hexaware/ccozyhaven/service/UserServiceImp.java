@@ -66,7 +66,7 @@ public class UserServiceImp implements IUserService {
 
 	@Override
 	public List<Room> getAllAvailableRoomsInHotel(Long hotelId) {
-		return hotelRepository.findByHotelIdAndAvailabilityStatus(hotelId, true);
+		return hotelRepository.findByHotelIdAndRoomAvailabilityStatus(hotelId, true);
 
 	}
 
@@ -193,12 +193,12 @@ public class UserServiceImp implements IUserService {
 	@Override
 	public List<Reservation> getUserReservations(Long userId) {
 
-		return reservationRepository.findByUserId(userId);
+		return reservationRepository.findByUser_UserId(userId);
 	}
 
 	@Override
 	public void cancelReservation(Long userId, Long reservationId) throws ReservationNotFoundException {
-		Reservation reservation = reservationRepository.findByIdAndUserId(reservationId, userId)
+		Reservation reservation = reservationRepository.findByReservationIdAndUser_UserId(reservationId, userId)
 				.orElseThrow(() -> new ReservationNotFoundException("Reservation not found with id: " + reservationId));
 
 		// Perform cancellation logic (e.g., update status or delete the reservation)
@@ -213,7 +213,7 @@ public class UserServiceImp implements IUserService {
 	public void cancelReservationAndRequestRefund(Long userId, Long reservationId)
 			throws InvalidCancellationException, ReservationNotFoundException {
 		// Check if the reservation exists for the specified user
-		Reservation reservation = reservationRepository.findByIdAndUserId(reservationId, userId)
+		Reservation reservation = reservationRepository.findByReservationIdAndUser_UserId(reservationId, userId)
 				.orElseThrow(() -> new ReservationNotFoundException("Reservation not found with id: " + reservationId));
 
 		// Check if the reservation is cancelable (e.g., not already canceled)
