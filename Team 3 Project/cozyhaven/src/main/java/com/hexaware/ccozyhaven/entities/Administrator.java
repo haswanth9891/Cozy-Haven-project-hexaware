@@ -35,6 +35,12 @@ public class Administrator {
     @Email(message = "Password cannot be blank")
     @Column(name = "email")
     private String email;
+    
+    @Pattern(regexp = "^(male|female|non-binary)$", message = "Invalid gender")
+    private String gender;
+    
+    @NotBlank(message = "Address is required")
+    private String address;
 
 	public Administrator() {
 		super();

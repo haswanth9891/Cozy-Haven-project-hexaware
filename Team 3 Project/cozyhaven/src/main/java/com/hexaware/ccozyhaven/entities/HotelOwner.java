@@ -15,7 +15,7 @@ import java.util.Set;
 public class HotelOwner {
 
     @Id
-    @Column(name ="hotelOwnerId")
+    
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Pattern(regexp = "^[0-9]+$")
     private Long hotelOwnerId;
@@ -34,9 +34,14 @@ public class HotelOwner {
     @NotBlank(message = "Email cannot be blank")
     @Email(message = "Invalid email format")
     private String email;
+    
+    @Pattern(regexp = "^(male|female|non-binary)$", message = "Invalid gender")
+    private String gender;
+    
+    @NotBlank(message = "Address is required")
+    private String address;
 
-    @OneToMany(mappedBy = "HotelOwner", cascade = CascadeType.ALL)
-    @JoinColumn(name="hotel_id")
+    @OneToMany(mappedBy = "hotelOwner", cascade = CascadeType.ALL)
     private Set<Hotel> hotel = new HashSet<Hotel>();
 
 

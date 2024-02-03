@@ -40,6 +40,9 @@ public class User {
     @Column(name = "contact_number")
     private String contactNumber;
     
+    @Pattern(regexp = "^(male|female|non-binary)$", message = "Invalid gender")
+    private String gender;
+    
 	@NotBlank(message = "Address is required")
     private String address;
 
