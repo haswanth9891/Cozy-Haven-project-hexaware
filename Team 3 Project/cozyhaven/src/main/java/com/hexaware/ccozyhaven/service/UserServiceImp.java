@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.hexaware.ccozyhaven.entities.Hotel;
 import com.hexaware.ccozyhaven.entities.Reservation;
@@ -23,6 +24,9 @@ import com.hexaware.ccozyhaven.repository.ReservationRepository;
 import com.hexaware.ccozyhaven.repository.RoomRepository;
 import com.hexaware.ccozyhaven.repository.UserRepository;
 
+import jakarta.transaction.Transactional;
+@Service
+@Transactional
 public class UserServiceImp implements IUserService {
 
 	@Autowired

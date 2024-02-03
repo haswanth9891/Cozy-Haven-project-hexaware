@@ -15,7 +15,10 @@ import com.hexaware.ccozyhaven.repository.HotelOwnerRepository;
 import com.hexaware.ccozyhaven.repository.ReservationRepository;
 import com.hexaware.ccozyhaven.repository.UserRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
+@Transactional
 public class AdministratorServiceImp implements IAdministratorService{
 	
 	 @Autowired

@@ -3,6 +3,7 @@ package com.hexaware.ccozyhaven.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.hexaware.ccozyhaven.dto.HotelOwnerDTO;
 import com.hexaware.ccozyhaven.dto.RoomDTO;
@@ -16,6 +17,9 @@ import com.hexaware.ccozyhaven.exceptions.RoomNotFoundException;
 import com.hexaware.ccozyhaven.repository.ReservationRepository;
 import com.hexaware.ccozyhaven.repository.RoomRepository;
 
+import jakarta.transaction.Transactional;
+@Service
+@Transactional
 public class HotelOwnerServiceImp implements IHotelOwnerService{
 	
 	
