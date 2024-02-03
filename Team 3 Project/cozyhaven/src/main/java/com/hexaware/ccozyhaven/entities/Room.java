@@ -13,63 +13,58 @@ import java.util.List;
 @Table(name = "Room_Details")
 public class Room {
 
-    @Id
-    @Column(name = "room_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Pattern(regexp = "^[0-9]+$")
-    private Long roomId;
+	@Id
+	@Column(name = "room_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Pattern(regexp = "^[0-9]+$")
+	private Long roomId;
 
-    @NotBlank(message = "Room size is required")
-    @Size(max = 20, message = "Room size must be at most 20 characters")
-    @Column(name = "room_size")
-    private String roomSize;
+	@NotBlank(message = "Room size is required")
+	@Size(max = 20, message = "Room size must be at most 20 characters")
+	@Column(name = "room_size")
+	private String roomSize;
 
-    @NotBlank(message = "Bed type is required")
-    @Size(max = 20, message = "Bed type must be at most 20 characters")
-    @Pattern(regexp = "single bed|double bed|king size", message = "Invalid bed type")
-    @Column(name = "bed_type")
-    private String bedType;
+	@NotBlank(message = "Bed type is required")
+	@Size(max = 20, message = "Bed type must be at most 20 characters")
+	@Pattern(regexp = "single bed|double bed|king size", message = "Invalid bed type")
+	@Column(name = "bed_type")
+	private String bedType;
 
-    @Positive(message = "Max occupancy must be a positive number")
-    @Column(name = "max_occupancy")
-    private int maxOccupancy;
+	@Positive(message = "Max occupancy must be a positive number")
+	@Column(name = "max_occupancy")
+	private int maxOccupancy;
 
-    @DecimalMin(value = "0.00", inclusive = false, message = "Base fare must be greater than 0.00")
-    @Column(name = "base_fare")
-    private double baseFare;
+	@DecimalMin(value = "0.00", inclusive = false, message = "Base fare must be greater than 0.00")
+	@Column(name = "base_fare")
+	private double baseFare;
 
-    @Column(name = "is_ac")
-    private boolean isAC;
+	@Column(name = "is_ac")
+	private boolean isAC;
 
-    @NotBlank(message = "Availability status is required")
-    @Size(max = 20, message = "Availability status must be at most 20 characters")
-    @Column(name = "availability_status")
-    private String availabilityStatus;
-    
-    @ManyToOne
-    @JoinColumn(name = "reservation_id")
-    private Reservation reservation;
-    
-    @ManyToOne
-    @JoinColumn(name = "hotel_id")
-    private Hotel hotel;
-   
-   
-    public Room() {
-        super();
-    }
+	@NotBlank(message = "Availability status is required")
+	@Size(max = 20, message = "Availability status must be at most 20 characters")
+	@Column(name = "availability_status")
+	private boolean availabilityStatus;
 
-  
+	@ManyToOne
+	@JoinColumn(name = "reservation_id")
+	private Reservation reservation;
 
-    
+	@ManyToOne
+	@JoinColumn(name = "hotel_id")
+	private Hotel hotel;
 
-    public Room(@Pattern(regexp = "^[0-9]+$") Long roomId,
+	public Room() {
+		super();
+	}
+
+	public Room(@Pattern(regexp = "^[0-9]+$") Long roomId,
 			@NotBlank(message = "Room size is required") @Size(max = 20, message = "Room size must be at most 20 characters") String roomSize,
-			@NotBlank(message = "Bed type is required") @Size(max = 20, message = "Bed type must be at most 20 characters") String bedType,
+			@NotBlank(message = "Bed type is required") @Size(max = 20, message = "Bed type must be at most 20 characters") @Pattern(regexp = "single bed|double bed|king size", message = "Invalid bed type") String bedType,
 			@Positive(message = "Max occupancy must be a positive number") int maxOccupancy,
 			@DecimalMin(value = "0.00", inclusive = false, message = "Base fare must be greater than 0.00") double baseFare,
 			boolean isAC,
-			@NotBlank(message = "Availability status is required") @Size(max = 20, message = "Availability status must be at most 20 characters") String availabilityStatus,
+			@NotBlank(message = "Availability status is required") @Size(max = 20, message = "Availability status must be at most 20 characters") boolean availabilityStatus,
 			Reservation reservation, Hotel hotel) {
 		super();
 		this.roomId = roomId;
@@ -83,45 +78,39 @@ public class Room {
 		this.hotel = hotel;
 	}
 
-
-
-
-
 	public Long getRoomId() {
-        return roomId;
-    }
+		return roomId;
+	}
 
-    public void setRoomId(Long roomId) {
-        this.roomId = roomId;
-    }
+	public void setRoomId(Long roomId) {
+		this.roomId = roomId;
+	}
 
-    public String getRoomSize() {
-        return roomSize;
-    }
+	public String getRoomSize() {
+		return roomSize;
+	}
 
-    public void setRoomSize(String roomSize) {
-        this.roomSize = roomSize;
-    }
+	public void setRoomSize(String roomSize) {
+		this.roomSize = roomSize;
+	}
 
-    public String getBedType() {
-        return bedType;
-    }
+	public String getBedType() {
+		return bedType;
+	}
 
-    public void setBedType(String bedType) {
-        this.bedType = bedType;
-    }
+	public void setBedType(String bedType) {
+		this.bedType = bedType;
+	}
 
-    public int getMaxOccupancy() {
-        return maxOccupancy;
-    }
+	public int getMaxOccupancy() {
+		return maxOccupancy;
+	}
 
-    public void setMaxOccupancy(int maxOccupancy) {
-        this.maxOccupancy = maxOccupancy;
-    }
+	public void setMaxOccupancy(int maxOccupancy) {
+		this.maxOccupancy = maxOccupancy;
+	}
 
-   
-
-    public double getBaseFare() {
+	public double getBaseFare() {
 		return baseFare;
 	}
 
@@ -146,38 +135,26 @@ public class Room {
 	}
 
 	public boolean isAC() {
-        return isAC;
-    }
+		return isAC;
+	}
 
-    public void setAC(boolean isAC) {
-        this.isAC = isAC;
-    }
+	public void setAC(boolean isAC) {
+		this.isAC = isAC;
+	}
 
-    public String getAvailabilityStatus() {
-        return availabilityStatus;
-    }
+	public boolean isAvailabilityStatus() {
+		return availabilityStatus;
+	}
 
-    public void setAvailabilityStatus(String availabilityStatus) {
-        this.availabilityStatus = availabilityStatus;
-    }
+	public void setAvailabilityStatus(boolean availabilityStatus) {
+		this.availabilityStatus = availabilityStatus;
+	}
 
-    @Override
+	@Override
 	public String toString() {
 		return "Room [roomId=" + roomId + ", roomSize=" + roomSize + ", bedType=" + bedType + ", maxOccupancy="
 				+ maxOccupancy + ", baseFare=" + baseFare + ", isAC=" + isAC + ", availabilityStatus="
 				+ availabilityStatus + ", reservation=" + reservation + ", hotel=" + hotel + "]";
 	}
 
-
-
-
-
-	
-
-
-
-
-
-	
-    
 }

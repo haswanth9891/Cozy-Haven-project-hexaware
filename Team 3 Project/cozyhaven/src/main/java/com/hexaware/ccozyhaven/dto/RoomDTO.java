@@ -2,25 +2,22 @@ package com.hexaware.ccozyhaven.dto;
 
 import java.math.BigDecimal;
 
-
 public class RoomDTO {
-	
-	
-    private Long roomId;
-    private String roomSize;
-    private String bedType;
-    private int maxOccupancy;
-    private double baseFare;
-    private boolean isAC;
-    private String availabilityStatus;
 
+	private Long roomId;
+	private String roomSize;
+	private String bedType;
+	private int maxOccupancy;
+	private double baseFare;
+	private boolean isAC;
+	private boolean availabilityStatus;
 
 	public RoomDTO() {
 		super();
 	}
-	
+
 	public RoomDTO(Long roomId, String roomSize, String bedType, int maxOccupancy, double baseFare, boolean isAC,
-			String availabilityStatus) {
+			boolean availabilityStatus) {
 		super();
 		this.roomId = roomId;
 		this.roomSize = roomSize;
@@ -30,58 +27,38 @@ public class RoomDTO {
 		this.isAC = isAC;
 		this.availabilityStatus = availabilityStatus;
 	}
-	
-	
 
-
-	
-
-
-	
 	public Long getRoomId() {
 		return roomId;
 	}
-
 
 	public void setRoomId(Long roomId) {
 		this.roomId = roomId;
 	}
 
-
 	public String getRoomSize() {
 		return roomSize;
 	}
-
 
 	public void setRoomSize(String roomSize) {
 		this.roomSize = roomSize;
 	}
 
-
 	public String getBedType() {
 		return bedType;
 	}
-
 
 	public void setBedType(String bedType) {
 		this.bedType = bedType;
 	}
 
-
 	public int getMaxOccupancy() {
 		return maxOccupancy;
 	}
 
-
 	public void setMaxOccupancy(int maxOccupancy) {
 		this.maxOccupancy = maxOccupancy;
 	}
-	
-	
-
-
-	
-
 
 	public double getBaseFare() {
 		return baseFare;
@@ -95,18 +72,15 @@ public class RoomDTO {
 		return isAC;
 	}
 
-
 	public void setAC(boolean isAC) {
 		this.isAC = isAC;
 	}
 
-
-	public String getAvailabilityStatus() {
+	public boolean isAvailabilityStatus() {
 		return availabilityStatus;
 	}
 
-
-	public void setAvailabilityStatus(String availabilityStatus) {
+	public void setAvailabilityStatus(boolean availabilityStatus) {
 		this.availabilityStatus = availabilityStatus;
 	}
 
@@ -117,12 +91,4 @@ public class RoomDTO {
 				+ availabilityStatus + "]";
 	}
 
-
-
-
-	
-
-
-
-    
 }

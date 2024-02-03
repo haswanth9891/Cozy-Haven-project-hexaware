@@ -10,6 +10,7 @@ import com.hexaware.ccozyhaven.dto.HotelOwnerDTO;
 import com.hexaware.ccozyhaven.dto.RoomDTO;
 import com.hexaware.ccozyhaven.entities.HotelOwner;
 import com.hexaware.ccozyhaven.entities.Room;
+import com.hexaware.ccozyhaven.exceptions.HotelOwnerNotFoundException;
 import com.hexaware.ccozyhaven.exceptions.InvalidRefundException;
 import com.hexaware.ccozyhaven.exceptions.RefundProcessedException;
 import com.hexaware.ccozyhaven.exceptions.ReservationNotFoundException;
@@ -30,7 +31,7 @@ public interface IHotelOwnerService {
 //    boolean loginHotelOwner(String username, String password);
     
     //update HotelOwnerDetails
-    HotelOwner updateHotelOwner(Long hotelOwnerId, HotelOwnerDTO updatedHotelOwnerDTO);
+    HotelOwner updateHotelOwner(Long hotelOwnerId, HotelOwnerDTO updatedHotelOwnerDTO) throws HotelOwnerNotFoundException;
 
     // Add a new room to the hotel
     Room addRoom(RoomDTO roomDTO);

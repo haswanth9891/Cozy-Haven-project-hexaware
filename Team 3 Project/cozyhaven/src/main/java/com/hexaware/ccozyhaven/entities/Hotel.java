@@ -81,8 +81,38 @@ public class Hotel {
 	public Hotel() {
         super();
     }
+	
+	
 
-    public Long getHotelId() {
+    public Hotel(@Pattern(regexp = "^[0-9]+$", message = "Hotel ID must contain only numeric digits") Long hotelId,
+			@NotBlank(message = "Hotel name cannot be blank") @Size(min = 3, max = 100, message = "Hotel name must be between 3 and 100 characters") String hotelName,
+			@NotBlank(message = "Location cannot be blank") @Size(min = 3, max = 100, message = "Location must be between 3 and 100 characters") String location,
+			@NotNull(message = "Dining information cannot be null") boolean hasDining,
+			@NotNull(message = "Parking information cannot be null") boolean hasParking,
+			@NotNull(message = "Wifi information cannot be null") boolean hasFreeWiFi,
+			@NotNull(message = "Room Service information cannot be null") boolean hasRoomService,
+			@NotNull(message = "Swimming pool information cannot be null") boolean hasSwimmingPool,
+			@NotNull(message = "Fitness Center information cannot be null") boolean hasFitnessCenter, Set<Room> room,
+			Set<Reservation> reservation, Set<Review> review, HotelOwner hotelOwner) {
+		super();
+		this.hotelId = hotelId;
+		this.hotelName = hotelName;
+		this.location = location;
+		this.hasDining = hasDining;
+		this.hasParking = hasParking;
+		this.hasFreeWiFi = hasFreeWiFi;
+		this.hasRoomService = hasRoomService;
+		this.hasSwimmingPool = hasSwimmingPool;
+		this.hasFitnessCenter = hasFitnessCenter;
+		this.room = room;
+		this.reservation = reservation;
+		this.review = review;
+		this.hotelOwner = hotelOwner;
+	}
+
+
+
+	public Long getHotelId() {
         return hotelId;
     }
 
