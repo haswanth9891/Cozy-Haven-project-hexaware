@@ -1,5 +1,6 @@
 package com.hexaware.ccozyhaven.restcontroller;
 
+import java.security.Provider.Service;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -8,6 +9,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hexaware.ccozyhaven.entities.Hotel;
 import com.hexaware.ccozyhaven.entities.Reservation;
 import com.hexaware.ccozyhaven.entities.Room;
+import com.hexaware.ccozyhaven.entities.User;
 import com.hexaware.ccozyhaven.exceptions.InvalidCancellationException;
 import com.hexaware.ccozyhaven.exceptions.ReservationNotFoundException;
 
@@ -22,12 +27,29 @@ import com.hexaware.ccozyhaven.exceptions.RoomNotFoundException;
 
 import com.hexaware.ccozyhaven.service.IUserService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/cozyhaven-user")
 public class UserController {
 	
 		@Autowired
 	    private IUserService userService;
+		
+		
+		@PostMapping("/addUser")
+		public User addUser(@RequestBody @Valid User user) {
+			
+			 return userService.addUser(user);
+		}
+		
+		@PutMapping("/updateUser")
+		public User updateUser(@RequestBody @Valid User user) {
+			 
+			return userService.updateUser(user);
+		}
+		
+		
 
 	    @GetMapping("/searchRooms")
 	    public List<Room> searchRooms(

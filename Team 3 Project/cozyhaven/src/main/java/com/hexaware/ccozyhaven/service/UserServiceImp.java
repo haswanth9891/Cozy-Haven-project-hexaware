@@ -40,7 +40,22 @@ public class UserServiceImp implements IUserService {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	
+	@Override
+	public User addUser(User user) {
+		
+		return userRepository.save(user);
+	}
 
+	@Override
+	public User updateUser(User user) {
+		
+		return userRepository.save(user);
+	}
+
+	
+	
 	@Override
 	public List<Room> searchRooms(String location, LocalDate checkInDate, LocalDate checkOutDate, int numberOfRooms) {
 		if (checkInDate.isAfter(checkOutDate)) {
@@ -224,5 +239,7 @@ public class UserServiceImp implements IUserService {
 		}
 
 	}
+
+	
 
 }

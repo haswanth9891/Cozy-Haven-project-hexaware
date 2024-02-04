@@ -11,12 +11,13 @@ import org.springframework.stereotype.Repository;
 import com.hexaware.ccozyhaven.entities.Hotel;
 import com.hexaware.ccozyhaven.entities.Reservation;
 import com.hexaware.ccozyhaven.entities.Room;
-
+import com.hexaware.ccozyhaven.entities.User;
 import com.hexaware.ccozyhaven.exceptions.InvalidCancellationException;
 import com.hexaware.ccozyhaven.exceptions.ReservationNotFoundException;
 import com.hexaware.ccozyhaven.exceptions.RoomNotAvailableException;
 import com.hexaware.ccozyhaven.exceptions.RoomNotFoundException;
 import com.hexaware.ccozyhaven.exceptions.UserNotFoundException;
+
 
 
 @Repository
@@ -27,6 +28,11 @@ public interface IUserService {
 //
 //    // User login
 //    boolean loginUser(String username, String password);
+	 // add the user
+	 public User addUser(User user);
+	 
+    // update the user
+	 public User updateUser(User user);
     
     //search for hotel rooms
     public List<Room> searchRooms(String location, LocalDate checkInDate, LocalDate checkOutDate, int numberOfRooms);
