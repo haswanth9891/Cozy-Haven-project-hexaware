@@ -86,7 +86,7 @@ public class HotelOwnerServiceImp implements IHotelOwnerService{
 		 Room existingRoom = roomRepository.findById(roomId)
 	                .orElseThrow(() -> new RoomNotFoundException("Room not found with id: " + roomId));
 
-	        // Update the room details based on the provided information
+	       
 	        existingRoom.setRoomSize(updatedRoomDTO.getRoomSize());
 	        existingRoom.setBedType(updatedRoomDTO.getBedType());
 	        existingRoom.setMaxOccupancy(updatedRoomDTO.getMaxOccupancy());
@@ -94,7 +94,7 @@ public class HotelOwnerServiceImp implements IHotelOwnerService{
 	        existingRoom.setAC(updatedRoomDTO.isAC());
 	        existingRoom.setAvailabilityStatus(updatedRoomDTO.isAvailabilityStatus());
 
-	        // Save the updated room to the database
+	       
 	        return roomRepository.save(existingRoom);
 	}
 
@@ -103,7 +103,7 @@ public class HotelOwnerServiceImp implements IHotelOwnerService{
 		Room roomToDelete = roomRepository.findById(roomId)
                 .orElseThrow(() -> new RoomNotFoundException("Room not found with id: " + roomId));
 
-        // Delete the room from the database
+       
         roomRepository.delete(roomToDelete);
 	}
 

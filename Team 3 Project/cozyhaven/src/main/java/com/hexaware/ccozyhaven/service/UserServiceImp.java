@@ -98,7 +98,7 @@ public class UserServiceImp implements IUserService {
 			Room room = optionalRoom.get();
 			double baseFare = room.getBaseFare();
 
-			// Determine the maximum capacity and calculate additional charges based on the
+			// Determine the maximum capacity and calculate additional charges based on the no.of peopele extract
 			// provided criteria
 			int maxCapacity = calculateMaxCapacity(room);
 
@@ -108,7 +108,7 @@ public class UserServiceImp implements IUserService {
 				throw new IllegalArgumentException("Number of people exceeds the room's maximum capacity.");
 			}
 
-			// Calculate additional charges based on the provided criteria
+			// Calculate additional charges based on the provided criteria in pdf 
 			double additionalCharge = 0;
 			for (int i = 1; i <= numberOfAdults; i++) {
 				additionalCharge += calculateAdditionalCharge(i, true);
@@ -127,9 +127,7 @@ public class UserServiceImp implements IUserService {
 	}
 
 	private int calculateMaxCapacity(Room room) {
-		// Implement your logic to determine the max capacity based on room properties
-		// For example, you can use roomSize, bedType, or other properties to make a
-		// decision.
+		
 		// Here's a simplified example based on the bedType:
 		switch (room.getBedType()) {
 		case "Single Bed":
@@ -142,7 +140,7 @@ public class UserServiceImp implements IUserService {
 	}
 
 	private double calculateAdditionalCharge(int personIndex, boolean isAdult) {
-		// Adjust the logic based on your specific criteria for additional charges
+		// The logic based on our specific criteria for additional charges
 		if (isAdult) {
 			return 0.4; // 40% additional charge for adults
 		} else {
@@ -202,7 +200,7 @@ public class UserServiceImp implements IUserService {
 				.orElseThrow(() -> new ReservationNotFoundException("Reservation not found with id: " + reservationId));
 
 		// Perform cancellation logic (e.g., update status or delete the reservation)
-		// For simplicity, let's assume there's a setStatus method in the Reservation
+		
 		// entity
 		reservation.setReservationStatus("CANCELLED");
 		reservationRepository.save(reservation);

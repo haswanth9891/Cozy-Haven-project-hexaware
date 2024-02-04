@@ -65,7 +65,7 @@ public class AdministratorServiceImp implements IAdministratorService{
 		 Reservation reservation = reservationRepository.findById(reservationId)
 	                .orElseThrow(() -> new ReservationNotFoundException("Reservation not found with id: " + reservationId));
 
-	        // Check if the reservation is in a cancellable state (e.g., not already canceled)
+	        // Check if the reservation is in a cancellable state for example( not already canceled)or (canceled)
 	        if (reservation.getReservationStatus() !="CANCELLED") {
 	            // Delete the reservation (you might want to perform additional cleanup like updating room availability)
 	            reservationRepository.delete(reservation);
