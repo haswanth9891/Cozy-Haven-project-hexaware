@@ -13,7 +13,25 @@ public class HotelOwnerDTO {
 	private String hotelOwnerName;
 	private String password;
     private String email;
-    private Set<Hotel> hotel = new HashSet<Hotel>();
+    private String gender;
+    private String address;
+    public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	private Set<Hotel> hotel = new HashSet<Hotel>();
     
     public HotelOwnerDTO() {
 		super();

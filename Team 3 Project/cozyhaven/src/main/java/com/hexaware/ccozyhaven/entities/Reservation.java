@@ -16,8 +16,8 @@ public class Reservation {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Pattern(regexp = "^[0-9]+$")
-	// @Column(name = "reservation_id")
+
+	@Column(name = "reservation_id")
 	private Long reservationId;
 
 	@NotNull(message = "Check-in date cannot be null")
@@ -43,9 +43,9 @@ public class Reservation {
 	@NotNull(message = "Reservation status cannot be null")
 	@Column(name = "reservation_status")
 	private String reservationStatus;
-	
+
 	@Column(name = "refund_processed")
-    private boolean refundProcessed;
+	private boolean refundProcessed;
 
 	@OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL)
 	private Set<Room> rooms = new HashSet<>();
@@ -62,17 +62,11 @@ public class Reservation {
 		super();
 	}
 
-	
-
-
-
-	public Reservation(@Pattern(regexp = "^[0-9]+$") Long reservationId,
-			@NotNull(message = "Check-in date cannot be null") LocalDate checkInDate,
+	public Reservation(Long reservationId, @NotNull(message = "Check-in date cannot be null") LocalDate checkInDate,
 			@NotNull(message = "Check-out date cannot be null") @Future(message = "Check-out date must be in the future") LocalDate checkOutDate,
 			@NotNull(message = "Number of adults cannot be null") int numberOfAdults,
 			@NotNull(message = "Number of children cannot be null") int numberOfChildren, double totalAmount,
-			@NotNull(message = "Reservation status cannot be null") String reservationStatus, boolean refundProcessed,
-			Set<Room> rooms, User user, Hotel hotel) {
+			@NotNull(message = "Reservation status cannot be null") String reservationStatus) {
 		super();
 		this.reservationId = reservationId;
 		this.checkInDate = checkInDate;
@@ -81,15 +75,21 @@ public class Reservation {
 		this.numberOfChildren = numberOfChildren;
 		this.totalAmount = totalAmount;
 		this.reservationStatus = reservationStatus;
-		this.refundProcessed = refundProcessed;
-		this.rooms = rooms;
-		this.user = user;
-		this.hotel = hotel;
 	}
 
-
-
-
+	public Reservation(@NotNull(message = "Check-in date cannot be null") LocalDate checkInDate,
+			@NotNull(message = "Check-out date cannot be null") @Future(message = "Check-out date must be in the future") LocalDate checkOutDate,
+			@NotNull(message = "Number of adults cannot be null") int numberOfAdults,
+			@NotNull(message = "Number of children cannot be null") int numberOfChildren, double totalAmount,
+			@NotNull(message = "Reservation status cannot be null") String reservationStatus) {
+		super();
+		this.checkInDate = checkInDate;
+		this.checkOutDate = checkOutDate;
+		this.numberOfAdults = numberOfAdults;
+		this.numberOfChildren = numberOfChildren;
+		this.totalAmount = totalAmount;
+		this.reservationStatus = reservationStatus;
+	}
 
 	public Long getReservationId() {
 		return reservationId;
@@ -146,24 +146,14 @@ public class Reservation {
 	public void setReservationStatus(String reservationStatus) {
 		this.reservationStatus = reservationStatus;
 	}
-	
-	
 
 	public boolean isRefundProcessed() {
 		return refundProcessed;
 	}
 
-
-
-
-
 	public void setRefundProcessed(boolean refundProcessed) {
 		this.refundProcessed = refundProcessed;
 	}
-
-
-
-
 
 	public Set<Room> getRooms() {
 		return rooms;
@@ -189,10 +179,6 @@ public class Reservation {
 		this.hotel = hotel;
 	}
 
-
-
-
-
 	@Override
 	public String toString() {
 		return "Reservation [reservationId=" + reservationId + ", checkInDate=" + checkInDate + ", checkOutDate="
@@ -200,9 +186,5 @@ public class Reservation {
 				+ ", totalAmount=" + totalAmount + ", reservationStatus=" + reservationStatus + ", refundProcessed="
 				+ refundProcessed + ", rooms=" + rooms + ", user=" + user + ", hotel=" + hotel + "]";
 	}
-	
-	
-
-	
 
 }

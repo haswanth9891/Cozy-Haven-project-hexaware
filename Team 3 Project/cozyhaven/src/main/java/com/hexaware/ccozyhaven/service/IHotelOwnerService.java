@@ -6,8 +6,10 @@ package com.hexaware.ccozyhaven.service;
 
 import java.util.List;
 
+import com.hexaware.ccozyhaven.dto.HotelDTO;
 import com.hexaware.ccozyhaven.dto.HotelOwnerDTO;
 import com.hexaware.ccozyhaven.dto.RoomDTO;
+import com.hexaware.ccozyhaven.entities.Hotel;
 import com.hexaware.ccozyhaven.entities.HotelOwner;
 import com.hexaware.ccozyhaven.entities.Room;
 import com.hexaware.ccozyhaven.exceptions.HotelOwnerNotFoundException;
@@ -47,4 +49,12 @@ public interface IHotelOwnerService {
 
     // Refund amount for canceled booked tickets
     double refundAmount(Long reservationId) throws RefundProcessedException, InvalidRefundException, ReservationNotFoundException;
+
+	void deleteHotelOwner(Long hotelOwnerId) throws HotelOwnerNotFoundException;
+
+	void addHotelOwnerWithHotel(HotelOwner hotelOwner);
+
+	Hotel addHotel(Long hotelOwnerId, HotelDTO hotelDTO) throws HotelOwnerNotFoundException;
+
+	
 }

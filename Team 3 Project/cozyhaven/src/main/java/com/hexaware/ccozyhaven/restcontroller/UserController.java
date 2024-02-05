@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hexaware.ccozyhaven.dto.UserDTO;
 import com.hexaware.ccozyhaven.entities.Hotel;
 import com.hexaware.ccozyhaven.entities.Reservation;
 import com.hexaware.ccozyhaven.entities.Room;
@@ -24,7 +25,7 @@ import com.hexaware.ccozyhaven.exceptions.InvalidCancellationException;
 import com.hexaware.ccozyhaven.exceptions.ReservationNotFoundException;
 
 import com.hexaware.ccozyhaven.exceptions.RoomNotFoundException;
-
+import com.hexaware.ccozyhaven.exceptions.UserNotFoundException;
 import com.hexaware.ccozyhaven.service.IUserService;
 
 import jakarta.validation.Valid;
@@ -37,21 +38,19 @@ public class UserController {
 	    private IUserService userService;
 		
 		
-		@PostMapping("/addUser")
-		public User addUser(@RequestBody @Valid User user) {
-			
-			 return userService.addUser(user);
-		}
+//		@PostMapping("/addUser")
+//		public User addUser(@RequestBody @Valid User user) {
+//			
+//			 return userService.addUser(user);
+//		}
 		
-		@PutMapping("/updateUser")
-		public User updateUser(@RequestBody @Valid User user) {
+		@PutMapping("/updateuser/{userId}")
+		public User updateUser(@PathVariable Long userId, @RequestBody @Valid UserDTO userDTO) throws UserNotFoundException {
 			 
-			return userService.updateUser(user);
+			return userService.updateUser(userId, userDTO);
 		}
 		
-		
-
-	    @GetMapping("/searchRooms")
+		@GetMapping("/searchRooms")
 	    public List<Room> searchRooms(
 	            @RequestParam String location,
 	            @RequestParam LocalDate checkInDate,

@@ -7,11 +7,12 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-
+import com.hexaware.ccozyhaven.dto.UserDTO;
 import com.hexaware.ccozyhaven.entities.Hotel;
 import com.hexaware.ccozyhaven.entities.Reservation;
 import com.hexaware.ccozyhaven.entities.Room;
 import com.hexaware.ccozyhaven.entities.User;
+import com.hexaware.ccozyhaven.exceptions.HotelOwnerNotFoundException;
 import com.hexaware.ccozyhaven.exceptions.InvalidCancellationException;
 import com.hexaware.ccozyhaven.exceptions.ReservationNotFoundException;
 import com.hexaware.ccozyhaven.exceptions.RoomNotAvailableException;
@@ -29,10 +30,10 @@ public interface IUserService {
 //    // User login
 //    boolean loginUser(String username, String password);
 	 // add the user
-	 public User addUser(User user);
+	// public User addUser(User user);
 	 
-    // update the user
-	 public User updateUser(User user);
+	User updateUser(Long userId, UserDTO updatedUserDTO) throws UserNotFoundException;
+
     
     //search for hotel rooms
     public List<Room> searchRooms(String location, LocalDate checkInDate, LocalDate checkOutDate, int numberOfRooms);
@@ -67,6 +68,7 @@ public interface IUserService {
     //Cancel 
     void cancelReservationAndRequestRefund(Long userId, Long reservationId) throws InvalidCancellationException, ReservationNotFoundException;
 
+	
     
     
     // Get auto-suggestions for location based on user input

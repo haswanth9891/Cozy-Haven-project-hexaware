@@ -2,6 +2,8 @@ package com.hexaware.ccozyhaven.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -20,6 +22,7 @@ public class Review {
 
     @Id
     @Column(name = "review_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reviewId;
 
     @Min(value = 1, message = "Rating must be at least 1")
@@ -51,17 +54,34 @@ public class Review {
         super();
     }
 
-    public Review(Long reviewId, int rating, String reviewText, Date reviewDate) {
-        super();
-        this.reviewId = reviewId;
-        this.rating = rating;
-        this.reviewText = reviewText;
-        this.reviewDate = reviewDate;
-    }
-
+   
     
+    
+    public Review(Long reviewId,
+			@Min(value = 1, message = "Rating must be at least 1") @Max(value = 5, message = "Rating must be at most 5") int rating,
+			@NotBlank(message = "Review text is required") @Size(max = 255, message = "Review text must be at most 255 characters") String reviewText,
+			@NotNull(message = "Review date is required") Date reviewDate) {
+		super();
+		this.reviewId = reviewId;
+		this.rating = rating;
+		this.reviewText = reviewText;
+		this.reviewDate = reviewDate;
+	}
 
-    public Long getReviewId() {
+
+
+
+	public Review(
+			@Min(value = 1, message = "Rating must be at least 1") @Max(value = 5, message = "Rating must be at most 5") int rating,
+			@NotBlank(message = "Review text is required") @Size(max = 255, message = "Review text must be at most 255 characters") String reviewText,
+			@NotNull(message = "Review date is required") Date reviewDate) {
+		super();
+		this.rating = rating;
+		this.reviewText = reviewText;
+		this.reviewDate = reviewDate;
+	}
+
+	public Long getReviewId() {
         return reviewId;
     }
 

@@ -1,17 +1,15 @@
 package com.hexaware.ccozyhaven.dto;
 
-
-
 public class AdministratorDTO {
-	
-    private Long adminId;
-    private String userName;
-    private String password;
-    private String email;
-    
+
+	private Long adminId;
+	private String userName;
+	private String password;
+	private String email;
+
 	public AdministratorDTO() {
 		super();
-		
+
 	}
 
 	public AdministratorDTO(Long adminId, String userName, String password, String email) {
@@ -59,8 +57,5 @@ public class AdministratorDTO {
 		return "AdministratorDTO [adminId=" + adminId + ", userName=" + userName + ", password=" + password + ", email="
 				+ email + "]";
 	}
-	
-    
-    
 
 }

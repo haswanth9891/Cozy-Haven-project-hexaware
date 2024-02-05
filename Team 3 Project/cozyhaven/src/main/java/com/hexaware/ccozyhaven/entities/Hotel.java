@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -25,9 +26,7 @@ import jakarta.validation.constraints.Size;
 public class Hotel {
 
     @Id
-    
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Pattern(regexp = "^[0-9]+$", message = "Hotel ID must contain only numeric digits")
     private Long hotelId;
 
     @Column(name = "hotel_name")
@@ -47,7 +46,7 @@ public class Hotel {
     @Column(name = "has_parking")
     private boolean hasParking;
 
-    @NotNull(message = "Wifi information cannot be null")
+    //@NotNull(message = "Wifi information cannot be null")
     @Column(name = "has_free_wifi")
     private boolean hasFreeWiFi;
 
@@ -73,18 +72,27 @@ public class Hotel {
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
     private Set<Review> review = new HashSet<>();
     
-    @ManyToOne
-    @JoinColumn(name = "hotel_owner_id")
+    @OneToOne(mappedBy = "hotel" , cascade = CascadeType.ALL)
+    
     private HotelOwner hotelOwner;
 
    
+	public HotelOwner getHotelOwner() {
+		return hotelOwner;
+	}
+
+	public void setHotelOwner(HotelOwner hotelOwner) {
+		this.hotelOwner = hotelOwner;
+	}
+
 	public Hotel() {
         super();
     }
 	
 	
+	
 
-    public Hotel(@Pattern(regexp = "^[0-9]+$", message = "Hotel ID must contain only numeric digits") Long hotelId,
+	public Hotel(Long hotelId,
 			@NotBlank(message = "Hotel name cannot be blank") @Size(min = 3, max = 100, message = "Hotel name must be between 3 and 100 characters") String hotelName,
 			@NotBlank(message = "Location cannot be blank") @Size(min = 3, max = 100, message = "Location must be between 3 and 100 characters") String location,
 			@NotNull(message = "Dining information cannot be null") boolean hasDining,
@@ -92,8 +100,7 @@ public class Hotel {
 			@NotNull(message = "Wifi information cannot be null") boolean hasFreeWiFi,
 			@NotNull(message = "Room Service information cannot be null") boolean hasRoomService,
 			@NotNull(message = "Swimming pool information cannot be null") boolean hasSwimmingPool,
-			@NotNull(message = "Fitness Center information cannot be null") boolean hasFitnessCenter, Set<Room> room,
-			Set<Reservation> reservation, Set<Review> review, HotelOwner hotelOwner) {
+			@NotNull(message = "Fitness Center information cannot be null") boolean hasFitnessCenter) {
 		super();
 		this.hotelId = hotelId;
 		this.hotelName = hotelName;
@@ -104,13 +111,27 @@ public class Hotel {
 		this.hasRoomService = hasRoomService;
 		this.hasSwimmingPool = hasSwimmingPool;
 		this.hasFitnessCenter = hasFitnessCenter;
-		this.room = room;
-		this.reservation = reservation;
-		this.review = review;
-		this.hotelOwner = hotelOwner;
 	}
-
-
+	
+	public Hotel(
+			@NotBlank(message = "Hotel name cannot be blank") @Size(min = 3, max = 100, message = "Hotel name must be between 3 and 100 characters") String hotelName,
+			@NotBlank(message = "Location cannot be blank") @Size(min = 3, max = 100, message = "Location must be between 3 and 100 characters") String location,
+			@NotNull(message = "Dining information cannot be null") boolean hasDining,
+			@NotNull(message = "Parking information cannot be null") boolean hasParking,
+			@NotNull(message = "Wifi information cannot be null") boolean hasFreeWiFi,
+			@NotNull(message = "Room Service information cannot be null") boolean hasRoomService,
+			@NotNull(message = "Swimming pool information cannot be null") boolean hasSwimmingPool,
+			@NotNull(message = "Fitness Center information cannot be null") boolean hasFitnessCenter) {
+		super();
+		this.hotelName = hotelName;
+		this.location = location;
+		this.hasDining = hasDining;
+		this.hasParking = hasParking;
+		this.hasFreeWiFi = hasFreeWiFi;
+		this.hasRoomService = hasRoomService;
+		this.hasSwimmingPool = hasSwimmingPool;
+		this.hasFitnessCenter = hasFitnessCenter;
+	}
 
 	public Long getHotelId() {
         return hotelId;

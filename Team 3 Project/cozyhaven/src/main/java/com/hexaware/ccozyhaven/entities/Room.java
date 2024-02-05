@@ -16,7 +16,6 @@ public class Room {
 	@Id
 	@Column(name = "room_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Pattern(regexp = "^[0-9]+$")
 	private Long roomId;
 
 	@NotBlank(message = "Room size is required")
@@ -58,14 +57,33 @@ public class Room {
 		super();
 	}
 
-	public Room(@Pattern(regexp = "^[0-9]+$") Long roomId,
+	
+
+	public Room(
 			@NotBlank(message = "Room size is required") @Size(max = 20, message = "Room size must be at most 20 characters") String roomSize,
 			@NotBlank(message = "Bed type is required") @Size(max = 20, message = "Bed type must be at most 20 characters") @Pattern(regexp = "single bed|double bed|king size", message = "Invalid bed type") String bedType,
 			@Positive(message = "Max occupancy must be a positive number") int maxOccupancy,
 			@DecimalMin(value = "0.00", inclusive = false, message = "Base fare must be greater than 0.00") double baseFare,
 			boolean isAC,
-			@NotBlank(message = "Availability status is required") @Size(max = 20, message = "Availability status must be at most 20 characters") boolean availabilityStatus,
-			Reservation reservation, Hotel hotel) {
+			@NotBlank(message = "Availability status is required") @Size(max = 20, message = "Availability status must be at most 20 characters") boolean availabilityStatus) {
+		super();
+		this.roomSize = roomSize;
+		this.bedType = bedType;
+		this.maxOccupancy = maxOccupancy;
+		this.baseFare = baseFare;
+		this.isAC = isAC;
+		this.availabilityStatus = availabilityStatus;
+	}
+
+
+
+	public Room(Long roomId,
+			@NotBlank(message = "Room size is required") @Size(max = 20, message = "Room size must be at most 20 characters") String roomSize,
+			@NotBlank(message = "Bed type is required") @Size(max = 20, message = "Bed type must be at most 20 characters") @Pattern(regexp = "single bed|double bed|king size", message = "Invalid bed type") String bedType,
+			@Positive(message = "Max occupancy must be a positive number") int maxOccupancy,
+			@DecimalMin(value = "0.00", inclusive = false, message = "Base fare must be greater than 0.00") double baseFare,
+			boolean isAC,
+			@NotBlank(message = "Availability status is required") @Size(max = 20, message = "Availability status must be at most 20 characters") boolean availabilityStatus) {
 		super();
 		this.roomId = roomId;
 		this.roomSize = roomSize;
@@ -74,9 +92,9 @@ public class Room {
 		this.baseFare = baseFare;
 		this.isAC = isAC;
 		this.availabilityStatus = availabilityStatus;
-		this.reservation = reservation;
-		this.hotel = hotel;
 	}
+
+
 
 	public Long getRoomId() {
 		return roomId;
