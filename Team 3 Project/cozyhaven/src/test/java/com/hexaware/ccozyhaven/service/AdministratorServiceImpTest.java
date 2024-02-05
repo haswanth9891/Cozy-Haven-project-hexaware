@@ -50,10 +50,10 @@ class AdministratorServiceImpTest {
         hotelOwner.setHotelOwnerId(1L);
         hotelOwnerRepository.save(hotelOwner);
 
-        // When deleteHotelOwnerAccount is called
+        
         assertDoesNotThrow(() -> administratorService.deleteHotelOwnerAccount(1L));
 
-        // Then the hotel owner should be deleted
+       
         Optional<HotelOwner> deletedHotelOwner = hotelOwnerRepository.findById(1L);
         assertFalse(deletedHotelOwner.isPresent());
 

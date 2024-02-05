@@ -58,7 +58,7 @@ public class HotelOwnerServiceImp implements IHotelOwnerService{
         newRoom.setAC(roomDTO.isAC());
         newRoom.setAvailabilityStatus(roomDTO.isAvailabilityStatus());
 
-        // Save the new room to the database
+        
         return roomRepository.save(newRoom);
 	}
 
@@ -118,16 +118,16 @@ public class HotelOwnerServiceImp implements IHotelOwnerService{
 		Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new ReservationNotFoundException("Reservation not found with id: " + reservationId));
 
-        // Check if the reservation is canceled
+        
         if (reservation.getReservationStatus() == "CANCELLED") {
-            // Check if a refund has not been processed
+            
             if (!reservation.isRefundProcessed()) {
-                // Perform the refund logic here (e.g., process payment, etc.)
+               
 
-                // Calculate and return the refunded amount (dummy value, replace with actual calculation)
+               
                 double refundedAmount = calculateRefundedAmount(reservation);
                 
-                // Optionally, update the reservation to mark refund as processed
+               
                 reservation.setRefundProcessed(true);
                 reservationRepository.save(reservation);
 

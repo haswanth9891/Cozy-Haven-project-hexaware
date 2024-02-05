@@ -78,7 +78,7 @@ class UserServiceImpTest {
         int numberOfChildren = 1;
         double totalFare = userService.calculateTotalFare(roomId, numberOfAdults, numberOfChildren);
 
-        // Add assertions based on your expected totalFare
+       
         assertEquals(140, totalFare);
 		
 	}

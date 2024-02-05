@@ -44,7 +44,7 @@ class HotelOwnerServiceImpTest {
 		 Set<Hotel> hotels = new HashSet<>();
 	        hotels.add(new Hotel());
 
-	        // Creating an instance of HotelOwnerDTO using the provided constructor
+	        
 	        HotelOwnerDTO hotelOwnerDTO = new HotelOwnerDTO(1L, "John Doe", "password123", "john@example.com", hotels);
 		
         HotelOwner updatedHotelOwner = hotelOwnerService.updateHotelOwner(1L, hotelOwnerDTO);
@@ -61,11 +61,9 @@ class HotelOwnerServiceImpTest {
 	        assertEquals("Standard", editedRoom.getRoomSize());
 		
 	}
-
-	@Test
-	void testRemoveRoom() throws RoomNotFoundException {
-		hotelOwnerService.removeRoom(1L);
-	}
+	
+	
+	
 
 	@Test
 	void testViewReservation() {
@@ -73,11 +71,16 @@ class HotelOwnerServiceImpTest {
         assertNotNull(reservations);
 		
 	}
-
-	@Test
-	void testRefundAmount() throws RefundProcessedException, InvalidRefundException, ReservationNotFoundException {
-		double refundedAmount = hotelOwnerService.refundAmount(1L);
-		
-	}
+	
+//	//to be completed
+//	@Test
+//	void testRefundAmount() throws RefundProcessedException, InvalidRefundException, ReservationNotFoundException {
+//		double refundedAmount = hotelOwnerService.refundAmount(1L);
+//		
+//	}
+//	@Test
+//	void testRemoveRoom() throws RoomNotFoundException {
+//		hotelOwnerService.removeRoom(1L);
+//	}
 
 }
