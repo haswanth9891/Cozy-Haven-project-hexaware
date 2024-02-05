@@ -12,6 +12,9 @@ public class UserDTO {
     private String firstName;
     private String lastName;
     private String contactNumber;
+    private String gender;
+    private String address;
+	
 	public UserDTO() {
 		super();
 	}
@@ -67,6 +70,20 @@ public class UserDTO {
 	}
 	public void setContactNumber(String contactNumber) {
 		this.contactNumber = contactNumber;
+	}
+	
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
 	}
 	@Override
 	public String toString() {

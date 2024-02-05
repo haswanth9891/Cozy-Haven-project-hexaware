@@ -19,59 +19,58 @@ import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class AdministratorServiceImp implements IAdministratorService{
-	
-	 @Autowired
-	 private UserRepository userRepository;
+public class AdministratorServiceImp implements IAdministratorService {
 
-	    @Autowired
-	    private HotelOwnerRepository hotelOwnerRepository;
-	   
-	    @Autowired
-	    private ReservationRepository reservationRepository;
+	@Autowired
+	private UserRepository userRepository;
 
+	@Autowired
+	private HotelOwnerRepository hotelOwnerRepository;
+
+	@Autowired
+	private ReservationRepository reservationRepository;
 
 	@Override
 	public void deleteUserAccount(Long userId) throws UserNotFoundException {
-		  User user = userRepository.findById(userId)
-		            .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
 
-		   userRepository.delete(user);
+		userRepository.delete(user);
 	}
 
 	@Override
 	public void deleteHotelOwnerAccount(Long hotelOwnerId) throws UserNotFoundException {
 		HotelOwner hotelOwner = hotelOwnerRepository.findById(hotelOwnerId)
-	            .orElseThrow(() -> new UserNotFoundException("User not found with id: " + hotelOwnerId));
+				.orElseThrow(() -> new UserNotFoundException("User not found with id: " + hotelOwnerId));
 
-	   hotelOwnerRepository.delete(hotelOwner);
-		
+		hotelOwnerRepository.delete(hotelOwner);
+
 	}
 
 	@Override
 	public List<User> viewAllUser() {
-		
+
 		return userRepository.findAll();
 	}
 
 	@Override
 	public List<HotelOwner> viewAllHotelOwner() {
-		
+
 		return hotelOwnerRepository.findAll();
 	}
 
 	@Override
-	public void manageRoomReservation(Long reservationId, String reservationStatus) throws ReservationNotFoundException, InvalidCancellationException {
-		 Reservation reservation = reservationRepository.findById(reservationId)
-	                .orElseThrow(() -> new ReservationNotFoundException("Reservation not found with id: " + reservationId));
+	public void manageRoomReservation(Long reservationId, String reservationStatus)
+			throws ReservationNotFoundException, InvalidCancellationException {
+		Reservation reservation = reservationRepository.findById(reservationId)
+				.orElseThrow(() -> new ReservationNotFoundException("Reservation not found with id: " + reservationId));
 
-	       
-	        if (reservation.getReservationStatus() !="CANCELLED") {
-	            
-	            reservationRepository.delete(reservation);
-	        } else {
-	            throw new InvalidCancellationException("Reservation is already cancelled.");
-	        }
+		if (reservation.getReservationStatus()!= "CANCELLED") {
+
+			reservationRepository.delete(reservation);
+		} else {
+			throw new InvalidCancellationException("Reservation is already cancelled.");
+		}
 	}
 
 }

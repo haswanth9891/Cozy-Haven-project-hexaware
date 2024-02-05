@@ -18,12 +18,12 @@ public class Administrator {
     @Id
     @Column(name = "admin_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Pattern(regexp = "^[0-9]+$")
+    
     private Long adminId;
 
     @NotBlank(message = "Username cannot be blank")
     @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
-    @Column(name = "user_name")
+    @Column(name = "administrator_name")
     private String userName;
 
     @NotBlank(message = "Password cannot be blank")
@@ -46,13 +46,57 @@ public class Administrator {
 		super();
 	}
 
-	public Administrator(Long adminId, String userName, String password, String email) {
+	
+	
+	public Administrator(Long adminId,
+			@NotBlank(message = "Username cannot be blank") @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters") String userName,
+			@NotBlank(message = "Password cannot be blank") @Size(min = 6, message = "Password must be at least 6 characters") String password,
+			@NotBlank(message = "Password cannot be blank") @Email(message = "Password cannot be blank") String email,
+			@Pattern(regexp = "^(male|female|non-binary)$", message = "Invalid gender") String gender,
+			@NotBlank(message = "Address is required") String address) {
 		super();
 		this.adminId = adminId;
 		this.userName = userName;
 		this.password = password;
 		this.email = email;
+		this.gender = gender;
+		this.address = address;
 	}
+
+	public Administrator(
+			@NotBlank(message = "Username cannot be blank") @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters") String userName,
+			@NotBlank(message = "Password cannot be blank") @Size(min = 6, message = "Password must be at least 6 characters") String password,
+			@NotBlank(message = "Password cannot be blank") @Email(message = "Password cannot be blank") String email,
+			@Pattern(regexp = "^(male|female|non-binary)$", message = "Invalid gender") String gender,
+			@NotBlank(message = "Address is required") String address) {
+		super();
+		this.userName = userName;
+		this.password = password;
+		this.email = email;
+		this.gender = gender;
+		this.address = address;
+	}
+
+
+	public String getGender() {
+		return gender;
+	}
+
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+
+	public String getAddress() {
+		return address;
+	}
+
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
 
 	public Long getAdminId() {
 		return adminId;

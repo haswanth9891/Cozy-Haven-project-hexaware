@@ -15,7 +15,6 @@ public class User {
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Pattern(regexp = "^[0-9]+$")
     private Long userId;
 
     @NotBlank(message = "Username is required")
@@ -56,6 +55,8 @@ public class User {
 		super();
 	}
 
+	
+
 	public User(Long userId,
 			@NotBlank(message = "Username is required") @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters") String userName,
 			@NotBlank(message = "Password is required") String password,
@@ -63,8 +64,8 @@ public class User {
 			@NotBlank(message = "First name is required") String firstName,
 			@NotBlank(message = "Last name is required") String lastName,
 			@Size(max = 10, message = "Contact number must be at most 10 characters") @Pattern(regexp = "\\d{10}", message = "Invalid contact number") String contactNumber,
-			@NotBlank(message = "Address is required") String address, Set<Reservation> reservations,
-			Set<Review> reviews) {
+			@Pattern(regexp = "^(male|female|non-binary)$", message = "Invalid gender") String gender,
+			@NotBlank(message = "Address is required") String address) {
 		super();
 		this.userId = userId;
 		this.userName = userName;
@@ -73,10 +74,39 @@ public class User {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.contactNumber = contactNumber;
+		this.gender = gender;
 		this.address = address;
-		this.reservations = reservations;
-		this.reviews = reviews;
 	}
+	
+	
+
+
+
+	
+
+
+
+	public User(
+			@NotBlank(message = "Username is required") @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters") String userName,
+			@NotBlank(message = "Password is required") String password,
+			@Email(message = "Invalid email format") String email,
+			@NotBlank(message = "First name is required") String firstName,
+			@NotBlank(message = "Last name is required") String lastName,
+			@Size(max = 10, message = "Contact number must be at most 10 characters") @Pattern(regexp = "\\d{10}", message = "Invalid contact number") String contactNumber,
+			@Pattern(regexp = "^(male|female|non-binary)$", message = "Invalid gender") String gender,
+			@NotBlank(message = "Address is required") String address) {
+		super();
+		this.userName = userName;
+		this.password = password;
+		this.email = email;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.contactNumber = contactNumber;
+		this.gender = gender;
+		this.address = address;
+	}
+
+
 
 	public Long getUserId() {
 		return userId;
@@ -132,6 +162,16 @@ public class User {
 
 	public void setContactNumber(String contactNumber) {
 		this.contactNumber = contactNumber;
+	}
+	
+	public String getGender() {
+		return gender;
+	}
+
+
+
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 
 	public String getAddress() {

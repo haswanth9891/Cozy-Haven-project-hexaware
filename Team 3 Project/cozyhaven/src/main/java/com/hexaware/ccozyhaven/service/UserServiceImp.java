@@ -9,11 +9,15 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hexaware.ccozyhaven.dto.HotelOwnerDTO;
+import com.hexaware.ccozyhaven.dto.UserDTO;
 import com.hexaware.ccozyhaven.entities.Hotel;
+import com.hexaware.ccozyhaven.entities.HotelOwner;
 import com.hexaware.ccozyhaven.entities.Reservation;
 
 import com.hexaware.ccozyhaven.entities.Room;
 import com.hexaware.ccozyhaven.entities.User;
+import com.hexaware.ccozyhaven.exceptions.HotelOwnerNotFoundException;
 import com.hexaware.ccozyhaven.exceptions.InvalidCancellationException;
 import com.hexaware.ccozyhaven.exceptions.ReservationNotFoundException;
 import com.hexaware.ccozyhaven.exceptions.RoomNotAvailableException;
@@ -42,16 +46,31 @@ public class UserServiceImp implements IUserService {
 	private UserRepository userRepository;
 	
 	
-	@Override
-	public User addUser(User user) {
-		
-		return userRepository.save(user);
-	}
+//	@Override
+//	public User addUser(User user) {
+//		
+//		return userRepository.save(user);
+//	}
 
+	
 	@Override
-	public User updateUser(User user) {
-		
-		return userRepository.save(user);
+	public User updateUser(Long userId, UserDTO updatedUserDTO)
+			throws UserNotFoundException {
+
+		User existingUser = userRepository.findById(userId)
+				.orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
+
+		existingUser.setEmail(updatedUserDTO.getEmail());
+
+		existingUser.setFirstName(updatedUserDTO.getFirstName());
+
+		existingUser.setLastName(updatedUserDTO.getLastName());
+		existingUser.setContactNumber(updatedUserDTO.getContactNumber());
+		existingUser.setGender(updatedUserDTO.getGender());
+		existingUser.setAddress(updatedUserDTO.getAddress());
+
+		return userRepository.save(existingUser);
+
 	}
 
 	
@@ -237,6 +256,9 @@ public class UserServiceImp implements IUserService {
 
 	}
 
+
+
+	
 	
 
 }
