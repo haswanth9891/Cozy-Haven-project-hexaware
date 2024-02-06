@@ -22,42 +22,41 @@ import com.hexaware.ccozyhaven.service.IAdministratorService;
 @RestController
 @RequestMapping("/cozyhaven-admin")
 public class AdministratorController {
-	
-	 @Autowired
-	    private IAdministratorService administratorService;
-	 
-	 @DeleteMapping("/deleteUserAccount/{userId}")
-	    public ResponseEntity<String> deleteUserAccount(@PathVariable Long userId) throws UserNotFoundException {
-	        administratorService.deleteUserAccount(userId);
-	        return new ResponseEntity<>("User account deleted successfully", HttpStatus.OK);
-	    }
-	 
-	 
-	 @DeleteMapping("/deleteHotelOwnerAccount/{hotelOwnerId}")
-	    public ResponseEntity<String> deleteHotelOwnerAccount(@PathVariable Long hotelOwnerId) throws UserNotFoundException {
-	        administratorService.deleteHotelOwnerAccount(hotelOwnerId);
-	        return new ResponseEntity<>("Hotel owner account deleted successfully", HttpStatus.OK);
-	    }
-	 
-	 @GetMapping("/viewAllUsers")
-	    public ResponseEntity<List<User>> viewAllUsers() {
-	        List<User> users = administratorService.viewAllUser();
-	        return new ResponseEntity<>(users, HttpStatus.OK);
-	    }
-	 
-	 @GetMapping("/viewAllHotelOwners")
-	    public ResponseEntity<List<HotelOwner>> viewAllHotelOwners() {
-	        List<HotelOwner> hotelOwners = administratorService.viewAllHotelOwner();
-	        return new ResponseEntity<>(hotelOwners, HttpStatus.OK);
-	    }
-	 
-	 
-	 @DeleteMapping("/manageRoomReservation/{reservationId}")
-	    public ResponseEntity<String> manageRoomReservation(@PathVariable Long reservationId,
-	                                                        @RequestParam(name = "reservationStatus") String reservationStatus)
-	            throws ReservationNotFoundException, InvalidCancellationException {
-	        administratorService.manageRoomReservation(reservationId, reservationStatus);
-	        return new ResponseEntity<>("Room reservation managed successfully", HttpStatus.OK);
-	    }
+
+	@Autowired
+	private IAdministratorService administratorService;
+
+	@DeleteMapping("/deleteUserAccount/{userId}")
+	public String deleteUserAccount(@PathVariable Long userId) throws UserNotFoundException {
+		administratorService.deleteUserAccount(userId);
+		return "User account deleted successfully";
+	}
+
+	@DeleteMapping("/deleteHotelOwnerAccount/{hotelOwnerId}")
+	public String deleteHotelOwnerAccount(@PathVariable Long hotelOwnerId)
+			throws UserNotFoundException {
+		administratorService.deleteHotelOwnerAccount(hotelOwnerId);
+		return "Hotel owner account deleted successfully";
+	}
+
+	@GetMapping("/viewAllUsers")
+	public List<User> viewAllUsers() {
+		List<User> users = administratorService.viewAllUser();
+		return users;
+	}
+
+	@GetMapping("/viewAllHotelOwners")
+	public List<HotelOwner> viewAllHotelOwners() {
+		List<HotelOwner> hotelOwners = administratorService.viewAllHotelOwner();
+		return hotelOwners;
+	}
+
+	@DeleteMapping("/manageRoomReservation/{reservationId}")
+	public String manageRoomReservation(@PathVariable Long reservationId,
+			@RequestParam(name = "reservationStatus") String reservationStatus)
+			throws ReservationNotFoundException, InvalidCancellationException {
+		administratorService.manageRoomReservation(reservationId, reservationStatus);
+		return "Room reservation managed successfully";
+	}
 
 }

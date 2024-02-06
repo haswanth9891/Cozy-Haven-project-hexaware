@@ -36,25 +36,25 @@ public interface IHotelOwnerService {
     HotelOwner updateHotelOwner(Long hotelOwnerId, HotelOwnerDTO updatedHotelOwnerDTO) throws HotelOwnerNotFoundException;
 
     // Add a new room to the hotel
-    Room addRoom(RoomDTO roomDTO);
+    //Room addRoom(RoomDTO roomDTO);
 
     // Edit details of an existing room in the hotel
-    Room editRoom(Long roomId, RoomDTO updatedRoomDTO) throws RoomNotFoundException;
+    //Room editRoom(Long roomId, RoomDTO updatedRoomDTO) throws RoomNotFoundException;
 
     // Remove a room from the hotel
-    void removeRoom(Long roomId) throws RoomNotFoundException;
+    //void removeRoom(Long roomId) throws RoomNotFoundException;
 
     // View booked reservations by users for rooms in the hotel
-    List<Reservation> viewReservation(Long hotelId);
+    //List<Reservation> viewReservation(Long hotelId);
 
     // Refund amount for canceled booked tickets
-    double refundAmount(Long reservationId) throws RefundProcessedException, InvalidRefundException, ReservationNotFoundException;
+   // double refundAmount(Long reservationId) throws RefundProcessedException, InvalidRefundException, ReservationNotFoundException;
 
 	void deleteHotelOwner(Long hotelOwnerId) throws HotelOwnerNotFoundException;
 
 	void addHotelOwnerWithHotel(HotelOwner hotelOwner);
 
-	Hotel addHotel(Long hotelOwnerId, HotelDTO hotelDTO) throws HotelOwnerNotFoundException;
+	//Hotel addHotel(Long hotelOwnerId, HotelDTO hotelDTO) throws HotelOwnerNotFoundException;
 
 	
 }
