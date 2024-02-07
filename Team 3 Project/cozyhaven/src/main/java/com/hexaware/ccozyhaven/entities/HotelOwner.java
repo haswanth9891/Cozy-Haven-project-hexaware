@@ -38,7 +38,7 @@ public class HotelOwner {
 	@NotBlank(message = "Address is required")
 	private String address;
 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "hotel_id")
 	private Hotel hotel = new Hotel();
 

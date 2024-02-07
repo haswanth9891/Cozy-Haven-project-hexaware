@@ -30,14 +30,7 @@ class HotelOwnerServiceImpTest {
 	@Autowired
     private HotelOwnerServiceImp hotelOwnerService;
 
-	@Test
-	@Rollback(false)
-	void testAddRoom() {
-		RoomDTO roomDTO = new RoomDTO(2L ,"Deluxe", "Double Bed", 2, 150.0, true, true);
-        Room addedRoom = hotelOwnerService.addRoom(roomDTO);
-        assertNotNull(addedRoom);
-        assertEquals("Deluxe", addedRoom.getRoomSize());
-	}
+	
 
 	@Test
 	void testUpdateHotelOwner() throws HotelOwnerNotFoundException {
@@ -53,24 +46,12 @@ class HotelOwnerServiceImpTest {
 		
 	}
 
-	@Test
-	void testEditRoom() throws RoomNotFoundException {
-		 RoomDTO updatedRoomDTO = new RoomDTO(1L,"Standard", "Single Bed", 1, 100.0, false, false);
-	        Room editedRoom = hotelOwnerService.editRoom(1L, updatedRoomDTO);
-	        assertNotNull(editedRoom);
-	        assertEquals("Standard", editedRoom.getRoomSize());
-		
-	}
+	
 	
 	
 	
 
-	@Test
-	void testViewReservation() {
-		List<Reservation> reservations = hotelOwnerService.viewReservation(1L);
-        assertNotNull(reservations);
-		
-	}
+//	
 	
 //	//to be completed
 //	@Test

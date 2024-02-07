@@ -73,7 +73,7 @@ public class Hotel {
     private Set<Review> review = new HashSet<>();
     
     @OneToOne(mappedBy = "hotel" , cascade = CascadeType.ALL)
-    
+    @JoinColumn(name="hotel_id")
     private HotelOwner hotelOwner;
 
    
