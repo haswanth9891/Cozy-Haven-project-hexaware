@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hexaware.ccozyhaven.entities.Hotel;
 import com.hexaware.ccozyhaven.entities.Room;
+import com.hexaware.ccozyhaven.exceptions.HotelNotFoundException;
 import com.hexaware.ccozyhaven.service.IHotelService;
 
 @RestController
@@ -19,17 +20,17 @@ public class HotelController {
 	@Autowired
 	private IHotelService hotelService;
 	
-	@GetMapping("/hotels")
+	@GetMapping("/getall")
     public List<Hotel> getAllHotels() {
         return hotelService.getAllHotels();
     }
     
-    @GetMapping("/hotels/{hotelId}")
-    public Hotel getHotelDetailsById(@PathVariable Long hotelId) {
+    @GetMapping("/get-by-id/{hotelId}")
+    public Hotel getHotelDetailsById(@PathVariable Long hotelId) throws HotelNotFoundException {
         return hotelService.getHotelDetailsById(hotelId);
     }
     
-    @GetMapping("/hotels/{hotelId}/available-rooms")
+    @GetMapping("/available-rooms/{hotelId}")
     public List<Room> getAllAvailableRoomsInHotel(@PathVariable Long hotelId) {
         return hotelService.getAllAvailableRoomsInHotel(hotelId);
     }

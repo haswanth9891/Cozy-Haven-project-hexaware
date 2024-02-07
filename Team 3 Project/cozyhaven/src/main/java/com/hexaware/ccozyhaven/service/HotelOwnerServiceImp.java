@@ -54,11 +54,10 @@ public class HotelOwnerServiceImp implements IHotelOwnerService {
 				.orElseThrow(() -> new HotelOwnerNotFoundException("HotelOwner not found with id: " + hotelOwnerId));
 
 		existingHotelOwner.setHotelOwnerName(updatedHotelOwnerDTO.getHotelOwnerName());
-
 		existingHotelOwner.setEmail(updatedHotelOwnerDTO.getEmail());
-
 		existingHotelOwner.setGender(updatedHotelOwnerDTO.getGender());
 		existingHotelOwner.setAddress(updatedHotelOwnerDTO.getAddress());
+		existingHotelOwner.setHotel(updatedHotelOwnerDTO.getHotel());
 
 		return hotelOwnerRepository.save(existingHotelOwner);
 

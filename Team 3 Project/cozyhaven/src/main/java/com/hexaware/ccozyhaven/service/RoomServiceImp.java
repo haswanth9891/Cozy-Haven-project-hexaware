@@ -14,26 +14,23 @@ import com.hexaware.ccozyhaven.exceptions.RoomNotFoundException;
 import com.hexaware.ccozyhaven.repository.ReservationRepository;
 import com.hexaware.ccozyhaven.repository.RoomRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
-public class RoomServiceImp implements IRoomService{
-	
+@Transactional
+public class RoomServiceImp implements IRoomService {
+
 	@Autowired
 	RoomRepository roomRepository;
-	
+
 	@Autowired
 	private ReservationRepository reservationRepository;
 
 	@Override
-	public Room addRoom(RoomDTO roomDTO) {
-		Room newRoom = new Room();
-		newRoom.setRoomSize(roomDTO.getRoomSize());
-		newRoom.setBedType(roomDTO.getBedType());
-		newRoom.setMaxOccupancy(roomDTO.getMaxOccupancy());
-		newRoom.setBaseFare(roomDTO.getBaseFare());
-		newRoom.setAC(roomDTO.isAC());
-		newRoom.setAvailabilityStatus(roomDTO.isAvailabilityStatus());
-
-		return roomRepository.save(newRoom);
+	public Room addRoomToHotel(Room room, Long hotelId) {
+		Room savedRoom = roomRepository.save(room); // Save the room and obtain the generated roomId
+		roomRepository.addRoomToHotel(savedRoom.getRoomId(), hotelId); // Update hotel association
+		return savedRoom;
 	}
 
 	@Override
@@ -49,7 +46,7 @@ public class RoomServiceImp implements IRoomService{
 		existingRoom.setAvailabilityStatus(updatedRoomDTO.isAvailabilityStatus());
 
 		return roomRepository.save(existingRoom);
-		
+
 	}
 
 	@Override
@@ -58,16 +55,15 @@ public class RoomServiceImp implements IRoomService{
 				.orElseThrow(() -> new RoomNotFoundException("Room not found with id: " + roomId));
 
 		roomRepository.delete(roomToDelete);
-		
+
 	}
 
 	@Override
-	public List<Room> searchRooms(String location, LocalDate checkInDate, LocalDate checkOutDate, int numberOfRooms) {
+	public List<Room> searchRooms(String location, LocalDate checkInDate, LocalDate checkOutDate) {
 		if (checkInDate.isAfter(checkOutDate)) {
 			throw new IllegalArgumentException("Check-in date must be before or equal to check-out date");
 		}
-		List<Room> availableRooms = roomRepository.findAvailableRooms(location, checkInDate, checkOutDate,
-				numberOfRooms);
+		List<Room> availableRooms = roomRepository.findAvailableRooms(location, checkInDate, checkOutDate);
 		return availableRooms;
 	}
 
@@ -91,6 +87,10 @@ public class RoomServiceImp implements IRoomService{
 	@Override
 	public double calculateTotalFare(Long roomId, int numberOfAdults, int numberOfChildren)
 			throws RoomNotFoundException {
+		if (numberOfAdults <= 0) {
+			throw new IllegalArgumentException("Number of adults must be greater than zero.");
+		}
+
 		Optional<Room> optionalRoom = roomRepository.findById(roomId);
 
 		if (optionalRoom.isPresent()) {
@@ -98,46 +98,61 @@ public class RoomServiceImp implements IRoomService{
 			double baseFare = room.getBaseFare();
 
 			int maxCapacity = calculateMaxCapacity(room);
+			int occupancy = room.getMaxOccupancy() + 1;
 
 			int totalPeople = numberOfAdults + numberOfChildren;
 			if (totalPeople > maxCapacity) {
 				throw new IllegalArgumentException("Number of people exceeds the room's maximum capacity.");
 			}
-
 			double additionalCharge = 0;
-			for (int i = 1; i <= numberOfAdults; i++) {
-				additionalCharge += calculateAdditionalCharge(i, true);
+			if (totalPeople > occupancy) {
+
+				if (numberOfAdults == occupancy) {
+					for (int i = 1; i <= numberOfChildren; i++) {
+		                additionalCharge += baseFare *0.4;
+		            }
+					
+				}
+				else if (numberOfAdults > occupancy) {
+					int remainingAdults = 0;
+					remainingAdults = numberOfAdults - occupancy;
+					for (int i = 1; i <= remainingAdults; i++) {
+		                additionalCharge += baseFare *0.6;
+		            }
+					for (int i = 1; i <= numberOfChildren; i++) {
+			            additionalCharge += baseFare * 0.4;
+			        }
 			}
-			for (int i = 1; i <= numberOfChildren; i++) {
-				additionalCharge += calculateAdditionalCharge(i, false);
+				else {
+					int remainingChildren = 0;
+					remainingChildren = maxCapacity - occupancy;
+					for (int i = 1; i <= remainingChildren; i++) {
+		                additionalCharge += baseFare *0.4;
+		            }
+					
+					
+					
+					
+				}
 			}
 
 			double totalFare = baseFare + additionalCharge;
-
 			return totalFare;
-		} else {
-			throw new RoomNotFoundException("Room not found with id: " + roomId);
-		}
-	}
+			 } else {
+			        throw new RoomNotFoundException("Room not found with id: " + roomId);
+			    }
+			}
 	
+
 	private int calculateMaxCapacity(Room room) {
 
-		switch (room.getBedType()) {
-		case "Single Bed":
+		switch (room.getBedType().toLowerCase()) {
+		case "single bed":
 			return 2;
-		case "Double Bed":
+		case "double bed":
 			return 4;
 		default:
 			return 6;
-		}
-	}
-
-	private double calculateAdditionalCharge(int personIndex, boolean isAdult) {
-
-		if (isAdult) {
-			return 0.4;
-		} else {
-			return 0.2;
 		}
 	}
 

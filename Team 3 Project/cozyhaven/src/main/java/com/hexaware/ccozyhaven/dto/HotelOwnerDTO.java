@@ -31,19 +31,24 @@ public class HotelOwnerDTO {
 		this.gender = gender;
 	}
 
-	private Set<Hotel> hotel = new HashSet<Hotel>();
+	private Hotel hotel = new Hotel();
     
     public HotelOwnerDTO() {
 		super();
 		
 	}
 
-	public HotelOwnerDTO(Long hotelOwnerId, String hotelOwnerName, String password, String email, Set<Hotel> hotel) {
+	
+
+	public HotelOwnerDTO(Long hotelOwnerId, String hotelOwnerName, String password, String email, String gender,
+			String address, Hotel hotel) {
 		super();
 		this.hotelOwnerId = hotelOwnerId;
 		this.hotelOwnerName = hotelOwnerName;
 		this.password = password;
 		this.email = email;
+		this.gender = gender;
+		this.address = address;
 		this.hotel = hotel;
 	}
 
@@ -79,20 +84,24 @@ public class HotelOwnerDTO {
 		this.email = email;
 	}
 
-	public Set<Hotel> getHotel() {
+	
+
+	public Hotel getHotel() {
 		return hotel;
 	}
 
-	public void setHotel(Set<Hotel> hotel) {
+	public void setHotel(Hotel hotel) {
 		this.hotel = hotel;
 	}
 
 	@Override
 	public String toString() {
 		return "HotelOwnerDTO [hotelOwnerId=" + hotelOwnerId + ", hotelOwnerName=" + hotelOwnerName + ", password="
-				+ password + ", email=" + email + ", hotel=" + hotel + "]";
+				+ password + ", email=" + email + ", gender=" + gender + ", address=" + address + ", hotel=" + hotel
+				+ "]";
 	}
-    
+
+	
     
 
 

@@ -5,7 +5,7 @@ public class RoomNotFoundException extends Exception{
 	
 
 	public RoomNotFoundException(String string) {
-		// TODO Auto-generated constructor stub
+		super(string);
 	}
 
 	

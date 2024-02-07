@@ -112,13 +112,13 @@ public class HotelOwner {
 		return gender;
 	}
 
+	
 	public Hotel getHotel() {
 		return hotel;
 	}
 
 	public void setHotel(Hotel hotel) {
 		this.hotel = hotel;
-		hotel.setHotelOwner(this);
 	}
 
 	public void setGender(String gender) {

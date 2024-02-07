@@ -22,39 +22,39 @@ import com.hexaware.ccozyhaven.exceptions.RoomNotFoundException;
 import com.hexaware.ccozyhaven.service.IRoomService;
 
 @RestController
-@RequestMapping("/cozyhaven-admin")
+@RequestMapping("/cozyhaven-room")
 public class RoomController {
 
 	@Autowired
 	private IRoomService roomService;
 
-	@PostMapping("/addrooms")
-	public Room addRoom(@RequestBody RoomDTO roomDTO) {
-		Room addedRoom = roomService.addRoom(roomDTO);
-		return addedRoom;
-	}
+	@PostMapping("/add-room")
+    public Room addRoomsToHotel(@RequestBody Room room, @RequestParam Long hotelId) {
+        Room addedRoom = roomService.addRoomToHotel(room, hotelId);
+        return addedRoom;
+    }
 
-	@PutMapping("/editRoom/{roomId}")
+	@PutMapping("/edit/{roomId}")
 	public Room editRoom(@PathVariable Long roomId, @RequestBody RoomDTO updatedRoomDTO)
 			throws RoomNotFoundException {
 		Room editedRoom = roomService.editRoom(roomId, updatedRoomDTO);
 		return editedRoom;
 	}
 
-	@DeleteMapping("/removeRoom/{roomId}")
+	@DeleteMapping("/remove/{roomId}")
 	public String removeRoom(@PathVariable Long roomId) throws RoomNotFoundException {
 		roomService.removeRoom(roomId);
 		return "Room removed successfully";
 	}
 
-	@GetMapping("/searchRooms")
+	@GetMapping("/search")
 	public List<Room> searchRooms(@RequestParam String location, @RequestParam LocalDate checkInDate,
-			@RequestParam LocalDate checkOutDate, @RequestParam int numberOfRooms) {
+			@RequestParam LocalDate checkOutDate) {
 
-		return roomService.searchRooms(location, checkInDate, checkOutDate, numberOfRooms);
+		return roomService.searchRooms(location, checkInDate, checkOutDate);
 	}
 
-	@GetMapping("/rooms/{roomId}/availability")
+	@GetMapping("/availability/{roomId}")
 	public boolean isRoomAvailable(@PathVariable Long roomId,
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkInDate,
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOutDate)
@@ -62,7 +62,7 @@ public class RoomController {
 		return roomService.isRoomAvailable(roomId, checkInDate, checkOutDate);
 	}
 
-	@GetMapping("/rooms/{roomId}/calculateTotalFare")
+	@GetMapping("/calculateTotalFare/{roomId}")
 	public double calculateTotalFare(@PathVariable Long roomId, @RequestParam int numberOfAdults,
 			@RequestParam int numberOfChildren) throws RoomNotFoundException {
 		return roomService.calculateTotalFare(roomId, numberOfAdults, numberOfChildren);

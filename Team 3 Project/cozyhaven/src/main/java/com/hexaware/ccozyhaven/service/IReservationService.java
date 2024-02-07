@@ -13,13 +13,19 @@ import com.hexaware.ccozyhaven.exceptions.RoomNotFoundException;
 import com.hexaware.ccozyhaven.exceptions.UserNotFoundException;
 
 public interface IReservationService {
-	
-	//public List<Reservation> viewReservation(Long hotelId);
-	public double refundAmount(Long reservationId) throws RefundProcessedException, InvalidRefundException, ReservationNotFoundException, RefundProcessedException, InvalidRefundException, ReservationNotFoundException;
+
+	public List<Reservation> viewReservationByHotelId(Long hotelId);
+
+	public double refundAmount(Long reservationId)
+			throws RefundProcessedException, InvalidRefundException, ReservationNotFoundException;
+
 	boolean reservationRoom(Long userId, Long roomId, int numberOfAdults, int numberOfChildren, LocalDate checkInDate,
 			LocalDate checkOutDate) throws RoomNotAvailableException, RoomNotFoundException, UserNotFoundException;
+
 	public List<Reservation> getUserReservations(Long userId);
+
 	public void cancelReservation(Long userId, Long reservationId) throws ReservationNotFoundException;
+
 	public void cancelReservationAndRequestRefund(Long userId, Long reservationId)
 			throws InvalidCancellationException, ReservationNotFoundException;
 

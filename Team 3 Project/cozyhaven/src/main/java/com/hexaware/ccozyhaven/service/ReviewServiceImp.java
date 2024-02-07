@@ -11,7 +11,10 @@ import com.hexaware.ccozyhaven.entities.Review;
 import com.hexaware.ccozyhaven.exceptions.ReviewNotFoundException;
 import com.hexaware.ccozyhaven.repository.ReviewRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
+@Transactional
 public class ReviewServiceImp implements IReviewService {
 
 	@Autowired

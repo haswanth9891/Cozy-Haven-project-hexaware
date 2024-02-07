@@ -32,7 +32,7 @@ public class ReviewController {
 	        return "Review added successfully";
 	    }
 
-	    @GetMapping("/get/{reviewId}")
+	    @GetMapping("/get-by-id/{reviewId}")
 	    public ResponseEntity<Review> getReviewById(@PathVariable Long reviewId) {
 	        try {
 	            Review review = reviewService.getReviewById(reviewId);

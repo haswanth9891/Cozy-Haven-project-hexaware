@@ -32,7 +32,7 @@ public class UserController {
 //			 return userService.addUser(user);
 //		}
 
-	@PutMapping("/updateuser/{userId}")
+	@PutMapping("/update/{userId}")
 	public User updateUser(@PathVariable Long userId, @RequestBody @Valid UserDTO userDTO)
 			throws UserNotFoundException {
 

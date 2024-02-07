@@ -9,6 +9,8 @@ import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "Room_Details")
 public class Room {
@@ -40,8 +42,8 @@ public class Room {
 	@Column(name = "is_ac")
 	private boolean isAC;
 
-	@NotBlank(message = "Availability status is required")
-	@Size(max = 20, message = "Availability status must be at most 20 characters")
+	
+	
 	@Column(name = "availability_status")
 	private boolean availabilityStatus;
 
@@ -51,6 +53,7 @@ public class Room {
 
 	@ManyToOne
 	@JoinColumn(name = "hotel_id")
+	 @JsonBackReference
 	private Hotel hotel;
 
 	public Room() {
