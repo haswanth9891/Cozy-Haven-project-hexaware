@@ -39,18 +39,18 @@ public class ReservationController {
 		return  refundedAmount;
 	}
 	
-	@GetMapping("/{userId}/reservations")
+	@GetMapping("/get-by-userid/{userId}")
     public List<Reservation> getUserReservations(@PathVariable Long userId) {
         return reservationService.getUserReservations(userId);
     }
     
-    @DeleteMapping("/{userId}/reservations/{reservationId}")
+    @DeleteMapping("/cancel/{userId}/{reservationId}")
     public void cancelReservation(@PathVariable Long userId, @PathVariable Long reservationId)
             throws ReservationNotFoundException {
     	reservationService.cancelReservation(userId, reservationId);
     }
     
-    @DeleteMapping("/{userId}/reservations/{reservationId}/cancelAndRefund")
+    @DeleteMapping("/cancel-and-refund/{userId}/{reservationId}")
     public void cancelReservationAndRequestRefund(@PathVariable Long userId, @PathVariable Long reservationId)
             throws InvalidCancellationException, ReservationNotFoundException {
     	reservationService.cancelReservationAndRequestRefund(userId, reservationId);

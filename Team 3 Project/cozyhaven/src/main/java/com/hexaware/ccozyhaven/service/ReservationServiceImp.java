@@ -23,7 +23,10 @@ import com.hexaware.ccozyhaven.repository.ReservationRepository;
 import com.hexaware.ccozyhaven.repository.RoomRepository;
 import com.hexaware.ccozyhaven.repository.UserRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
+@Transactional
 public class ReservationServiceImp implements IReservationService{
 	
 	@Autowired
@@ -35,11 +38,11 @@ public class ReservationServiceImp implements IReservationService{
 
 
 
-//	@Override
-//	public List<Reservation> viewReservation(Long hotelId) {
-//		return reservationRepository.findByUser_UserId(hotelId);
-//
-//	}
+	@Override
+	public List<Reservation> viewReservationByHotelId(Long hotelId) {
+		return reservationRepository.findAllByHotel_HotelId(hotelId);
+
+	}
 
 	@Override
 	public double refundAmount(Long reservationId)

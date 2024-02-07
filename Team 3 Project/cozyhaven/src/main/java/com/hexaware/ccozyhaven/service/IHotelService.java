@@ -4,11 +4,12 @@ import java.util.List;
 
 import com.hexaware.ccozyhaven.entities.Hotel;
 import com.hexaware.ccozyhaven.entities.Room;
+import com.hexaware.ccozyhaven.exceptions.HotelNotFoundException;
 
 public interface IHotelService {
 	
 	public List<Hotel> getAllHotels();
-	public Hotel getHotelDetailsById(Long hotelId);
+	public Hotel getHotelDetailsById(Long hotelId) throws HotelNotFoundException;
 	List<Room> getAllAvailableRoomsInHotel(Long hotelId);
 
 }

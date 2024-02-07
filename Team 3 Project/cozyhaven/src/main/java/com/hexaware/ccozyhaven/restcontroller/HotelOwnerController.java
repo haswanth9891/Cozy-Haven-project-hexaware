@@ -40,7 +40,7 @@ public class HotelOwnerController {
 
 	}
 
-	@PutMapping("/updateHotelOwner/{hotelOwnerId}")
+	@PutMapping("/update/{hotelOwnerId}")
 	public HotelOwner updateHotelOwner(@PathVariable Long hotelOwnerId, @RequestBody HotelOwnerDTO updatedHotelOwnerDTO)
 			throws HotelOwnerNotFoundException {
 		HotelOwner updatedHotelOwner = hotelOwnerService.updateHotelOwner(hotelOwnerId, updatedHotelOwnerDTO);
