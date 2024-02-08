@@ -29,8 +29,8 @@ import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class ReservationServiceImp implements IReservationService{
-	
+public class ReservationServiceImp implements IReservationService {
+
 	@Autowired
 	ReservationRepository reservationRepository;
 	@Autowired
@@ -38,71 +38,68 @@ public class ReservationServiceImp implements IReservationService{
 	@Autowired
 	private RoomRepository roomRepository;
 
-
-
 	@Override
 	public List<Reservation> viewReservationByHotelId(Long hotelId) {
 		return reservationRepository.findAllByHotel_HotelId(hotelId);
 
 	}
-	
+
 	@Override
 	public List<Reservation> viewValidReservationByHotelId(Long hotelId) {
 		return reservationRepository.findAllByHotel_HotelId(hotelId);
 
 	}
-	
+
 	@Override
-	public boolean reservationRoom(Long userId, List<Long> roomIds, int numberOfAdults, int numberOfChildren,
-	                                LocalDate checkInDate, LocalDate checkOutDate)
-	        throws RoomNotAvailableException, RoomNotFoundException, UserNotFoundException {
-	    // Check if any of the rooms is not available for the selected date range
-	    for (Long roomId : roomIds) {
-	        if (!isRoomAvailable(roomId, checkInDate, checkOutDate)) {
-	            throw new RoomNotAvailableException("Room with id " + roomId + " is not available for the selected date range.");
-	        }
-	    }
+	public boolean reservationRoom(Long userId, Long roomId, int numberOfAdults, int numberOfChildren,
+			LocalDate checkInDate, LocalDate checkOutDate)
+			throws RoomNotAvailableException, RoomNotFoundException, UserNotFoundException {
 
-	    Reservation reservation = new Reservation();
-	    reservation.setNumberOfAdults(numberOfAdults);
-	    reservation.setNumberOfChildren(numberOfChildren);
-	    reservation.setCheckInDate(checkInDate);
-	    reservation.setCheckOutDate(checkOutDate);
-	    long numberOfDays = ChronoUnit.DAYS.between(checkInDate, checkOutDate) + 1;
+		if (!isRoomAvailable(roomId, checkInDate, checkOutDate)) {
+			throw new RoomNotAvailableException(
+					"Room with id " + roomId + " is not available for the selected date range.");
+		}
 
+		Reservation reservation = new Reservation();
+		reservation.setNumberOfAdults(numberOfAdults);
+		reservation.setNumberOfChildren(numberOfChildren);
+		reservation.setCheckInDate(checkInDate);
+		reservation.setCheckOutDate(checkOutDate);
+		long numberOfDays = ChronoUnit.DAYS.between(checkInDate, checkOutDate) + 1;
 
-	    double fareForDay = 0;
-	    for (Long roomId : roomIds) {
-	     fareForDay += calculateTotalFare(roomId, numberOfAdults, numberOfChildren);
-	    }
-	    double totalFare = fareForDay * numberOfDays;
-	    reservation.setTotalAmount(totalFare);
+		double fareForDay = 0;
+		fareForDay += calculateTotalFare(roomId, numberOfAdults, numberOfChildren);
 
-	    User user = userRepository.findById(userId)
-	            .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
-	    reservation.setUser(user);
+		double totalFare = fareForDay * numberOfDays;
+		reservation.setTotalAmount(totalFare);
 
-	    Set<Room> rooms = new HashSet<>();
-	    for (Long roomId : roomIds) {
-	        Room room = roomRepository.findById(roomId)
-	                .orElseThrow(() -> new RoomNotFoundException("Room not found with id: " + roomId));
-	        room.setReservation(reservation);  // Set the reservation in each room
-	        rooms.add(room);
-	    }
-	    
-	    if (!rooms.isEmpty()) {
-	        Room firstRoom = rooms.iterator().next();
-	        Hotel hotel = firstRoom.getHotel();
-	        reservation.setHotel(hotel);
-	    }
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
+		reservation.setUser(user);
 
-	    reservation.setRooms(rooms);
-	    reservation.setReservationStatus("PENDING");
+		
+			Room room = roomRepository.findById(roomId)
+					.orElseThrow(() -> new RoomNotFoundException("Room not found with id: " + roomId));
+			room.setReservation(reservation); // Set the reservation in each room
+			Set<Room> rooms = new HashSet();
+			rooms.add(room);
+		
 
-	    reservationRepository.save(reservation);
-	    return true;
+		
+			
+			Hotel hotel = room.getHotel();
+			reservation.setHotel(hotel);
+		
+			
+		reservation.setRooms(rooms);
+		reservation.setReservationStatus("PENDING");
+
+		reservationRepository.save(reservation);
+		return true;
 	}
 	
+
+	@Override
 	public boolean isRoomAvailable(Long roomId, LocalDate checkInDate, LocalDate checkOutDate)
 			throws RoomNotFoundException {
 		Optional<Room> optionalRoom = roomRepository.findById(roomId);
@@ -119,8 +116,6 @@ public class ReservationServiceImp implements IReservationService{
 		}
 	}
 
-	
-	
 	public double calculateTotalFare(Long roomId, int numberOfAdults, int numberOfChildren)
 			throws RoomNotFoundException {
 		if (numberOfAdults <= 0) {
@@ -145,40 +140,34 @@ public class ReservationServiceImp implements IReservationService{
 
 				if (numberOfAdults == occupancy) {
 					for (int i = 1; i <= numberOfChildren; i++) {
-		                additionalCharge += baseFare *0.4;
-		            }
-					
-				}
-				else if (numberOfAdults > occupancy) {
+						additionalCharge += baseFare * 0.4;
+					}
+
+				} else if (numberOfAdults > occupancy) {
 					int remainingAdults = 0;
 					remainingAdults = numberOfAdults - occupancy;
 					for (int i = 1; i <= remainingAdults; i++) {
-		                additionalCharge += baseFare *0.6;
-		            }
+						additionalCharge += baseFare * 0.6;
+					}
 					for (int i = 1; i <= numberOfChildren; i++) {
-			            additionalCharge += baseFare * 0.4;
-			        }
-			}
-				else {
+						additionalCharge += baseFare * 0.4;
+					}
+				} else {
 					int remainingChildren = 0;
 					remainingChildren = maxCapacity - occupancy;
 					for (int i = 1; i <= remainingChildren; i++) {
-		                additionalCharge += baseFare *0.4;
-		            }
-					
-					
-					
-					
+						additionalCharge += baseFare * 0.4;
+					}
+
 				}
 			}
 
 			double totalFare = baseFare + additionalCharge;
 			return totalFare;
-			 } else {
-			        throw new RoomNotFoundException("Room not found with id: " + roomId);
-			    }
-			}
-	
+		} else {
+			throw new RoomNotFoundException("Room not found with id: " + roomId);
+		}
+	}
 
 	private int calculateMaxCapacity(Room room) {
 
@@ -215,13 +204,11 @@ public class ReservationServiceImp implements IReservationService{
 			throw new InvalidRefundException("Refund can only be processed for canceled reservations.");
 		}
 	}
-	
+
 	private double calculateRefundedAmount(Reservation reservation) {
 
 		return reservation.getTotalAmount() * 0.8; // 80 percent refund
 	}
-
-	
 
 	@Override
 	public List<Reservation> getUserReservations(Long userId) {
@@ -235,7 +222,7 @@ public class ReservationServiceImp implements IReservationService{
 
 		reservation.setReservationStatus("CANCELLED");
 		reservationRepository.save(reservation);
-		
+
 	}
 
 	@Override
@@ -254,9 +241,5 @@ public class ReservationServiceImp implements IReservationService{
 
 	}
 
-		
-	
-	
-	
 
 }

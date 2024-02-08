@@ -29,8 +29,8 @@ public class RoomController {
 	private IRoomService roomService;
 
 	@PostMapping("/add-room")
-    public Room addRoomsToHotel(@RequestBody Room room, @RequestParam Long hotelId) {
-        Room addedRoom = roomService.addRoomToHotel(room, hotelId);
+    public Room addRoomsToHotel(@RequestBody RoomDTO roomDTO, @RequestParam Long hotelId) {
+        Room addedRoom = roomService.addRoomToHotel(roomDTO, hotelId);
         return addedRoom;
     }
 

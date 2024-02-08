@@ -47,17 +47,17 @@ public class HotelOwnerServiceImp implements IHotelOwnerService {
 	}
 
 	@Override
-	public HotelOwner updateHotelOwner(Long hotelOwnerId, HotelOwnerDTO updatedHotelOwnerDTO)
+	public HotelOwner updateHotelOwner(Long hotelOwnerId, HotelOwner updatedHotelOwner)
 			throws HotelOwnerNotFoundException {
 
 		HotelOwner existingHotelOwner = hotelOwnerRepository.findById(hotelOwnerId)
 				.orElseThrow(() -> new HotelOwnerNotFoundException("HotelOwner not found with id: " + hotelOwnerId));
 
-		existingHotelOwner.setHotelOwnerName(updatedHotelOwnerDTO.getHotelOwnerName());
-		existingHotelOwner.setEmail(updatedHotelOwnerDTO.getEmail());
-		existingHotelOwner.setGender(updatedHotelOwnerDTO.getGender());
-		existingHotelOwner.setAddress(updatedHotelOwnerDTO.getAddress());
-		existingHotelOwner.setHotel(updatedHotelOwnerDTO.getHotel());
+		existingHotelOwner.setHotelOwnerName(updatedHotelOwner.getHotelOwnerName());
+		existingHotelOwner.setEmail(updatedHotelOwner.getEmail());
+		existingHotelOwner.setGender(updatedHotelOwner.getGender());
+		existingHotelOwner.setAddress(updatedHotelOwner.getAddress());
+		existingHotelOwner.setHotel(updatedHotelOwner.getHotel());
 
 		return hotelOwnerRepository.save(existingHotelOwner);
 
@@ -72,19 +72,7 @@ public class HotelOwnerServiceImp implements IHotelOwnerService {
 
 	}
 
-//	@Override
-//	public Hotel addHotel(Long hotelOwnerId, HotelDTO hotelDTO) throws HotelOwnerNotFoundException {
-//		HotelOwner hotelOwner = hotelOwnerRepository.findById(hotelOwnerId)
-//				.orElseThrow(() -> new HotelOwnerNotFoundException("HotelOwner not found with id: " + hotelOwnerId));
-//
-//		Hotel newHotel = new Hotel();
-//		newHotel.setHotelName(hotelDTO.getHotelName());
-//		newHotel.setLocation(hotelDTO.getLocation());
-//		// newHotel.setRating(hotelDTO.getRating());
-//		newHotel.setHotelOwner(hotelOwner);
-//
-//		return hotelRepository.save(newHotel);
-//	}
+
 
 //	@Override
 //	public HotelOwner registerHotelOwner(HotelOwnerDTO hotelOwnerDTO) {

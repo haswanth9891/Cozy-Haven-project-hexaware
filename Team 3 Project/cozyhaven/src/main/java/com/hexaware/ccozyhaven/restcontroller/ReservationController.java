@@ -72,7 +72,7 @@ public class ReservationController {
     @PostMapping("/make-reservation")
     public ResponseEntity<String> reserveRooms(
             @RequestParam Long userId,
-            @RequestBody List<Long> roomIds,
+            @RequestBody Long roomId,
             @RequestParam int numberOfAdults,
             @RequestParam int numberOfChildren,
             @RequestParam String checkInDate,
@@ -83,7 +83,7 @@ public class ReservationController {
             LocalDate checkOut = LocalDate.parse(checkOutDate);
 
             boolean reservationSuccess = reservationService.reservationRoom(
-                    userId, roomIds, numberOfAdults, numberOfChildren, checkIn, checkOut);
+                    userId, roomId, numberOfAdults, numberOfChildren, checkIn, checkOut);
 
             if (reservationSuccess) {
                 return new ResponseEntity<>("Reservation successful", HttpStatus.OK);
@@ -94,5 +94,7 @@ public class ReservationController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+    
+   
 
 }

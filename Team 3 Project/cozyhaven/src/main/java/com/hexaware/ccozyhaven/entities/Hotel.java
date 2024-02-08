@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -74,7 +75,7 @@ public class Hotel {
     
     @OneToOne(mappedBy = "hotel" , cascade = CascadeType.ALL)
     @JoinColumn(name="hotel_id")
-    @JsonBackReference
+    @JsonManagedReference
     private HotelOwner hotelOwner;
 
    

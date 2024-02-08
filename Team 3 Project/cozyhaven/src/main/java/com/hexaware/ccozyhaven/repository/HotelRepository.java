@@ -17,7 +17,8 @@ public interface HotelRepository extends JpaRepository<Hotel,Long>{
 	
 	
 	
-	 List<Room> findByHotelIdAndRoomAvailabilityStatus(Long hotelId, boolean availabilityStatus);
+	@Query("SELECT room FROM Room room WHERE room.hotel.id = :hotelId AND room.availabilityStatus = true")
+    List<Room> findAvailableRoomsInHotel(@Param("hotelId") Long hotelId);
 
 	
 

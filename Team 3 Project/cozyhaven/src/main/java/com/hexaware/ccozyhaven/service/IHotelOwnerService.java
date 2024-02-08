@@ -33,7 +33,8 @@ public interface IHotelOwnerService {
 //    boolean loginHotelOwner(String username, String password);
     
     //update HotelOwnerDetails
-    HotelOwner updateHotelOwner(Long hotelOwnerId, HotelOwnerDTO updatedHotelOwnerDTO) throws HotelOwnerNotFoundException;
+  
+    HotelOwner updateHotelOwner(Long hotelOwnerId, HotelOwner updatedHotelOwner) throws HotelOwnerNotFoundException;
 
     // Add a new room to the hotel
     //Room addRoom(RoomDTO roomDTO);
@@ -53,6 +54,8 @@ public interface IHotelOwnerService {
 	void deleteHotelOwner(Long hotelOwnerId) throws HotelOwnerNotFoundException;
 
 	void addHotelOwnerWithHotel(HotelOwner hotelOwner);
+
+	
 
 	//Hotel addHotel(Long hotelOwnerId, HotelDTO hotelDTO) throws HotelOwnerNotFoundException;
 

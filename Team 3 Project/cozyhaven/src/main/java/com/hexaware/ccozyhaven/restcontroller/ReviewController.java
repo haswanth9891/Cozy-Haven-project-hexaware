@@ -21,6 +21,8 @@ import com.hexaware.ccozyhaven.exceptions.ReviewNotFoundException;
 import com.hexaware.ccozyhaven.exceptions.UserNotFoundException;
 import com.hexaware.ccozyhaven.service.IReviewService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/cozyhaven/review")
 public class ReviewController {
@@ -53,7 +55,7 @@ public class ReviewController {
 	 
 	 @PutMapping("/update/{reviewId}")
 	    public ResponseEntity<String> updateReviewById(@PathVariable Long reviewId,
-	                                                   @RequestBody ReviewDTO reviewDTO) {
+	                                                   @RequestBody @Valid ReviewDTO reviewDTO) {
 	        try {
 	            reviewService.updateReviewById(reviewId, reviewDTO);
 	            return new ResponseEntity<>("Review updated successfully", HttpStatus.OK);
