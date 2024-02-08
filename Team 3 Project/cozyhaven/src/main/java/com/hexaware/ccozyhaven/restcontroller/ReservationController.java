@@ -1,5 +1,6 @@
 package com.hexaware.ccozyhaven.restcontroller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,15 +9,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hexaware.ccozyhaven.entities.Reservation;
+import com.hexaware.ccozyhaven.exceptions.HotelNotFoundException;
 import com.hexaware.ccozyhaven.exceptions.InvalidCancellationException;
 import com.hexaware.ccozyhaven.exceptions.InvalidRefundException;
 import com.hexaware.ccozyhaven.exceptions.RefundProcessedException;
 import com.hexaware.ccozyhaven.exceptions.ReservationNotFoundException;
-
+import com.hexaware.ccozyhaven.exceptions.RoomNotAvailableException;
+import com.hexaware.ccozyhaven.exceptions.RoomNotFoundException;
+import com.hexaware.ccozyhaven.exceptions.UserNotFoundException;
 import com.hexaware.ccozyhaven.service.IReservationService;
 
 @RestController
@@ -26,11 +33,16 @@ public class ReservationController {
 	@Autowired
 	private IReservationService reservationService;
 
-//	@GetMapping("/viewReservation/{hotelId}")
-//	public List<Reservation> viewReservation(@PathVariable Long hotelId) {
-//		List<Reservation> reservations = reservationService.viewReservation(hotelId);
-//		return reservations;
-//	}
+	 @GetMapping("/get-by-hotel/{hotelId}")
+	    public List<Reservation> viewReservationByHotelId(@PathVariable Long hotelId) throws HotelNotFoundException {
+	        List<Reservation> reservations = reservationService.viewReservationByHotelId(hotelId);
+			return reservations;
+	    }
+	 @GetMapping("/valid-get-by-hotel/{hotelId}")
+	    public List<Reservation> viewValidReservationByHotelId(@PathVariable Long hotelId) throws HotelNotFoundException {
+	        List<Reservation> reservations = reservationService.viewValidReservationByHotelId(hotelId);
+			return reservations;
+	    }
 
 	@GetMapping("/refundAmount/{reservationId}")
 	public Double refundAmount(@PathVariable Long reservationId)
@@ -39,7 +51,7 @@ public class ReservationController {
 		return  refundedAmount;
 	}
 	
-	@GetMapping("/get-by-userid/{userId}")
+	@GetMapping("/get-by-user/{userId}")
     public List<Reservation> getUserReservations(@PathVariable Long userId) {
         return reservationService.getUserReservations(userId);
     }
@@ -57,18 +69,30 @@ public class ReservationController {
     }
     
     
-    //to be reviewed
-//    @PostMapping("/reservation")
-//    public boolean reservationRoom(@RequestBody Reservation reservation)
-//            throws RoomNotAvailableException, RoomNotFoundException, UserNotFoundException {
-//        Long userId = reservation.getUser().getUserId();
-//        //Long roomId = reservation.getRooms().
-//        int numberOfAdults = reservation.getNumberOfAdults();
-//        int numberOfChildren = reservation.getNumberOfChildren();
-//        LocalDate checkInDate = reservation.getCheckInDate();
-//        LocalDate checkOutDate = reservation.getCheckOutDate();
-//
-//        return userService.reservationRoom(userId, roomId, numberOfAdults, numberOfChildren, checkInDate, checkOutDate);
-//    }
+    @PostMapping("/make-reservation")
+    public ResponseEntity<String> reserveRooms(
+            @RequestParam Long userId,
+            @RequestBody List<Long> roomIds,
+            @RequestParam int numberOfAdults,
+            @RequestParam int numberOfChildren,
+            @RequestParam String checkInDate,
+            @RequestParam String checkOutDate) {
+
+        try {
+            LocalDate checkIn = LocalDate.parse(checkInDate);
+            LocalDate checkOut = LocalDate.parse(checkOutDate);
+
+            boolean reservationSuccess = reservationService.reservationRoom(
+                    userId, roomIds, numberOfAdults, numberOfChildren, checkIn, checkOut);
+
+            if (reservationSuccess) {
+                return new ResponseEntity<>("Reservation successful", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Reservation failed", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } catch (RoomNotAvailableException | RoomNotFoundException | UserNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 
 }

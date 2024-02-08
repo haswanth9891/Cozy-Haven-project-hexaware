@@ -3,15 +3,19 @@ package com.hexaware.ccozyhaven.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 
 import java.time.LocalDate;
-import java.util.Date;
+
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity
 @Table(name = "Reservation_Details")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "reservationId")
 public class Reservation {
 
 	@Id
@@ -52,9 +56,10 @@ public class Reservation {
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")
+
 	private User user;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "hotel_id")
 	private Hotel hotel;
 

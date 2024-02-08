@@ -19,8 +19,8 @@ public interface IReservationService {
 	public double refundAmount(Long reservationId)
 			throws RefundProcessedException, InvalidRefundException, ReservationNotFoundException;
 
-	boolean reservationRoom(Long userId, Long roomId, int numberOfAdults, int numberOfChildren, LocalDate checkInDate,
-			LocalDate checkOutDate) throws RoomNotAvailableException, RoomNotFoundException, UserNotFoundException;
+//	boolean reservationRoom(Long userId, Long roomId, int numberOfAdults, int numberOfChildren, LocalDate checkInDate,
+//			LocalDate checkOutDate) throws RoomNotAvailableException, RoomNotFoundException, UserNotFoundException;
 
 	public List<Reservation> getUserReservations(Long userId);
 
@@ -28,5 +28,11 @@ public interface IReservationService {
 
 	public void cancelReservationAndRequestRefund(Long userId, Long reservationId)
 			throws InvalidCancellationException, ReservationNotFoundException;
+
+	boolean reservationRoom(Long userId, List<Long> roomIds, int numberOfAdults, int numberOfChildren,
+			LocalDate checkInDate, LocalDate checkOutDate)
+			throws RoomNotAvailableException, RoomNotFoundException, UserNotFoundException;
+
+	List<Reservation> viewValidReservationByHotelId(Long hotelId);
 
 }

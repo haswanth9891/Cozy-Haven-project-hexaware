@@ -53,7 +53,7 @@ public class Room {
 
 	@ManyToOne
 	@JoinColumn(name = "hotel_id")
-	 @JsonBackReference
+	@JsonBackReference
 	private Hotel hotel;
 
 	public Room() {
