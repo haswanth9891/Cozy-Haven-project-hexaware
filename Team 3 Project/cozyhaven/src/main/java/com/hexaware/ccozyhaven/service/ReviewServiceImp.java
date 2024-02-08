@@ -1,3 +1,5 @@
+
+
 package com.hexaware.ccozyhaven.service;
 
 import java.util.List;
@@ -7,9 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hexaware.ccozyhaven.dto.ReviewDTO;
+import com.hexaware.ccozyhaven.entities.Hotel;
 import com.hexaware.ccozyhaven.entities.Review;
+import com.hexaware.ccozyhaven.entities.User;
+import com.hexaware.ccozyhaven.exceptions.HotelNotFoundException;
 import com.hexaware.ccozyhaven.exceptions.ReviewNotFoundException;
+import com.hexaware.ccozyhaven.exceptions.UserNotFoundException;
+import com.hexaware.ccozyhaven.repository.HotelRepository;
 import com.hexaware.ccozyhaven.repository.ReviewRepository;
+import com.hexaware.ccozyhaven.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -18,63 +26,82 @@ import jakarta.transaction.Transactional;
 public class ReviewServiceImp implements IReviewService {
 
 	@Autowired
-	ReviewRepository reviewRepository;
+    private ReviewRepository reviewRepository;
 
-	@Override
-	public void addReview(ReviewDTO reviewDTO) {
-		Review review = new Review();
-		// Map fields manually
-		review.setRating(reviewDTO.getRating());
-		review.setReviewText(reviewDTO.getReviewText());
-		review.setReviewDate(reviewDTO.getReviewDate());
+    @Autowired
+    private UserRepository userRepository;
 
-		reviewRepository.save(review);
+    @Autowired
+    private HotelRepository hotelRepository;
 
-	}
+    @Override
+    public void addReviewWithUserAndHotel(ReviewDTO reviewDTO, Long userId, Long hotelId)
+            throws UserNotFoundException, HotelNotFoundException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
 
-	@Override
-	public Review getReviewById(Long reviewId) throws ReviewNotFoundException {
-		Optional<Review> optionalReview = reviewRepository.findById(reviewId);
-		return optionalReview.orElseThrow(() -> new ReviewNotFoundException("Review not found with id: " + reviewId));
+        Hotel hotel = hotelRepository.findById(hotelId)
+                .orElseThrow(() -> new HotelNotFoundException("Hotel not found with id: " + hotelId));
 
-	}
+        Review newReview = new Review();
+        newReview.setUser(user);
+        newReview.setHotel(hotel);
+        newReview.setRating(reviewDTO.getRating());
+        newReview.setReviewText(reviewDTO.getReviewText());
+        newReview.setReviewDate(reviewDTO.getReviewDate());
 
-	@Override
-	public void updateReview(ReviewDTO reviewDTO) throws ReviewNotFoundException {
-		Long reviewId = reviewDTO.getReviewId();
-		Review existingReview = getReviewById(reviewId);
+        reviewRepository.save(newReview);
+    }
 
-		existingReview.setRating(reviewDTO.getRating());
-		existingReview.setReviewText(reviewDTO.getReviewText());
-		existingReview.setReviewDate(reviewDTO.getReviewDate());
+	
+	
+	 @Override
+	    public Review getReviewById(Long reviewId) throws ReviewNotFoundException {
+	        return reviewRepository.findById(reviewId)
+	                .orElseThrow(() -> new ReviewNotFoundException("Review not found with id: " + reviewId));
+	    }
 
-		reviewRepository.save(existingReview);
+	
+	 @Override
+	    public void updateReviewById(Long reviewId, ReviewDTO reviewDTO) throws ReviewNotFoundException {
+	        Review existingReview = getReviewById(reviewId);
 
-	}
+	       
+	        existingReview.setRating(reviewDTO.getRating());
+	        existingReview.setReviewText(reviewDTO.getReviewText());
+	        existingReview.setReviewDate(reviewDTO.getReviewDate());
 
-	@Override
-	public void deleteReview(Long reviewId) throws ReviewNotFoundException {
-		Review existingReview = getReviewById(reviewId);
-		reviewRepository.delete(existingReview);
+	        reviewRepository.save(existingReview);
+	    }
+	 @Override
+	    public void deleteReviewById(Long reviewId) throws ReviewNotFoundException {
+	        Review reviewToDelete = getReviewById(reviewId);
+	        reviewRepository.delete(reviewToDelete);
+	    }
 
-	}
-//
-//	@Override
-//	public List<Review> getAllReviewsForHotel(Long hotelId) {
-//		return reviewRepository.findByHotel_HotelId(hotelId);
-//
-//	}
-//
-//	@Override
-//	public List<Review> getAllReviewsByUser(Long userId) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
+	 @Override
+	    public List<Review> getAllReviews() {
+	        return reviewRepository.findAll();
+	    }
 
-	@Override
-	public List<Review> getAllReviews() {
-		return reviewRepository.findAll();
+	 @Override
+	    public List<Review> getAllReviewsForHotel(Long hotelId) throws HotelNotFoundException {
+	        Hotel hotel = hotelRepository.findById(hotelId)
+	                .orElseThrow(() -> new HotelNotFoundException("Hotel not found with id: " + hotelId));
 
-	}
+	        return reviewRepository.findAllByHotel(hotel);
+	    }
+	 @Override
+	    public List<Review> getAllReviewsByUser(Long userId) throws UserNotFoundException {
+	        User user = userRepository.findById(userId)
+	                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
+
+	        return reviewRepository.findAllByUser(user);
+	    }
+
+    
+	
+	
+
 
 }
