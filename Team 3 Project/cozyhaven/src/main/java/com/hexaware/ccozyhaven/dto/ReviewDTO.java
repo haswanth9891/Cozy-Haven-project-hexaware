@@ -2,11 +2,17 @@ package com.hexaware.ccozyhaven.dto;
 
 import java.util.Date;
 
+import jakarta.persistence.Column;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+
 
 public class ReviewDTO {
 	
 
-    
+	@Min(value = 1, message = "Rating must be at least 1")
+	@Max(value = 5, message = "Rating must be at most 5")
+	@Column(name = "rating")
     private Long reviewId;
 
    

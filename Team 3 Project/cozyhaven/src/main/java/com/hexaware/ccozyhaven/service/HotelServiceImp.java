@@ -31,7 +31,7 @@ public class HotelServiceImp implements IHotelService{
 
 	@Override
 	public List<Room> getAllAvailableRoomsInHotel(Long hotelId) {
-		return hotelRepository.findByHotelIdAndRoomAvailabilityStatus(hotelId, true);
+		return hotelRepository.findAvailableRoomsInHotel(hotelId);
 	}
 	
 

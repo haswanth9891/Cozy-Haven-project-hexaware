@@ -35,8 +35,12 @@ public class RoomServiceImp implements IRoomService {
         room.setBaseFare(roomDTO.getBaseFare());
         room.setAC(roomDTO.isAC());
         room.setAvailabilityStatus(roomDTO.isAvailabilityStatus());
-		Room savedRoom = roomRepository.save(room); // Save the room and obtain the generated roomId
-		roomRepository.addRoomToHotel(savedRoom.getRoomId(), hotelId); // Update hotel association
+
+		Room savedRoom = roomRepository.save(room); 
+		roomRepository.addRoomToHotel(savedRoom.getRoomId(), hotelId); 
+
+		
+
 		return savedRoom;
 	}
 

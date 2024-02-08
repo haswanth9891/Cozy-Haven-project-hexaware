@@ -9,7 +9,7 @@ import com.hexaware.ccozyhaven.exceptions.RoomNotFoundException;
 
 public interface IRoomService {
 
-	public Room addRoomToHotel(RoomDTO roomDTO, Long hotelId);
+	Room addRoomToHotel(RoomDTO roomDTO, Long hotelId);
 
 	public Room editRoom(Long roomId, RoomDTO updatedRoomDTO) throws RoomNotFoundException;
 
@@ -20,5 +20,7 @@ public interface IRoomService {
 	boolean isRoomAvailable(Long roomId, LocalDate checkInDate, LocalDate checkOutDate) throws RoomNotFoundException;
 
 	double calculateTotalFare(Long roomId, int numberOfAdults, int numberOfChildren) throws RoomNotFoundException;
+
+	
 
 }
