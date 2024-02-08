@@ -9,7 +9,7 @@ import com.hexaware.ccozyhaven.exceptions.RoomNotFoundException;
 
 public interface IRoomService {
 
-	public Room addRoomToHotel(Room room, Long hotelId);
+	public Room addRoomToHotel(RoomDTO roomDTO, Long hotelId);
 
 	public Room editRoom(Long roomId, RoomDTO updatedRoomDTO) throws RoomNotFoundException;
 
