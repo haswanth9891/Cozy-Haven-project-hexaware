@@ -1,20 +1,13 @@
 package com.hexaware.ccozyhaven.service;
 
-import java.time.LocalDate;
-import java.util.List;
+
 
 import org.springframework.stereotype.Repository;
 
 import com.hexaware.ccozyhaven.dto.UserDTO;
-import com.hexaware.ccozyhaven.entities.Hotel;
-import com.hexaware.ccozyhaven.entities.Reservation;
-import com.hexaware.ccozyhaven.entities.Room;
+
 import com.hexaware.ccozyhaven.entities.User;
-import com.hexaware.ccozyhaven.exceptions.HotelOwnerNotFoundException;
-import com.hexaware.ccozyhaven.exceptions.InvalidCancellationException;
-import com.hexaware.ccozyhaven.exceptions.ReservationNotFoundException;
-import com.hexaware.ccozyhaven.exceptions.RoomNotAvailableException;
-import com.hexaware.ccozyhaven.exceptions.RoomNotFoundException;
+
 import com.hexaware.ccozyhaven.exceptions.UserNotFoundException;
 
 @Repository

@@ -1,7 +1,5 @@
 package com.hexaware.ccozyhaven.dto;
 
-import java.math.BigDecimal;
-
 public class RoomDTO {
 
 	private Long roomId;
