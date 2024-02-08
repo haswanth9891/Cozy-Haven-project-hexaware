@@ -4,8 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.hexaware.ccozyhaven.dto.AdministratorDTO;
-import com.hexaware.ccozyhaven.entities.Administrator;
+
 import com.hexaware.ccozyhaven.entities.HotelOwner;
 import com.hexaware.ccozyhaven.entities.User;
 import com.hexaware.ccozyhaven.exceptions.InvalidCancellationException;
