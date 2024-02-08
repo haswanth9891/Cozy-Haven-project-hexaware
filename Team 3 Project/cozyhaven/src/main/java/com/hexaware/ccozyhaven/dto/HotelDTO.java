@@ -1,14 +1,5 @@
 package com.hexaware.ccozyhaven.dto;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import com.hexaware.ccozyhaven.entities.Reservation;
-import com.hexaware.ccozyhaven.entities.Review;
-import com.hexaware.ccozyhaven.entities.Room;
-
-
-
 public class HotelDTO {
 
 	private Long hotelId;

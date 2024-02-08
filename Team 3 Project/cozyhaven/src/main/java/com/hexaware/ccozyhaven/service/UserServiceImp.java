@@ -1,31 +1,19 @@
 package com.hexaware.ccozyhaven.service;
 
-import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.hexaware.ccozyhaven.dto.HotelOwnerDTO;
-import com.hexaware.ccozyhaven.dto.UserDTO;
-import com.hexaware.ccozyhaven.entities.Hotel;
-import com.hexaware.ccozyhaven.entities.HotelOwner;
-import com.hexaware.ccozyhaven.entities.Reservation;
 
-import com.hexaware.ccozyhaven.entities.Room;
+import com.hexaware.ccozyhaven.dto.UserDTO;
+
+
+
 import com.hexaware.ccozyhaven.entities.User;
-import com.hexaware.ccozyhaven.exceptions.HotelOwnerNotFoundException;
-import com.hexaware.ccozyhaven.exceptions.InvalidCancellationException;
-import com.hexaware.ccozyhaven.exceptions.ReservationNotFoundException;
-import com.hexaware.ccozyhaven.exceptions.RoomNotAvailableException;
-import com.hexaware.ccozyhaven.exceptions.RoomNotFoundException;
+
 import com.hexaware.ccozyhaven.exceptions.UserNotFoundException;
-import com.hexaware.ccozyhaven.repository.HotelRepository;
-import com.hexaware.ccozyhaven.repository.ReservationRepository;
-import com.hexaware.ccozyhaven.repository.RoomRepository;
+
 import com.hexaware.ccozyhaven.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
