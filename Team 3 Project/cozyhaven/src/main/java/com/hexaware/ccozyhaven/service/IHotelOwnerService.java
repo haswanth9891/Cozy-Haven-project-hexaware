@@ -27,7 +27,7 @@ public interface IHotelOwnerService {
     
     //update HotelOwnerDetails
   
-    HotelOwner updateHotelOwner(Long hotelOwnerId, HotelOwner updatedHotelOwner) throws HotelOwnerNotFoundException;
+   
 
     // Add a new room to the hotel
     //Room addRoom(RoomDTO roomDTO);
@@ -49,6 +49,9 @@ public interface IHotelOwnerService {
 	
 
 	void addHotelOwnerWithHotel(HotelOwnerDTO hotelOwnerDTO);
+
+	void updateHotelOwnerWithHotel(Long hotelOwnerId, HotelOwnerDTO updatedHotelOwnerDTO)
+			throws HotelOwnerNotFoundException;
 
 	
 

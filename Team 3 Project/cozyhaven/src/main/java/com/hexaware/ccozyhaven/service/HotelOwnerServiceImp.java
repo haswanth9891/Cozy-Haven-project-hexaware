@@ -79,22 +79,44 @@ public class HotelOwnerServiceImp implements IHotelOwnerService {
 	}
 
 	@Override
-	public HotelOwner updateHotelOwner(Long hotelOwnerId, HotelOwner updatedHotelOwner)
-			throws HotelOwnerNotFoundException {
-		LOGGER.info("Updating hotel owner with ID: {}", hotelOwnerId);
-		HotelOwner existingHotelOwner = hotelOwnerRepository.findById(hotelOwnerId)
-				.orElseThrow(() -> new HotelOwnerNotFoundException("HotelOwner not found with id: " + hotelOwnerId));
+	public void updateHotelOwnerWithHotel(Long hotelOwnerId, HotelOwnerDTO updatedHotelOwnerDTO) throws HotelOwnerNotFoundException {
 
-		existingHotelOwner.setHotelOwnerName(updatedHotelOwner.getHotelOwnerName());
-		existingHotelOwner.setEmail(updatedHotelOwner.getEmail());
-		existingHotelOwner.setGender(updatedHotelOwner.getGender());
-		existingHotelOwner.setAddress(updatedHotelOwner.getAddress());
-		existingHotelOwner.setHotel(updatedHotelOwner.getHotel());
+	    LOGGER.info("Updating hotel owner with ID: {}", hotelOwnerId);
 
-		return hotelOwnerRepository.save(existingHotelOwner);
+	    // Retrieve existing HotelOwner
+	    HotelOwner existingHotelOwner = hotelOwnerRepository.findById(hotelOwnerId)
+	            .orElseThrow(() -> new HotelOwnerNotFoundException("HotelOwner not found with id: " + hotelOwnerId));
 
+	    // Convert DTO to entity
+	    HotelOwner updatedHotelOwner = convertHotelOwnerDTOToEntity(updatedHotelOwnerDTO);
+
+	    // Update HotelOwner fields
+	    existingHotelOwner.setHotelOwnerName(updatedHotelOwner.getHotelOwnerName());
+	    existingHotelOwner.setEmail(updatedHotelOwner.getEmail());
+	    existingHotelOwner.setGender(updatedHotelOwner.getGender());
+	    existingHotelOwner.setAddress(updatedHotelOwner.getAddress());
+
+	    // Update associated Hotel details
+	    HotelDTO updatedHotelDTO = updatedHotelOwnerDTO.getHotelDTO();
+	    Hotel existingHotel = existingHotelOwner.getHotel();
+	    
+	    existingHotel.setHotelName(updatedHotelDTO.getHotelName());
+	    existingHotel.setLocation(updatedHotelDTO.getLocation());
+	    existingHotel.setHasDining(updatedHotelDTO.isHasDining());
+	    existingHotel.setHasParking(updatedHotelDTO.isHasParking());
+	    existingHotel.setHasFreeWiFi(updatedHotelDTO.isHasFreeWiFi());
+	    existingHotel.setHasRoomService(updatedHotelDTO.isHasRoomService());
+	    existingHotel.setHasSwimmingPool(updatedHotelDTO.isHasSwimmingPool());
+	    existingHotel.setHasFitnessCenter(updatedHotelDTO.isHasFitnessCenter());
+
+	    // Save the updated HotelOwner and associated Hotel
+	    hotelOwnerRepository.save(existingHotelOwner);
+
+	    LOGGER.info("Hotel owner and associated hotel details updated successfully");
 	}
 
+	
+	
 	@Override
 	public void deleteHotelOwner(Long hotelOwnerId) throws HotelOwnerNotFoundException {
 		LOGGER.info("Deleting hotel owner with ID: {}", hotelOwnerId);
@@ -105,6 +127,7 @@ public class HotelOwnerServiceImp implements IHotelOwnerService {
 		LOGGER.info("Hotel owner deleted successfully");
 
 	}
+
 
 //	@Override
 //	public HotelOwner registerHotelOwner(HotelOwnerDTO hotelOwnerDTO) {

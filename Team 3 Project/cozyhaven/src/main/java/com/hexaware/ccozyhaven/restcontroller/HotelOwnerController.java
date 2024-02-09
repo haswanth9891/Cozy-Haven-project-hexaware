@@ -5,8 +5,9 @@ package com.hexaware.ccozyhaven.restcontroller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
-
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -43,13 +44,36 @@ public class HotelOwnerController {
 
 	}
 
-	@PutMapping("/update/{hotelOwnerId}")
-	public HotelOwner updateHotelOwner(@PathVariable Long hotelOwnerId, @RequestBody HotelOwner updateHotelOwner)
-			throws HotelOwnerNotFoundException {
-		 LOGGER.info("Received request to update HotelOwner with ID: {}", hotelOwnerId);
-		HotelOwner updatedHotelOwner = hotelOwnerService.updateHotelOwner(hotelOwnerId, updateHotelOwner);
-		return updatedHotelOwner;
-	}
+	 @PutMapping("/update/{hotelOwnerId}")
+	    public ResponseEntity<String> updateHotelOwner(@PathVariable Long hotelOwnerId,
+	                                                   @RequestBody HotelOwnerDTO updatedHotelOwnerDTO) {
+	        try {
+	            hotelOwnerService.updateHotelOwnerWithHotel(hotelOwnerId, updatedHotelOwnerDTO);
+	            return new ResponseEntity<>("HotelOwner updated successfully", HttpStatus.OK);
+	        } catch (HotelOwnerNotFoundException e) {
+	            LOGGER.error("Error updating HotelOwner with ID: {}", hotelOwnerId, e);
+	            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+	        }
+	    }
+	
+	@DeleteMapping("/delete/{hotelOwnerId}")
+    public ResponseEntity<String> deleteHotelOwner(@PathVariable Long hotelOwnerId) {
+        try {
+            hotelOwnerService.deleteHotelOwner(hotelOwnerId);
+            return new ResponseEntity<>("Hotel owner deleted successfully", HttpStatus.OK);
+        } catch (HotelOwnerNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 //	 @PostMapping("/{hotelOwnerId}/addhotel")
 //	    public ResponseEntity<Hotel> addHotel(@PathVariable Long hotelOwnerId, @RequestBody HotelDTO hotelDTO) {
@@ -60,6 +84,6 @@ public class HotelOwnerController {
 //	            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 //	        }
 //	    }
-//	
+
 
 }
