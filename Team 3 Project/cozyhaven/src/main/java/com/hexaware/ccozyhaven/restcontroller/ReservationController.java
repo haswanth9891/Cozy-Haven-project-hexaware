@@ -3,6 +3,8 @@ package com.hexaware.ccozyhaven.restcontroller;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,17 +31,21 @@ import com.hexaware.ccozyhaven.service.IReservationService;
 @RestController
 @RequestMapping("/cozyhaven-reservation")
 public class ReservationController {
+	
+	 private static final Logger LOGGER = LoggerFactory.getLogger(ReservationController.class);
 
 	@Autowired
 	private IReservationService reservationService;
 
 	 @GetMapping("/get-by-hotel/{hotelId}")
 	    public List<Reservation> viewReservationByHotelId(@PathVariable Long hotelId) throws HotelNotFoundException {
+		 LOGGER.info("Received request to view reservations by hotel ID: {}", hotelId);
 	        List<Reservation> reservations = reservationService.viewReservationByHotelId(hotelId);
 			return reservations;
 	    }
 	 @GetMapping("/valid-get-by-hotel/{hotelId}")
 	    public List<Reservation> viewValidReservationByHotelId(@PathVariable Long hotelId) throws HotelNotFoundException {
+		 LOGGER.info("Received request to view valid reservations by hotel ID: {}", hotelId);
 	        List<Reservation> reservations = reservationService.viewValidReservationByHotelId(hotelId);
 			return reservations;
 	    }
@@ -47,24 +53,28 @@ public class ReservationController {
 	@GetMapping("/refundAmount/{reservationId}")
 	public Double refundAmount(@PathVariable Long reservationId)
 			throws RefundProcessedException, InvalidRefundException, ReservationNotFoundException {
+		 LOGGER.info("Received request to get refund amount for reservation ID: {}", reservationId);
 		Double refundedAmount = reservationService.refundAmount(reservationId);
 		return  refundedAmount;
 	}
 	
 	@GetMapping("/get-by-user/{userId}")
     public List<Reservation> getUserReservations(@PathVariable Long userId) {
+		 LOGGER.info("Received request to view reservations by user ID: {}", userId);
         return reservationService.getUserReservations(userId);
     }
     
     @DeleteMapping("/cancel/{userId}/{reservationId}")
     public void cancelReservation(@PathVariable Long userId, @PathVariable Long reservationId)
             throws ReservationNotFoundException {
+    	 LOGGER.info("Received request to cancel reservation with ID: {} for user ID: {}", reservationId, userId);
     	reservationService.cancelReservation(userId, reservationId);
     }
     
     @DeleteMapping("/cancel-and-refund/{userId}/{reservationId}")
     public void cancelReservationAndRequestRefund(@PathVariable Long userId, @PathVariable Long reservationId)
             throws InvalidCancellationException, ReservationNotFoundException {
+    	 LOGGER.info("Received request to cancel and refund reservation with ID: {} for user ID: {}", reservationId, userId);
     	reservationService.cancelReservationAndRequestRefund(userId, reservationId);
     }
     
@@ -81,6 +91,8 @@ public class ReservationController {
         try {
             LocalDate checkIn = LocalDate.parse(checkInDate);
             LocalDate checkOut = LocalDate.parse(checkOutDate);
+            LOGGER.info("Received request to make reservation for user ID: {}, room ID: {}, check-in: {}, check-out: {}",
+                    userId, roomId, checkIn, checkOut);
 
             boolean reservationSuccess = reservationService.reservationRoom(
                     userId, roomId, numberOfAdults, numberOfChildren, checkIn, checkOut);
@@ -91,6 +103,7 @@ public class ReservationController {
                 return new ResponseEntity<>("Reservation failed", HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } catch (RoomNotAvailableException | RoomNotFoundException | UserNotFoundException e) {
+        	 LOGGER.error("Error while processing reservation request: {}", e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }

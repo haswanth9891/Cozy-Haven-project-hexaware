@@ -29,12 +29,11 @@ public class HotelOwnerServiceImp implements IHotelOwnerService {
 	@Autowired
 	HotelRepository hotelRepository;
 
-	Logger log = LoggerFactory.getLogger(HotelOwnerServiceImp.class);
-
+	 private static final Logger LOGGER = LoggerFactory.getLogger(HotelOwnerServiceImp.class);
 	@Override
 	public void addHotelOwnerWithHotel(HotelOwner hotelOwner) {
 
-		log.info("Before saving: " + hotelOwner);
+		 LOGGER.info("Adding hotel owner with hotel: {}", hotelOwner);
 
 		Hotel hotel = hotelOwner.getHotel();
 
@@ -43,13 +42,14 @@ public class HotelOwnerServiceImp implements IHotelOwnerService {
 
 		hotelRepository.save(hotel);
 		hotelOwnerRepository.save(hotelOwner);
+		 LOGGER.info("Hotel owner added successfully");
 
 	}
 
 	@Override
 	public HotelOwner updateHotelOwner(Long hotelOwnerId, HotelOwner updatedHotelOwner)
 			throws HotelOwnerNotFoundException {
-
+		 LOGGER.info("Updating hotel owner with ID: {}", hotelOwnerId);
 		HotelOwner existingHotelOwner = hotelOwnerRepository.findById(hotelOwnerId)
 				.orElseThrow(() -> new HotelOwnerNotFoundException("HotelOwner not found with id: " + hotelOwnerId));
 
@@ -65,10 +65,12 @@ public class HotelOwnerServiceImp implements IHotelOwnerService {
 
 	@Override
 	public void deleteHotelOwner(Long hotelOwnerId) throws HotelOwnerNotFoundException {
+		LOGGER.info("Deleting hotel owner with ID: {}", hotelOwnerId);
 		HotelOwner hotelOwnerToDelete = hotelOwnerRepository.findById(hotelOwnerId)
 				.orElseThrow(() -> new HotelOwnerNotFoundException("HotelOwner not found with id: " + hotelOwnerId));
 
 		hotelOwnerRepository.delete(hotelOwnerToDelete);
+		 LOGGER.info("Hotel owner deleted successfully");
 
 	}
 

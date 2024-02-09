@@ -2,6 +2,8 @@ package com.hexaware.ccozyhaven.service;
 
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,8 @@ import jakarta.transaction.Transactional;
 @Service
 @Transactional
 public class UserServiceImp implements IUserService {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImp.class);
 
 	
 
@@ -35,7 +39,7 @@ public class UserServiceImp implements IUserService {
 
 	@Override
 	public User updateUser(Long userId, UserDTO updatedUserDTO) throws UserNotFoundException {
-
+		 LOGGER.info("Updating user with ID {}", userId);
 		User existingUser = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
 
@@ -48,7 +52,8 @@ public class UserServiceImp implements IUserService {
 		existingUser.setGender(updatedUserDTO.getGender());
 		existingUser.setAddress(updatedUserDTO.getAddress());
 
-		return userRepository.save(existingUser);
+		 LOGGER.info("User updated successfully");
+	        return userRepository.save(existingUser);
 
 	}
 

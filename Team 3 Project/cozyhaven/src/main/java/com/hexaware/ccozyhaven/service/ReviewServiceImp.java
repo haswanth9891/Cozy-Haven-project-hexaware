@@ -5,6 +5,8 @@ package com.hexaware.ccozyhaven.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,8 @@ import jakarta.transaction.Transactional;
 @Service
 @Transactional
 public class ReviewServiceImp implements IReviewService {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(ReviewServiceImp.class);
 
 	@Autowired
     private ReviewRepository reviewRepository;
@@ -37,6 +41,7 @@ public class ReviewServiceImp implements IReviewService {
     @Override
     public void addReviewWithUserAndHotel(ReviewDTO reviewDTO, Long userId, Long hotelId)
             throws UserNotFoundException, HotelNotFoundException {
+    	 LOGGER.info("Adding review with user ID {} and hotel ID {}", userId, hotelId);
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
 
@@ -51,12 +56,14 @@ public class ReviewServiceImp implements IReviewService {
         newReview.setReviewDate(reviewDTO.getReviewDate());
 
         reviewRepository.save(newReview);
+        LOGGER.info("Review added successfully");
     }
 
 	
 	
 	 @Override
 	    public Review getReviewById(Long reviewId) throws ReviewNotFoundException {
+		 LOGGER.info("Fetching review with ID {}", reviewId);
 	        return reviewRepository.findById(reviewId)
 	                .orElseThrow(() -> new ReviewNotFoundException("Review not found with id: " + reviewId));
 	    }
@@ -64,6 +71,7 @@ public class ReviewServiceImp implements IReviewService {
 	
 	 @Override
 	    public void updateReviewById(Long reviewId, ReviewDTO reviewDTO) throws ReviewNotFoundException {
+		 LOGGER.info("Updating review with ID {}", reviewId);
 	        Review existingReview = getReviewById(reviewId);
 
 	       
@@ -72,21 +80,26 @@ public class ReviewServiceImp implements IReviewService {
 	        existingReview.setReviewDate(reviewDTO.getReviewDate());
 
 	        reviewRepository.save(existingReview);
+	        LOGGER.info("Review updated successfully");
 	    }
 	 
 	 @Override
 	    public void deleteReviewById(Long reviewId) throws ReviewNotFoundException {
+		 LOGGER.info("Deleting review with ID {}", reviewId);
 	        Review reviewToDelete = getReviewById(reviewId);
 	        reviewRepository.delete(reviewToDelete);
+	        LOGGER.info("Review deleted successfully");
 	    }
 
 	 @Override
 	    public List<Review> getAllReviews() {
+		 LOGGER.info("Fetching all reviews");
 	        return reviewRepository.findAll();
 	    }
 
 	 @Override
 	    public List<Review> getAllReviewsForHotel(Long hotelId) throws HotelNotFoundException {
+		 LOGGER.info("Fetching all reviews for hotel with ID {}", hotelId);
 	        Hotel hotel = hotelRepository.findById(hotelId)
 	                .orElseThrow(() -> new HotelNotFoundException("Hotel not found with id: " + hotelId));
 
@@ -94,6 +107,7 @@ public class ReviewServiceImp implements IReviewService {
 	    }
 	 @Override
 	    public List<Review> getAllReviewsByUser(Long userId) throws UserNotFoundException {
+		 LOGGER.info("Fetching all reviews for user with ID {}", userId);
 	        User user = userRepository.findById(userId)
 	                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
 

@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +32,8 @@ import jakarta.transaction.Transactional;
 @Service
 @Transactional
 public class ReservationServiceImp implements IReservationService {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(ReservationServiceImp.class);
 
 	@Autowired
 	ReservationRepository reservationRepository;
@@ -40,12 +44,14 @@ public class ReservationServiceImp implements IReservationService {
 
 	@Override
 	public List<Reservation> viewReservationByHotelId(Long hotelId) {
+		 LOGGER.info("Viewing all reservations for hotel with ID: {}", hotelId);
 		return reservationRepository.findAllByHotel_HotelId(hotelId);
 
 	}
 
 	@Override
 	public List<Reservation> viewValidReservationByHotelId(Long hotelId) {
+		LOGGER.info("Viewing valid reservations for hotel with ID: {}", hotelId);
 		return reservationRepository.findAllByHotel_HotelId(hotelId);
 
 	}
@@ -54,7 +60,7 @@ public class ReservationServiceImp implements IReservationService {
 	public boolean reservationRoom(Long userId, Long roomId, int numberOfAdults, int numberOfChildren,
 			LocalDate checkInDate, LocalDate checkOutDate)
 			throws RoomNotAvailableException, RoomNotFoundException, UserNotFoundException {
-
+		 LOGGER.info("Making a reservation for user with ID: {} and room with ID: {}", userId, roomId);
 		if (!isRoomAvailable(roomId, checkInDate, checkOutDate)) {
 			throw new RoomNotAvailableException(
 					"Room with id " + roomId + " is not available for the selected date range.");
@@ -95,6 +101,7 @@ public class ReservationServiceImp implements IReservationService {
 		reservation.setReservationStatus("PENDING");
 
 		reservationRepository.save(reservation);
+		LOGGER.info("Reservation made successfully");
 		return true;
 	}
 	
@@ -102,8 +109,9 @@ public class ReservationServiceImp implements IReservationService {
 	@Override
 	public boolean isRoomAvailable(Long roomId, LocalDate checkInDate, LocalDate checkOutDate)
 			throws RoomNotFoundException {
+		 LOGGER.info("Checking room availability with ID: {}", roomId);
 		Optional<Room> optionalRoom = roomRepository.findById(roomId);
-
+        
 		if (optionalRoom.isPresent()) {
 			Room room = optionalRoom.get();
 
@@ -184,6 +192,7 @@ public class ReservationServiceImp implements IReservationService {
 	@Override
 	public double refundAmount(Long reservationId)
 			throws RefundProcessedException, InvalidRefundException, ReservationNotFoundException {
+		LOGGER.info("Calculating refund amount for reservation with ID: {}", reservationId);
 		Reservation reservation = reservationRepository.findById(reservationId)
 				.orElseThrow(() -> new ReservationNotFoundException("Reservation not found with id: " + reservationId));
 
@@ -212,22 +221,27 @@ public class ReservationServiceImp implements IReservationService {
 
 	@Override
 	public List<Reservation> getUserReservations(Long userId) {
+		LOGGER.info("Retrieving reservations for user with ID: {}", userId);
 		return reservationRepository.findByUserId(userId);
 	}
 
 	@Override
 	public void cancelReservation(Long userId, Long reservationId) throws ReservationNotFoundException {
+		 LOGGER.info("Cancelling reservation with ID: {} for user with ID: {}", reservationId, userId);
+
 		Reservation reservation = reservationRepository.findByReservationIdAndUser_UserId(reservationId, userId)
 				.orElseThrow(() -> new ReservationNotFoundException("Reservation not found with id: " + reservationId));
 
 		reservation.setReservationStatus("CANCELLED");
 		reservationRepository.save(reservation);
+		LOGGER.info("Reservation cancelled successfully");
 
 	}
 
 	@Override
 	public void cancelReservationAndRequestRefund(Long userId, Long reservationId)
 			throws InvalidCancellationException, ReservationNotFoundException {
+		 LOGGER.info("Cancelling reservation with refund request for ID: {} for user with ID: {}", reservationId, userId);
 		Reservation reservation = reservationRepository.findByReservationIdAndUser_UserId(reservationId, userId)
 				.orElseThrow(() -> new ReservationNotFoundException("Reservation not found with id: " + reservationId));
 
@@ -238,7 +252,7 @@ public class ReservationServiceImp implements IReservationService {
 		} else {
 			throw new InvalidCancellationException("Reservation is already cancelled.");
 		}
-
+		LOGGER.info("Reservation cancelled with refund request successfully");
 	}
 
 

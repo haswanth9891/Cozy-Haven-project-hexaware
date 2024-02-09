@@ -2,6 +2,8 @@ package com.hexaware.ccozyhaven.restcontroller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,31 +23,37 @@ import com.hexaware.ccozyhaven.service.IAdministratorService;
 @RestController
 @RequestMapping("/cozyhaven-admin")
 public class AdministratorController {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(AdministratorController.class);
 
 	@Autowired
 	private IAdministratorService administratorService;
 
 	@DeleteMapping("/deleteUserAccount/{userId}")
 	public String deleteUserAccount(@PathVariable Long userId) throws UserNotFoundException {
-		administratorService.deleteUserAccount(userId);
+		 LOGGER.info("Received request to delete user account with ID: {}", userId);
+	       administratorService.deleteUserAccount(userId);
 		return "User account deleted successfully";
 	}
 
 	@DeleteMapping("/deleteHotelOwnerAccount/{hotelOwnerId}")
 	public String deleteHotelOwnerAccount(@PathVariable Long hotelOwnerId)
 			throws UserNotFoundException {
+		 LOGGER.info("Received request to delete hotel owner account with ID: {}", hotelOwnerId);
 		administratorService.deleteHotelOwnerAccount(hotelOwnerId);
 		return "Hotel owner account deleted successfully";
 	}
 
 	@GetMapping("/viewAllUsers")
 	public List<User> viewAllUsers() {
+		LOGGER.info("Received request to view all users");
 		List<User> users = administratorService.viewAllUser();
 		return users;
 	}
 
 	@GetMapping("/viewAllHotelOwners")
 	public List<HotelOwner> viewAllHotelOwners() {
+		LOGGER.info("Received request to view all hotel owners");
 		List<HotelOwner> hotelOwners = administratorService.viewAllHotelOwner();
 		return hotelOwners;
 	}
@@ -54,6 +62,7 @@ public class AdministratorController {
 	public String manageRoomReservation(@PathVariable Long reservationId,
 			@RequestParam(name = "reservationStatus") String reservationStatus)
 			throws ReservationNotFoundException, InvalidCancellationException {
+		 LOGGER.info("Received request to manage room reservation with ID: {} and status: {}", reservationId, reservationStatus);
 		administratorService.manageRoomReservation(reservationId, reservationStatus);
 		return "Room reservation managed successfully";
 	}

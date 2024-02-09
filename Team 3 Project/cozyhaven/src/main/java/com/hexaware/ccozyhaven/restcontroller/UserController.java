@@ -1,5 +1,7 @@
 package com.hexaware.ccozyhaven.restcontroller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +24,7 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/cozyhaven-user")
 public class UserController {
+	 private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
 	@Autowired
 	private IUserService userService;
@@ -35,8 +38,10 @@ public class UserController {
 	@PutMapping("/update/{userId}")
 	public User updateUser(@PathVariable Long userId, @RequestBody @Valid UserDTO userDTO)
 			throws UserNotFoundException {
+		LOGGER.info("Received request to update user with ID: {}", userId);
 
 		return userService.updateUser(userId, userDTO);
+		 
 	}
 
 }

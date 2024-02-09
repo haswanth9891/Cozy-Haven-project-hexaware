@@ -25,16 +25,19 @@ import com.hexaware.ccozyhaven.service.IHotelOwnerService;
 @RestController
 @RequestMapping("/cozyhaven-hotelowner")
 public class HotelOwnerController {
+	
+	 private static final Logger LOGGER = LoggerFactory.getLogger(HotelOwnerController.class);
 
+	 
 	@Autowired
 	private IHotelOwnerService hotelOwnerService;
 
-	Logger log = LoggerFactory.getLogger(HotelOwnerServiceImp.class);
+	
 
 	@PostMapping(path = "/add", consumes = "application/json")
 	public String addHotelOwnerWithHotel(@RequestBody HotelOwner hotelOwner) {
 
-		log.info("In Restcontroller Before : " + hotelOwner);
+		LOGGER.info("Received request to add HotelOwner with Hotel: {}", hotelOwner);
 		hotelOwnerService.addHotelOwnerWithHotel(hotelOwner);
 		return "HotelOwner and Hotel added successfully";
 
@@ -43,6 +46,7 @@ public class HotelOwnerController {
 	@PutMapping("/update/{hotelOwnerId}")
 	public HotelOwner updateHotelOwner(@PathVariable Long hotelOwnerId, @RequestBody HotelOwner updateHotelOwner)
 			throws HotelOwnerNotFoundException {
+		 LOGGER.info("Received request to update HotelOwner with ID: {}", hotelOwnerId);
 		HotelOwner updatedHotelOwner = hotelOwnerService.updateHotelOwner(hotelOwnerId, updateHotelOwner);
 		return updatedHotelOwner;
 	}

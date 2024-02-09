@@ -2,6 +2,8 @@ package com.hexaware.ccozyhaven.restcontroller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,7 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/cozyhaven/review")
 public class ReviewController {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ReviewController.class);
 	
 	 @Autowired
 	    private IReviewService reviewService;
@@ -36,8 +39,10 @@ public class ReviewController {
 	                                                            @PathVariable Long hotelId) {
 	        try {
 	            reviewService.addReviewWithUserAndHotel(reviewDTO, userId, hotelId);
+	            LOGGER.info("Review added successfully");
 	            return new ResponseEntity<>("Review added successfully", HttpStatus.CREATED);
 	        } catch (UserNotFoundException | HotelNotFoundException e) {
+	        	 LOGGER.error("Error adding review: {}", e.getMessage());
 	            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
 	        }
 	    }
@@ -46,8 +51,10 @@ public class ReviewController {
 	    public ResponseEntity<Review> getReviewById(@PathVariable Long reviewId) {
 	        try {
 	            Review review = reviewService.getReviewById(reviewId);
+	            LOGGER.info("Retrieved review with ID: {}", reviewId);
 	            return new ResponseEntity<>(review, HttpStatus.OK);
 	        } catch (ReviewNotFoundException e) {
+	        	 LOGGER.error("Error getting review with ID {}: {}", reviewId, e.getMessage());
 	            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 	        }
 	    }
@@ -58,8 +65,10 @@ public class ReviewController {
 	                                                   @RequestBody @Valid ReviewDTO reviewDTO) {
 	        try {
 	            reviewService.updateReviewById(reviewId, reviewDTO);
+	            LOGGER.info("Review with ID {} updated successfully", reviewId);
 	            return new ResponseEntity<>("Review updated successfully", HttpStatus.OK);
 	        } catch (ReviewNotFoundException e) {
+	        	 LOGGER.error("Error updating review with ID {}: {}", reviewId, e.getMessage());
 	            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
 	        }
 	    }
@@ -68,8 +77,10 @@ public class ReviewController {
 	    public ResponseEntity<String> deleteReviewById(@PathVariable Long reviewId) {
 	        try {
 	            reviewService.deleteReviewById(reviewId);
+	            LOGGER.info("Review with ID {} deleted successfully", reviewId);
 	            return new ResponseEntity<>("Review deleted successfully", HttpStatus.OK);
 	        } catch (ReviewNotFoundException e) {
+	        	 LOGGER.error("Error deleting review with ID {}: {}", reviewId, e.getMessage());
 	            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
 	        }
 	    }
@@ -78,6 +89,7 @@ public class ReviewController {
 	 @GetMapping("/getall")
 	    public ResponseEntity<List<Review>> getAllReviews() {
 	        List<Review> reviews = reviewService.getAllReviews();
+	        LOGGER.info("Retrieved all reviews");
 	        return new ResponseEntity<>(reviews, HttpStatus.OK);
 	    }
 	
@@ -86,8 +98,10 @@ public class ReviewController {
 	    public ResponseEntity<List<Review>> getAllReviewsForHotel(@PathVariable Long hotelId) {
 	        try {
 	            List<Review> reviews = reviewService.getAllReviewsForHotel(hotelId);
+	            LOGGER.info("Retrieved all reviews for hotel with ID: {}", hotelId);
 	            return new ResponseEntity<>(reviews, HttpStatus.OK);
 	        } catch (HotelNotFoundException e) {
+	        	 LOGGER.error("Error getting reviews for hotel with ID {}: {}", hotelId, e.getMessage());
 	            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 	        }
 	    }
@@ -96,8 +110,10 @@ public class ReviewController {
 	    public ResponseEntity<List<Review>> getAllReviewsByUser(@PathVariable Long userId) {
 	        try {
 	            List<Review> reviews = reviewService.getAllReviewsByUser(userId);
+	            LOGGER.info("Retrieved all reviews by user with ID: {}", userId);
 	            return new ResponseEntity<>(reviews, HttpStatus.OK);
 	        } catch (UserNotFoundException e) {
+	        	 LOGGER.error("Error getting reviews by user with ID {}: {}", userId, e.getMessage());
 	            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 	        }
 	    }

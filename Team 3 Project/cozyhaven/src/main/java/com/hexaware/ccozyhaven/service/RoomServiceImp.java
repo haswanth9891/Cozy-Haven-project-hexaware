@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,8 @@ import jakarta.transaction.Transactional;
 @Service
 @Transactional
 public class RoomServiceImp implements IRoomService {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(RoomServiceImp.class);
 
 	@Autowired
 	RoomRepository roomRepository;
@@ -28,6 +32,7 @@ public class RoomServiceImp implements IRoomService {
 
 	@Override
 	public Room addRoomToHotel(RoomDTO roomDTO, Long hotelId) {
+		 LOGGER.info("Adding room to hotel");
 		Room room = new Room();
         room.setRoomSize(roomDTO.getRoomSize());
         room.setBedType(roomDTO.getBedType());
@@ -40,12 +45,13 @@ public class RoomServiceImp implements IRoomService {
 		roomRepository.addRoomToHotel(savedRoom.getRoomId(), hotelId); 
 
 		
-
+		 LOGGER.info("Room added to hotel successfully");
 		return savedRoom;
 	}
 
 	@Override
 	public Room editRoom(Long roomId, RoomDTO updatedRoomDTO) throws RoomNotFoundException {
+		LOGGER.info("Editing room with ID {}", roomId);
 		Room existingRoom = roomRepository.findById(roomId)
 				.orElseThrow(() -> new RoomNotFoundException("Room not found with id: " + roomId));
 
@@ -55,32 +61,38 @@ public class RoomServiceImp implements IRoomService {
 		existingRoom.setBaseFare(updatedRoomDTO.getBaseFare());
 		existingRoom.setAC(updatedRoomDTO.isAC());
 		existingRoom.setAvailabilityStatus(updatedRoomDTO.isAvailabilityStatus());
-
+        
+		LOGGER.info("Room with ID {} edited successfully", roomId);
 		return roomRepository.save(existingRoom);
 
 	}
 
 	@Override
 	public void removeRoom(Long roomId) throws RoomNotFoundException {
+		LOGGER.info("Removing room with ID {}", roomId);
 		Room roomToDelete = roomRepository.findById(roomId)
 				.orElseThrow(() -> new RoomNotFoundException("Room not found with id: " + roomId));
 
 		roomRepository.delete(roomToDelete);
+		LOGGER.info("Room with ID {} removed successfully", roomId);
 
 	}
 
 	@Override
 	public List<Room> searchRooms(String location, LocalDate checkInDate, LocalDate checkOutDate) {
+		 LOGGER.info("Searching rooms");
 		if (checkInDate.isAfter(checkOutDate)) {
 			throw new IllegalArgumentException("Check-in date must be before or equal to check-out date");
 		}
 		List<Room> availableRooms = roomRepository.findAvailableRooms(location, checkInDate, checkOutDate);
+		  LOGGER.info("Rooms searched successfully");
 		return availableRooms;
 	}
 
 	@Override
 	public boolean isRoomAvailable(Long roomId, LocalDate checkInDate, LocalDate checkOutDate)
 			throws RoomNotFoundException {
+		 LOGGER.info("Checking room availability with ID {}", roomId);
 		Optional<Room> optionalRoom = roomRepository.findById(roomId);
 
 		if (optionalRoom.isPresent()) {
@@ -90,14 +102,18 @@ public class RoomServiceImp implements IRoomService {
 					checkInDate, checkOutDate);
 
 			return overlappingReservations.isEmpty();
+			 
 		} else {
+			 LOGGER.error("Room not found with ID: {}", roomId);
 			throw new RoomNotFoundException("Room not found with id: " + roomId);
 		}
+		
 	}
 
 	@Override
 	public double calculateTotalFare(Long roomId, int numberOfAdults, int numberOfChildren)
 			throws RoomNotFoundException {
+		 LOGGER.info("Calculating total fare for room with ID {}", roomId);
 		if (numberOfAdults <= 0) {
 			throw new IllegalArgumentException("Number of adults must be greater than zero.");
 		}
@@ -148,6 +164,7 @@ public class RoomServiceImp implements IRoomService {
 			}
 
 			double totalFare = baseFare + additionalCharge;
+			 LOGGER.info("Total fare calculated successfully: {}", totalFare);
 			return totalFare;
 			 } else {
 			        throw new RoomNotFoundException("Room not found with id: " + roomId);
