@@ -25,13 +25,17 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 	@Query(value = "SELECT * FROM reservation WHERE hotel_id = :hotelId AND reservation_status != 'CANCELLED'", nativeQuery = true)
 	List<Reservation> findValidReservationsByHotelId(@Param("hotelId") Long hotelId);
 
-	@Query(value = "SELECT r.* FROM Reservation_Details r " + "JOIN Room_Details rd ON r.hotel_id = rd.hotel_id "
-			+ "AND r.reservation_id = rd.reservation_id " + "WHERE rd.room_id = :roomId "
-			+ "AND (:checkInDate BETWEEN r.check_in_date AND r.check_out_date "
-			+ "OR :checkOutDate BETWEEN r.check_in_date AND r.check_out_date "
-			+ "OR r.check_in_date BETWEEN :checkInDate AND :checkOutDate "
-			+ "OR r.check_out_date BETWEEN :checkInDate AND :checkOutDate)", nativeQuery = true)
+	@Query(value = "SELECT r.* FROM reservation_details r " +
+	        "JOIN reservation_room rr ON r.reservation_id = rr.reservation_id " +
+	        "JOIN room_details rd ON rr.room_id = rd.room_id " +
+	        "WHERE rd.room_id = :roomId " +
+	        "AND (:checkInDate BETWEEN r.check_in_date AND r.check_out_date " +
+	        "OR :checkOutDate BETWEEN r.check_in_date AND r.check_out_date " +
+	        "OR r.check_in_date BETWEEN :checkInDate AND :checkOutDate " +
+	        "OR r.check_out_date BETWEEN :checkInDate AND :checkOutDate)", nativeQuery = true)
 	List<Reservation> findOverlappingReservations(@Param("roomId") Long roomId,
-			@Param("checkInDate") LocalDate checkInDate, @Param("checkOutDate") LocalDate checkOutDate);
+	                                              @Param("checkInDate") LocalDate checkInDate,
+	                                              @Param("checkOutDate") LocalDate checkOutDate);
+
 
 }

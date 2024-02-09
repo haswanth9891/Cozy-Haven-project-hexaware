@@ -1,17 +1,35 @@
 package com.hexaware.ccozyhaven.dto;
+
 import com.hexaware.ccozyhaven.entities.Hotel;
 
-
 public class HotelOwnerDTO {
-	
-	
+
 	private Long hotelOwnerId;
 	private String hotelOwnerName;
 	private String password;
-    private String email;
-    private String gender;
-    private String address;
-    public String getAddress() {
+	private String email;
+	private String gender;
+	private String address;
+	private HotelDTO hotelDTO = new HotelDTO();
+
+	public HotelOwnerDTO() {
+		super();
+
+	}
+
+	public HotelOwnerDTO(Long hotelOwnerId, String hotelOwnerName, String password, String email, String gender,
+			String address, HotelDTO hotelDTO) {
+		super();
+		this.hotelOwnerId = hotelOwnerId;
+		this.hotelOwnerName = hotelOwnerName;
+		this.password = password;
+		this.email = email;
+		this.gender = gender;
+		this.address = address;
+		this.hotelDTO = hotelDTO;
+	}
+
+	public String getAddress() {
 		return address;
 	}
 
@@ -25,27 +43,6 @@ public class HotelOwnerDTO {
 
 	public void setGender(String gender) {
 		this.gender = gender;
-	}
-
-	private Hotel hotel = new Hotel();
-    
-    public HotelOwnerDTO() {
-		super();
-		
-	}
-
-	
-
-	public HotelOwnerDTO(Long hotelOwnerId, String hotelOwnerName, String password, String email, String gender,
-			String address, Hotel hotel) {
-		super();
-		this.hotelOwnerId = hotelOwnerId;
-		this.hotelOwnerName = hotelOwnerName;
-		this.password = password;
-		this.email = email;
-		this.gender = gender;
-		this.address = address;
-		this.hotel = hotel;
 	}
 
 	public Long getHotelOwnerId() {
@@ -80,26 +77,19 @@ public class HotelOwnerDTO {
 		this.email = email;
 	}
 
-	
-
-	public Hotel getHotel() {
-		return hotel;
+	public HotelDTO getHotelDTO() {
+		return hotelDTO;
 	}
 
-	public void setHotel(Hotel hotel) {
-		this.hotel = hotel;
+	public void setHotelDTO(HotelDTO hotelDTO) {
+		this.hotelDTO = hotelDTO;
 	}
 
 	@Override
 	public String toString() {
 		return "HotelOwnerDTO [hotelOwnerId=" + hotelOwnerId + ", hotelOwnerName=" + hotelOwnerName + ", password="
-				+ password + ", email=" + email + ", gender=" + gender + ", address=" + address + ", hotel=" + hotel
-				+ "]";
+				+ password + ", email=" + email + ", gender=" + gender + ", address=" + address + ", hotelDTO="
+				+ hotelDTO + "]";
 	}
-
-	
-    
-
-
 
 }

@@ -1,5 +1,10 @@
 package com.hexaware.ccozyhaven.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -10,6 +15,7 @@ import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "HotelOwner_Details")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "hotelOwnerId")
 public class HotelOwner {
 
 	@Id
@@ -39,18 +45,21 @@ public class HotelOwner {
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "hotel_id")
+	@JsonBackReference
 	private Hotel hotel = new Hotel();
 
 	public HotelOwner() {
 		super();
 	}
 
+	
+
 	public HotelOwner(Long hotelOwnerId,
-			@Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters") String hotelOwnerName,
-			@Size(min = 6, message = "Password must be at least 6 characters") String password,
-			@Email(message = "Invalid email format") String email,
-			@Pattern(regexp = "^(male|female|non-binary)$", message = "Invalid gender") String gender, String address,
-			Hotel hotel) {
+			@NotBlank(message = "Username cannot be blank") @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters") String hotelOwnerName,
+			@NotBlank(message = "Password cannot be blank") @Size(min = 6, message = "Password must be at least 6 characters") String password,
+			@NotBlank(message = "Email cannot be blank") @Email(message = "Invalid email format") String email,
+			@Pattern(regexp = "^(male|female|non-binary)$", message = "Invalid gender") String gender,
+			@NotBlank(message = "Address is required") String address) {
 		super();
 		this.hotelOwnerId = hotelOwnerId;
 		this.hotelOwnerName = hotelOwnerName;
@@ -58,8 +67,9 @@ public class HotelOwner {
 		this.email = email;
 		this.gender = gender;
 		this.address = address;
-		this.hotel = hotel;
 	}
+
+
 
 	public HotelOwner(
 			@NotBlank(message = "Username cannot be blank") @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters") String hotelOwnerName,
@@ -111,7 +121,7 @@ public class HotelOwner {
 		return gender;
 	}
 
-	
+	@JsonIgnore
 	public Hotel getHotel() {
 		return hotel;
 	}

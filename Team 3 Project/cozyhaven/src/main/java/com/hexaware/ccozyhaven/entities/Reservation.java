@@ -51,7 +51,8 @@ public class Reservation {
 	@Column(name = "refund_processed")
 	private boolean refundProcessed;
 
-	@OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL)
+	@ManyToMany
+	@JoinTable(name = "reservation_room", joinColumns = @JoinColumn(name = "reservation_id"), inverseJoinColumns = @JoinColumn(name = "room_id"))
 	private Set<Room> rooms = new HashSet<>();
 
 	@ManyToOne

@@ -68,5 +68,11 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<String>(e.toString(),HttpStatus.NOT_ACCEPTABLE);
 	}
 	
+	@ExceptionHandler({InconsistentHotelException.class})
+	public ResponseEntity<String> handleExp(InconsistentHotelException e) {
+		
+		return new ResponseEntity<String>(e.toString(),HttpStatus.NOT_ACCEPTABLE);
+	}
+	
 	
 }

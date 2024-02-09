@@ -7,11 +7,16 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
+import java.util.HashSet;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "Room_Details")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "roomId")
 public class Room {
 
 	@Id
@@ -46,9 +51,8 @@ public class Room {
 	@Column(name = "availability_status")
 	private boolean availabilityStatus;
 
-	@ManyToOne
-	@JoinColumn(name = "reservation_id")
-	private Reservation reservation;
+	 @ManyToMany(mappedBy = "rooms")
+	 private Set<Reservation> reservations = new HashSet<>();
 
 	@ManyToOne
 	@JoinColumn(name = "hotel_id")
@@ -61,22 +65,7 @@ public class Room {
 
 	
 
-	public Room(
-			@NotBlank(message = "Room size is required") @Size(max = 20, message = "Room size must be at most 20 characters") String roomSize,
-			@NotBlank(message = "Bed type is required") @Size(max = 20, message = "Bed type must be at most 20 characters") @Pattern(regexp = "single bed|double bed|king size", message = "Invalid bed type") String bedType,
-			@Positive(message = "Max occupancy must be a positive number") int maxOccupancy,
-			@DecimalMin(value = "0.00", inclusive = false, message = "Base fare must be greater than 0.00") double baseFare,
-			boolean isAC,
-			@NotBlank(message = "Availability status is required") @Size(max = 20, message = "Availability status must be at most 20 characters") boolean availabilityStatus) {
-		super();
-		this.roomSize = roomSize;
-		this.bedType = bedType;
-		this.maxOccupancy = maxOccupancy;
-		this.baseFare = baseFare;
-		this.isAC = isAC;
-		this.availabilityStatus = availabilityStatus;
-	}
-
+	
 
 
 	public Room(Long roomId,
@@ -84,8 +73,7 @@ public class Room {
 			@NotBlank(message = "Bed type is required") @Size(max = 20, message = "Bed type must be at most 20 characters") @Pattern(regexp = "single bed|double bed|king size", message = "Invalid bed type") String bedType,
 			@Positive(message = "Max occupancy must be a positive number") int maxOccupancy,
 			@DecimalMin(value = "0.00", inclusive = false, message = "Base fare must be greater than 0.00") double baseFare,
-			boolean isAC,
-			@NotBlank(message = "Availability status is required") @Size(max = 20, message = "Availability status must be at most 20 characters") boolean availabilityStatus) {
+			boolean isAC, boolean availabilityStatus, Set<Reservation> reservations, Hotel hotel) {
 		super();
 		this.roomId = roomId;
 		this.roomSize = roomSize;
@@ -94,7 +82,37 @@ public class Room {
 		this.baseFare = baseFare;
 		this.isAC = isAC;
 		this.availabilityStatus = availabilityStatus;
+		this.reservations = reservations;
+		this.hotel = hotel;
 	}
+
+
+
+
+
+
+
+
+
+	public Room(
+			@NotBlank(message = "Room size is required") @Size(max = 20, message = "Room size must be at most 20 characters") String roomSize,
+			@NotBlank(message = "Bed type is required") @Size(max = 20, message = "Bed type must be at most 20 characters") @Pattern(regexp = "single bed|double bed|king size", message = "Invalid bed type") String bedType,
+			@Positive(message = "Max occupancy must be a positive number") int maxOccupancy,
+			@DecimalMin(value = "0.00", inclusive = false, message = "Base fare must be greater than 0.00") double baseFare,
+			boolean isAC, boolean availabilityStatus, Set<Reservation> reservations, Hotel hotel) {
+		super();
+		this.roomSize = roomSize;
+		this.bedType = bedType;
+		this.maxOccupancy = maxOccupancy;
+		this.baseFare = baseFare;
+		this.isAC = isAC;
+		this.availabilityStatus = availabilityStatus;
+		this.reservations = reservations;
+		this.hotel = hotel;
+	}
+
+
+
 
 
 
@@ -138,13 +156,19 @@ public class Room {
 		this.baseFare = baseFare;
 	}
 
-	public Reservation getReservation() {
-		return reservation;
+	
+
+	public Set<Reservation> getReservations() {
+		return reservations;
 	}
 
-	public void setReservation(Reservation reservation) {
-		this.reservation = reservation;
+
+
+	public void setReservations(Set<Reservation> reservations) {
+		this.reservations = reservations;
 	}
+
+
 
 	public Hotel getHotel() {
 		return hotel;
@@ -170,11 +194,15 @@ public class Room {
 		this.availabilityStatus = availabilityStatus;
 	}
 
+
+
 	@Override
 	public String toString() {
 		return "Room [roomId=" + roomId + ", roomSize=" + roomSize + ", bedType=" + bedType + ", maxOccupancy="
 				+ maxOccupancy + ", baseFare=" + baseFare + ", isAC=" + isAC + ", availabilityStatus="
-				+ availabilityStatus + ", reservation=" + reservation + ", hotel=" + hotel + "]";
+				+ availabilityStatus + ", reservations=" + reservations + ", hotel=" + hotel + "]";
 	}
+
+	
 
 }

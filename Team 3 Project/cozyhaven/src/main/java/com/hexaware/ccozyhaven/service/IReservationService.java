@@ -3,7 +3,9 @@ package com.hexaware.ccozyhaven.service;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.hexaware.ccozyhaven.dto.BookedRoomDTO;
 import com.hexaware.ccozyhaven.entities.Reservation;
+import com.hexaware.ccozyhaven.exceptions.InconsistentHotelException;
 import com.hexaware.ccozyhaven.exceptions.InvalidCancellationException;
 import com.hexaware.ccozyhaven.exceptions.InvalidRefundException;
 import com.hexaware.ccozyhaven.exceptions.RefundProcessedException;
@@ -21,9 +23,9 @@ public interface IReservationService {
 
 	
 
-	public boolean reservationRoom(Long userId, Long roomId, int numberOfAdults, int numberOfChildren,
-			LocalDate checkInDate, LocalDate checkOutDate)
-			throws RoomNotAvailableException, RoomNotFoundException, UserNotFoundException;
+
+	boolean reservationRoom(Long userId, List<BookedRoomDTO> bookedRooms, LocalDate checkInDate, LocalDate checkOutDate)
+			throws RoomNotAvailableException, RoomNotFoundException, UserNotFoundException, InconsistentHotelException;
 
 	public List<Reservation> getUserReservations(Long userId);
 
@@ -35,6 +37,8 @@ public interface IReservationService {
 	List<Reservation> viewValidReservationByHotelId(Long hotelId);
 
 	boolean isRoomAvailable(Long roomId, LocalDate checkInDate, LocalDate checkOutDate) throws RoomNotFoundException;
+
+	
 
 	
 

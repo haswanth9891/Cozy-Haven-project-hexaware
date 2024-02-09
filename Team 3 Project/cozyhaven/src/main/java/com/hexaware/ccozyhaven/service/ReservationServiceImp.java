@@ -12,10 +12,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hexaware.ccozyhaven.dto.BookedRoomDTO;
 import com.hexaware.ccozyhaven.entities.Hotel;
 import com.hexaware.ccozyhaven.entities.Reservation;
 import com.hexaware.ccozyhaven.entities.Room;
 import com.hexaware.ccozyhaven.entities.User;
+import com.hexaware.ccozyhaven.exceptions.InconsistentHotelException;
 import com.hexaware.ccozyhaven.exceptions.InvalidCancellationException;
 import com.hexaware.ccozyhaven.exceptions.InvalidRefundException;
 import com.hexaware.ccozyhaven.exceptions.RefundProcessedException;
@@ -32,7 +34,7 @@ import jakarta.transaction.Transactional;
 @Service
 @Transactional
 public class ReservationServiceImp implements IReservationService {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(ReservationServiceImp.class);
 
 	@Autowired
@@ -44,7 +46,7 @@ public class ReservationServiceImp implements IReservationService {
 
 	@Override
 	public List<Reservation> viewReservationByHotelId(Long hotelId) {
-		 LOGGER.info("Viewing all reservations for hotel with ID: {}", hotelId);
+		LOGGER.info("Viewing all reservations for hotel with ID: {}", hotelId);
 		return reservationRepository.findAllByHotel_HotelId(hotelId);
 
 	}
@@ -56,62 +58,77 @@ public class ReservationServiceImp implements IReservationService {
 
 	}
 
+
 	@Override
-	public boolean reservationRoom(Long userId, Long roomId, int numberOfAdults, int numberOfChildren,
-			LocalDate checkInDate, LocalDate checkOutDate)
-			throws RoomNotAvailableException, RoomNotFoundException, UserNotFoundException {
-		 LOGGER.info("Making a reservation for user with ID: {} and room with ID: {}", userId, roomId);
-		if (!isRoomAvailable(roomId, checkInDate, checkOutDate)) {
-			throw new RoomNotAvailableException(
-					"Room with id " + roomId + " is not available for the selected date range.");
+	public boolean reservationRoom(Long userId, List<BookedRoomDTO> bookedRooms, LocalDate checkInDate,
+			LocalDate checkOutDate) throws RoomNotAvailableException, RoomNotFoundException, UserNotFoundException, InconsistentHotelException {
+		LOGGER.info("Making a reservation for user with ID: {} and rooms", userId);
+
+		for (BookedRoomDTO bookedRoom : bookedRooms) {
+			if (!isRoomAvailable(bookedRoom.getRoomId(), checkInDate, checkOutDate)) {
+				throw new RoomNotAvailableException(
+						"Room with id " + bookedRoom.getRoomId() + " is not available for the selected date range.");
+			}
 		}
 
 		Reservation reservation = new Reservation();
-		reservation.setNumberOfAdults(numberOfAdults);
-		reservation.setNumberOfChildren(numberOfChildren);
 		reservation.setCheckInDate(checkInDate);
 		reservation.setCheckOutDate(checkOutDate);
+
 		long numberOfDays = ChronoUnit.DAYS.between(checkInDate, checkOutDate) + 1;
+		double fare = 0; // single day fare for all rooms
+		int totalAdults = 0;
+		int totalChildren = 0;
 
-		double fareForDay = 0;
-		fareForDay += calculateTotalFare(roomId, numberOfAdults, numberOfChildren);
+		for (BookedRoomDTO bookedRoom : bookedRooms) {
+			fare += calculateTotalFare(bookedRoom.getRoomId(), bookedRoom.getNumberOfAdults(),
+					bookedRoom.getNumberOfChildren());
+			totalAdults += bookedRoom.getNumberOfAdults();
+			totalChildren += bookedRoom.getNumberOfChildren();
+		}
 
-		double totalFare = fareForDay * numberOfDays;
+		double totalFare = numberOfDays * fare;
+		reservation.setNumberOfAdults(totalAdults);
+		reservation.setNumberOfChildren(totalChildren);
 		reservation.setTotalAmount(totalFare);
+		Hotel firstHotel = null;
 
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
 		reservation.setUser(user);
 
-		
-			Room room = roomRepository.findById(roomId)
-					.orElseThrow(() -> new RoomNotFoundException("Room not found with id: " + roomId));
-			room.setReservation(reservation); // Set the reservation in each room
-			Set<Room> rooms = new HashSet();
-			rooms.add(room);
-		
+		Set<Room> rooms = new HashSet<>();
 
-		
-			
-			Hotel hotel = room.getHotel();
-			reservation.setHotel(hotel);
-		
-			
+		//setting reservation in each room and checking if every room is from same hotel
+		for (BookedRoomDTO bookedRoom : bookedRooms) {
+			Room room = roomRepository.findById(bookedRoom.getRoomId())
+					.orElseThrow(() -> new RoomNotFoundException("Room not found with id: " + bookedRoom.getRoomId()));
+			room.getReservations().add(reservation);
+			rooms.add(room);
+			 if (firstHotel == null) {
+		            firstHotel = room.getHotel();
+		        } else if (!firstHotel.equals(room.getHotel())) {
+		            throw new InconsistentHotelException("Rooms from different hotels cannot be booked together.");
+		        }
+		}
 		reservation.setRooms(rooms);
-		reservation.setReservationStatus("PENDING");
+
+		// setting hotel fetched from above
+		reservation.setHotel(firstHotel);
+
+		reservation.setReservationStatus("CONFIRMED");
 
 		reservationRepository.save(reservation);
 		LOGGER.info("Reservation made successfully");
 		return true;
 	}
-	
 
 	@Override
 	public boolean isRoomAvailable(Long roomId, LocalDate checkInDate, LocalDate checkOutDate)
 			throws RoomNotFoundException {
-		 LOGGER.info("Checking room availability with ID: {}", roomId);
+		LOGGER.info("Checking room availability with ID: {}", roomId);
 		Optional<Room> optionalRoom = roomRepository.findById(roomId);
-        
+
 		if (optionalRoom.isPresent()) {
 			Room room = optionalRoom.get();
 
@@ -227,7 +244,7 @@ public class ReservationServiceImp implements IReservationService {
 
 	@Override
 	public void cancelReservation(Long userId, Long reservationId) throws ReservationNotFoundException {
-		 LOGGER.info("Cancelling reservation with ID: {} for user with ID: {}", reservationId, userId);
+		LOGGER.info("Cancelling reservation with ID: {} for user with ID: {}", reservationId, userId);
 
 		Reservation reservation = reservationRepository.findByReservationIdAndUser_UserId(reservationId, userId)
 				.orElseThrow(() -> new ReservationNotFoundException("Reservation not found with id: " + reservationId));
@@ -241,7 +258,8 @@ public class ReservationServiceImp implements IReservationService {
 	@Override
 	public void cancelReservationAndRequestRefund(Long userId, Long reservationId)
 			throws InvalidCancellationException, ReservationNotFoundException {
-		 LOGGER.info("Cancelling reservation with refund request for ID: {} for user with ID: {}", reservationId, userId);
+		LOGGER.info("Cancelling reservation with refund request for ID: {} for user with ID: {}", reservationId,
+				userId);
 		Reservation reservation = reservationRepository.findByReservationIdAndUser_UserId(reservationId, userId)
 				.orElseThrow(() -> new ReservationNotFoundException("Reservation not found with id: " + reservationId));
 
@@ -254,6 +272,5 @@ public class ReservationServiceImp implements IReservationService {
 		}
 		LOGGER.info("Reservation cancelled with refund request successfully");
 	}
-
 
 }

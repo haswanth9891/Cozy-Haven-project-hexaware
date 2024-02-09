@@ -18,16 +18,22 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 	@Query("UPDATE Room r SET r.hotel.hotelId = :hotelId WHERE r.roomId = :roomId")
 	void addRoomToHotel(@Param("roomId") Long roomId, @Param("hotelId") Long hotelId);
 
-	@Query(value = "SELECT * FROM room_details r " + "WHERE r.hotel_id IN ("
-			+ "  SELECT h.hotel_id FROM hotel_details h " + "  WHERE h.location = :location" + ") "
-			+ "AND r.availability_status = true " + "AND NOT EXISTS ("
-			+ "  SELECT res.reservation_id FROM reservation_details res "
-			+ "  JOIN room_details resRoom ON res.reservation_id = resRoom.reservation_id "
-			+ "  WHERE (resRoom.room_id = r.room_id) " + "  AND ("
-			+ "    (res.check_in_date BETWEEN :checkInDate AND :checkOutDate) "
-			+ "    OR (res.check_out_date BETWEEN :checkInDate AND :checkOutDate)" + "  )" + ") "
-			+ "ORDER BY r.base_fare ASC", nativeQuery = true)
-	List<Room> findAvailableRooms(@Param("location") String location, @Param("checkInDate") LocalDate checkInDate,
-			@Param("checkOutDate") LocalDate checkOutDate);
+	@Query(value = "SELECT DISTINCT r.* FROM room_details r " +
+	        "JOIN hotel_details h ON r.hotel_id = h.hotel_id " +
+	        "LEFT JOIN reservation_room rr ON r.room_id = rr.room_id " +
+	        "LEFT JOIN reservation_details res ON rr.reservation_id = res.reservation_id " +
+	        "WHERE h.location = :location " +
+	        "AND r.availability_status = true " +
+	        "AND (res.reservation_id IS NULL OR " +
+	        "    NOT ( " +
+	        "        (res.check_in_date BETWEEN :checkInDate AND :checkOutDate) " +
+	        "        OR (res.check_out_date BETWEEN :checkInDate AND :checkOutDate)" +
+	        "    )" +
+	        ") " +
+	        "ORDER BY r.base_fare ASC", nativeQuery = true)
+	List<Room> findAvailableRooms(@Param("location") String location,
+	                              @Param("checkInDate") LocalDate checkInDate,
+	                              @Param("checkOutDate") LocalDate checkOutDate);
+
 
 }

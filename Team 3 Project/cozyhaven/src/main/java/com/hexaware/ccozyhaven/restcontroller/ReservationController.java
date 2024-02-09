@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hexaware.ccozyhaven.dto.BookedRoomDTO;
 import com.hexaware.ccozyhaven.entities.Reservation;
 import com.hexaware.ccozyhaven.exceptions.HotelNotFoundException;
+import com.hexaware.ccozyhaven.exceptions.InconsistentHotelException;
 import com.hexaware.ccozyhaven.exceptions.InvalidCancellationException;
 import com.hexaware.ccozyhaven.exceptions.InvalidRefundException;
 import com.hexaware.ccozyhaven.exceptions.RefundProcessedException;
@@ -79,34 +81,56 @@ public class ReservationController {
     }
     
     
+//    @PostMapping("/make-reservation")
+//    public ResponseEntity<String> reserveRooms(
+//            @RequestParam Long userId,
+//            @RequestBody Long roomId,
+//            @RequestParam int numberOfAdults,
+//            @RequestParam int numberOfChildren,
+//            @RequestParam String checkInDate,
+//            @RequestParam String checkOutDate) {
+//
+//        try {
+//            LocalDate checkIn = LocalDate.parse(checkInDate);
+//            LocalDate checkOut = LocalDate.parse(checkOutDate);
+//            LOGGER.info("Received request to make reservation for user ID: {}, room ID: {}, check-in: {}, check-out: {}",
+//                    userId, roomId, checkIn, checkOut);
+//
+//            boolean reservationSuccess = reservationService.reservationRoom(
+//                    userId, roomId, numberOfAdults, numberOfChildren, checkIn, checkOut);
+//
+//            if (reservationSuccess) {
+//                return new ResponseEntity<>("Reservation successful", HttpStatus.OK);
+//            } else {
+//                return new ResponseEntity<>("Reservation failed", HttpStatus.INTERNAL_SERVER_ERROR);
+//            }
+//        } catch (RoomNotAvailableException | RoomNotFoundException | UserNotFoundException e) {
+//        	 LOGGER.error("Error while processing reservation request: {}", e.getMessage());
+//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+//        }
+//    }
     @PostMapping("/make-reservation")
     public ResponseEntity<String> reserveRooms(
             @RequestParam Long userId,
-            @RequestBody Long roomId,
-            @RequestParam int numberOfAdults,
-            @RequestParam int numberOfChildren,
+            @RequestBody List<BookedRoomDTO> bookedRooms,
             @RequestParam String checkInDate,
             @RequestParam String checkOutDate) {
 
         try {
             LocalDate checkIn = LocalDate.parse(checkInDate);
             LocalDate checkOut = LocalDate.parse(checkOutDate);
-            LOGGER.info("Received request to make reservation for user ID: {}, room ID: {}, check-in: {}, check-out: {}",
-                    userId, roomId, checkIn, checkOut);
 
-            boolean reservationSuccess = reservationService.reservationRoom(
-                    userId, roomId, numberOfAdults, numberOfChildren, checkIn, checkOut);
+            boolean reservationSuccess = reservationService.reservationRoom(userId, bookedRooms, checkIn, checkOut);
 
             if (reservationSuccess) {
                 return new ResponseEntity<>("Reservation successful", HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("Reservation failed", HttpStatus.INTERNAL_SERVER_ERROR);
             }
-        } catch (RoomNotAvailableException | RoomNotFoundException | UserNotFoundException e) {
-        	 LOGGER.error("Error while processing reservation request: {}", e.getMessage());
+        } catch (RoomNotAvailableException | RoomNotFoundException | UserNotFoundException | InconsistentHotelException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-    }
+    } 
     
    
 

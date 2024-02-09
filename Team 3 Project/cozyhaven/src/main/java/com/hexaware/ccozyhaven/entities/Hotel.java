@@ -4,7 +4,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -22,6 +26,7 @@ import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "hotel_details")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "hotelId")
 public class Hotel {
 
     @Id
@@ -63,6 +68,7 @@ public class Hotel {
     
 
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Set<Room> room = new HashSet<>();
 
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
@@ -73,7 +79,8 @@ public class Hotel {
     
     @OneToOne(mappedBy = "hotel" , cascade = CascadeType.ALL)
     @JoinColumn(name="hotel_id")
-    @JsonManagedReference
+    @JsonIdentityReference(alwaysAsId = true)
+    
     private HotelOwner hotelOwner;
 
    

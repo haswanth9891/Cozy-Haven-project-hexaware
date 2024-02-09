@@ -46,7 +46,9 @@ public interface IHotelOwnerService {
 
 	void deleteHotelOwner(Long hotelOwnerId) throws HotelOwnerNotFoundException;
 
-	void addHotelOwnerWithHotel(HotelOwner hotelOwner);
+	
+
+	void addHotelOwnerWithHotel(HotelOwnerDTO hotelOwnerDTO);
 
 	
 

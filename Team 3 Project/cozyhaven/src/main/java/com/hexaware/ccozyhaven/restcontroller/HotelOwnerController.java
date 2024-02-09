@@ -35,10 +35,10 @@ public class HotelOwnerController {
 	
 
 	@PostMapping(path = "/add", consumes = "application/json")
-	public String addHotelOwnerWithHotel(@RequestBody HotelOwner hotelOwner) {
+	public String addHotelOwnerWithHotel(@RequestBody HotelOwnerDTO hotelOwnerDTO) {
 
-		LOGGER.info("Received request to add HotelOwner with Hotel: {}", hotelOwner);
-		hotelOwnerService.addHotelOwnerWithHotel(hotelOwner);
+		LOGGER.info("Received request to add HotelOwner with Hotel: {}", hotelOwnerDTO);
+		hotelOwnerService.addHotelOwnerWithHotel(hotelOwnerDTO);
 		return "HotelOwner and Hotel added successfully";
 
 	}
