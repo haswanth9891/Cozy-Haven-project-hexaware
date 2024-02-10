@@ -75,4 +75,12 @@ public class GlobalExceptionHandler {
 	}
 	
 	
+	@ExceptionHandler({DataAlreadyPresentException.class})
+	public ResponseEntity<String> handleExp(DataAlreadyPresentException e) {
+		
+		return new ResponseEntity<String>(e.toString(),HttpStatus.NOT_ACCEPTABLE);
+	}
+	
+	
+	
 }

@@ -1,23 +1,38 @@
 package com.hexaware.ccozyhaven.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
+
 public class AdministratorDTO {
 
 	private Long adminId;
-	private String userName;
+	
+	private String adminFirstName;
+
+	
+	private String adminLastName;
+	@Size(min=5,max=20)
 	private String password;
+	
+	@Email
 	private String email;
+	
+	private String role;
 
 	public AdministratorDTO() {
 		super();
 
 	}
 
-	public AdministratorDTO(Long adminId, String userName, String password, String email) {
+	public AdministratorDTO(Long adminId, String adminFirstName, String adminLastName,
+			@Size(min = 5, max = 20) String password, @Email String email, String role) {
 		super();
 		this.adminId = adminId;
-		this.userName = userName;
+		this.adminFirstName = adminFirstName;
+		this.adminLastName = adminLastName;
 		this.password = password;
 		this.email = email;
+		this.role = role;
 	}
 
 	public Long getAdminId() {
@@ -28,12 +43,20 @@ public class AdministratorDTO {
 		this.adminId = adminId;
 	}
 
-	public String getUserName() {
-		return userName;
+	public String getAdminFirstName() {
+		return adminFirstName;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setAdminFirstName(String adminFirstName) {
+		this.adminFirstName = adminFirstName;
+	}
+
+	public String getAdminLastName() {
+		return adminLastName;
+	}
+
+	public void setAdminLastName(String adminLastName) {
+		this.adminLastName = adminLastName;
 	}
 
 	public String getPassword() {
@@ -52,10 +75,19 @@ public class AdministratorDTO {
 		this.email = email;
 	}
 
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
 	@Override
 	public String toString() {
-		return "AdministratorDTO [adminId=" + adminId + ", userName=" + userName + ", password=" + password + ", email="
-				+ email + "]";
+		return "AdministratorDTO [adminId=" + adminId + ", adminFirstName=" + adminFirstName + ", adminLastName="
+				+ adminLastName + ", password=" + password + ", email=" + email + ", role=" + role + "]";
 	}
+	
 
 }

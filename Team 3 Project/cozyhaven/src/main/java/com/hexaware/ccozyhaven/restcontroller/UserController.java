@@ -22,7 +22,7 @@ import com.hexaware.ccozyhaven.service.IUserService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/cozyhaven-user")
+@RequestMapping("/api/user")
 public class UserController {
 	 private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 

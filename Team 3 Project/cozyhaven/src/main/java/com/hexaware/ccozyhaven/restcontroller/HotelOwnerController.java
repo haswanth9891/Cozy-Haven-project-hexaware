@@ -24,7 +24,7 @@ import com.hexaware.ccozyhaven.service.HotelOwnerServiceImp;
 import com.hexaware.ccozyhaven.service.IHotelOwnerService;
 
 @RestController
-@RequestMapping("/cozyhaven-hotelowner")
+@RequestMapping("/api/hotelowner")
 public class HotelOwnerController {
 	
 	 private static final Logger LOGGER = LoggerFactory.getLogger(HotelOwnerController.class);

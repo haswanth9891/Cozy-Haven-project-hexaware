@@ -8,7 +8,7 @@ package com.hexaware.ccozyhaven.service;
 import com.hexaware.ccozyhaven.dto.HotelOwnerDTO;
 
 import com.hexaware.ccozyhaven.entities.HotelOwner;
-
+import com.hexaware.ccozyhaven.exceptions.DataAlreadyPresentException;
 import com.hexaware.ccozyhaven.exceptions.HotelOwnerNotFoundException;
 
 
@@ -52,6 +52,14 @@ public interface IHotelOwnerService {
 
 	void updateHotelOwnerWithHotel(Long hotelOwnerId, HotelOwnerDTO updatedHotelOwnerDTO)
 			throws HotelOwnerNotFoundException;
+
+
+
+	boolean registerHotelOwner(HotelOwnerDTO hotelOwnerDTO) throws DataAlreadyPresentException, DataAlreadyPresentException;
+
+
+
+	boolean login(String username, String password);
 
 	
 
