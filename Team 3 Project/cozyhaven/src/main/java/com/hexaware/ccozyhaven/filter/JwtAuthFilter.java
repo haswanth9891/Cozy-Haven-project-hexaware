@@ -12,7 +12,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.hexaware.ccozyhaven.config.UserInfoUserDetailsService;
+import com.hexaware.ccozyhaven.config.UsersInfoUserDetailsService;
 import com.hexaware.ccozyhaven.service.JwtService;
 
 import jakarta.servlet.FilterChain;
@@ -27,7 +27,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	private JwtService jwtService;
 	
 	@Autowired
-	private UserInfoUserDetailsService userDetailsService;
+	private UsersInfoUserDetailsService userDetailsService;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -45,7 +45,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 			UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 			if(jwtService.validateToken(token, userDetails)) {
 				UsernamePasswordAuthenticationToken authToken =
-						new UsernamePasswordAuthenticationToken(username,null, userDetails.getAuthorities());
+						new UsernamePasswordAuthenticationToken(userDetails,userDetails.getAuthorities());
 				
 				authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);

@@ -12,7 +12,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.hexaware.ccozyhaven.dto.RoomDTO;
 import com.hexaware.ccozyhaven.entities.Room;
+import com.hexaware.ccozyhaven.exceptions.AuthorizationException;
+import com.hexaware.ccozyhaven.exceptions.HotelNotFoundException;
+import com.hexaware.ccozyhaven.exceptions.HotelOwnerMismatchException;
 import com.hexaware.ccozyhaven.exceptions.RoomNotFoundException;
+import com.hexaware.ccozyhaven.exceptions.UnauthorizedAccessException;
 import com.hexaware.ccozyhaven.repository.ReservationRepository;
 import com.hexaware.ccozyhaven.repository.RoomRepository;
 
@@ -33,7 +37,7 @@ class RoomServiceImpTest {
 
     @Test
     @Disabled
-    void testAddRoomToHotel() {
+    void testAddRoomToHotel() throws HotelNotFoundException, HotelOwnerMismatchException, UnauthorizedAccessException {
         RoomDTO roomDTO = new RoomDTO();
         roomDTO.setRoomSize("Standard");
         roomDTO.setBedType("double bed");
@@ -57,7 +61,7 @@ class RoomServiceImpTest {
     }
 
     @Test
-    void testEditRoom() throws RoomNotFoundException {
+    void testEditRoom() throws RoomNotFoundException, UnauthorizedAccessException, AuthorizationException {
        
         RoomDTO updatedRoomDTO = new RoomDTO();
         updatedRoomDTO.setRoomSize("Deluxe");
@@ -84,7 +88,7 @@ class RoomServiceImpTest {
 
 
     @Test
-    void testRemoveRoom() throws RoomNotFoundException {
+    void testRemoveRoom() throws RoomNotFoundException, UnauthorizedAccessException, AuthorizationException {
        
         Long roomIdToRemove = 3L;
 

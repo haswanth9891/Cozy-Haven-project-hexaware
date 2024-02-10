@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hexaware.ccozyhaven.dto.RoomDTO;
 import com.hexaware.ccozyhaven.entities.Room;
+import com.hexaware.ccozyhaven.exceptions.AuthorizationException;
+import com.hexaware.ccozyhaven.exceptions.HotelNotFoundException;
+import com.hexaware.ccozyhaven.exceptions.HotelOwnerMismatchException;
 import com.hexaware.ccozyhaven.exceptions.RoomNotFoundException;
+import com.hexaware.ccozyhaven.exceptions.UnauthorizedAccessException;
 import com.hexaware.ccozyhaven.service.IRoomService;
 
 @RestController
@@ -33,7 +37,8 @@ public class RoomController {
 	private IRoomService roomService;
 
 	@PostMapping("/add-room")
-    public Room addRoomsToHotel(@RequestBody RoomDTO roomDTO, @RequestParam Long hotelId) {
+	@PreAuthorize("hasAuthority('HOTEL_OWNER')")
+    public Room addRoomsToHotel(@RequestBody RoomDTO roomDTO, @RequestParam Long hotelId) throws HotelNotFoundException, HotelOwnerMismatchException, UnauthorizedAccessException {
 		LOGGER.info("Received request to add a room to the hotel with ID: {}", hotelId);
         Room addedRoom = roomService.addRoomToHotel(roomDTO, hotelId);
         LOGGER.info("Room added successfully");
@@ -41,8 +46,9 @@ public class RoomController {
     }
 
 	@PutMapping("/edit/{roomId}")
+	@PreAuthorize("hasAuthority('HOTEL_OWNER')")
 	public Room editRoom(@PathVariable Long roomId, @RequestBody RoomDTO updatedRoomDTO)
-			throws RoomNotFoundException {
+			throws RoomNotFoundException, UnauthorizedAccessException, AuthorizationException {
 		 LOGGER.info("Received request to edit room with ID: {}", roomId);
 		Room editedRoom = roomService.editRoom(roomId, updatedRoomDTO);
 		 LOGGER.info("Room edited successfully");
@@ -50,7 +56,8 @@ public class RoomController {
 	}
 
 	@DeleteMapping("/remove/{roomId}")
-	public String removeRoom(@PathVariable Long roomId) throws RoomNotFoundException {
+	@PreAuthorize("hasAuthority('HOTEL_OWNER')")
+	public String removeRoom(@PathVariable Long roomId) throws RoomNotFoundException, UnauthorizedAccessException, AuthorizationException {
 		 LOGGER.info("Received request to remove room with ID: {}", roomId);
 		roomService.removeRoom(roomId);
 		LOGGER.info("Room removed successfully");

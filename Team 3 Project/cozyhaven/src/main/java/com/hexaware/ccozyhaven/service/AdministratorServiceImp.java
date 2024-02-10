@@ -5,6 +5,12 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.hexaware.ccozyhaven.dto.AdministratorDTO;
@@ -26,9 +32,11 @@ import jakarta.transaction.Transactional;
 @Service
 @Transactional
 public class AdministratorServiceImp implements IAdministratorService {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdministratorServiceImp.class);
+
 	
+
 	@Autowired
 	private AdministratorRepository adminRepository;
 
@@ -40,38 +48,39 @@ public class AdministratorServiceImp implements IAdministratorService {
 
 	@Autowired
 	private ReservationRepository reservationRepository;
-	
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
 	@Override
-	public boolean login(String username, String password) {
-		// TODO Auto-generated method stub
-		return false;
+	public String login(String username, String password) {
+		return null;
 	}
 
 	@Override
-	public boolean register(AdministratorDTO adminDto) throws DataAlreadyPresentException {
-		Administrator localAdmin = adminRepository.findByEmail(adminDto.getEmail()).orElse(null);
-		if(localAdmin!=null) {
-			throw new DataAlreadyPresentException("Email Id already present");
-		}
+	public Long register(AdministratorDTO adminDTO) throws DataAlreadyPresentException {
 		Administrator admin = new Administrator();
-		admin.setAdminFirstName(adminDto.getAdminFirstName());
-		admin.setAdminLastName(adminDto.getAdminLastName());
-		admin.setEmail(adminDto.getEmail());
-		admin.setPassword(adminDto.getPassword());
-		admin.setRole("Admin");
-		Administrator savedAdmin = adminRepository.save(admin);
-		LOGGER.info("Saved Admin: "+savedAdmin);
-		return true;
+		admin.setAdminId(adminDTO.getAdminId());
+		admin.setUserName(adminDTO.getUserName());
+		admin.setPassword(passwordEncoder.encode(adminDTO.getPassword()));
+		admin.setAdminFirstName(adminDTO.getAdminFirstName());
+		admin.setAdminLastName(adminDTO.getAdminLastName());
+		admin.setEmail(adminDTO.getEmail());
+		admin.setRole("admin");
+		
+		adminRepository.save(admin);
+
+		return admin.getAdminId();
 	}
 
 	@Override
 	public void deleteUserAccount(Long userId) throws UserNotFoundException {
-		 LOGGER.info("Deleting user account with ID: {}", userId);
+		LOGGER.info("Deleting user account with ID: {}", userId);
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
 
 		userRepository.delete(user);
-		 LOGGER.info("User account deleted successfully");
+		LOGGER.info("User account deleted successfully");
 	}
 
 	@Override
@@ -81,8 +90,7 @@ public class AdministratorServiceImp implements IAdministratorService {
 				.orElseThrow(() -> new UserNotFoundException("User not found with id: " + hotelOwnerId));
 
 		hotelOwnerRepository.delete(hotelOwner);
-		 LOGGER.info("Hotel owner account deleted successfully");
-    
+		LOGGER.info("Hotel owner account deleted successfully");
 
 	}
 
@@ -95,7 +103,7 @@ public class AdministratorServiceImp implements IAdministratorService {
 
 	@Override
 	public List<HotelOwner> viewAllHotelOwner() {
-		 LOGGER.info("Viewing all hotel owners");
+		LOGGER.info("Viewing all hotel owners");
 
 		return hotelOwnerRepository.findAll();
 	}
@@ -107,11 +115,11 @@ public class AdministratorServiceImp implements IAdministratorService {
 		Reservation reservation = reservationRepository.findById(reservationId)
 				.orElseThrow(() -> new ReservationNotFoundException("Reservation not found with id: " + reservationId));
 
-		if (reservation.getReservationStatus()!= "CANCELLED") {
+		if (reservation.getReservationStatus() != "CANCELLED") {
 
 			reservationRepository.delete(reservation);
 		} else {
-			 LOGGER.warn("Invalid cancellation request for already cancelled reservation");
+			LOGGER.warn("Invalid cancellation request for already cancelled reservation");
 			throw new InvalidCancellationException("Reservation is already cancelled.");
 		}
 	}

@@ -11,7 +11,8 @@ import com.hexaware.ccozyhaven.entities.Administrator;
 @Repository
 public interface AdministratorRepository extends JpaRepository<Administrator, Long>{
 	
-	@Query("select a from Administrator a where a.email=?1")
-	Optional<Administrator> findByEmail(String email);
+	
+	
+	 Optional<Administrator> findByUserName(String username);
 
 }

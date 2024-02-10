@@ -23,6 +23,10 @@ public class User {
 	@Column(name = "user_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long userId;
+	
+	@NotBlank(message = "Username is required")
+	@Pattern(regexp = "^[a-zA-Z0-9_]+$", message = "Username should contain only alphanumeric characters and underscores")
+	private String username;
 
 	@NotBlank(message = "Password is required")
 	private String password;
@@ -49,6 +53,8 @@ public class User {
 
 	private String role;
 
+	
+
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	@JsonIgnoreProperties("user")
 	private Set<Reservation> reservations = new HashSet<>();
@@ -70,15 +76,28 @@ public class User {
 	}
 
 
-	public User(Long userId, @NotBlank(message = "Password is required") String password,
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	
+
+	public User(Long userId,
+			@NotBlank(message = "Username is required") @Pattern(regexp = "^[a-zA-Z0-9_]+$", message = "Username should contain only alphanumeric characters and underscores") String username,
+			@NotBlank(message = "Password is required") String password,
 			@Email(message = "Invalid email format") String email,
 			@NotBlank(message = "First name is required") String firstName,
 			@NotBlank(message = "Last name is required") String lastName,
 			@Size(max = 10, message = "Contact number must be at most 10 characters") @Pattern(regexp = "\\d{10}", message = "Invalid contact number") String contactNumber,
 			@Pattern(regexp = "^(male|female|non-binary)$", message = "Invalid gender") String gender,
-			@NotBlank(message = "Address is required") String address, String role) {
+			@NotBlank(message = "Address is required") String address) {
 		super();
 		this.userId = userId;
+		this.username = username;
 		this.password = password;
 		this.email = email;
 		this.firstName = firstName;
@@ -86,7 +105,6 @@ public class User {
 		this.contactNumber = contactNumber;
 		this.gender = gender;
 		this.address = address;
-		this.role = role;
 	}
 
 	public Long getUserId() {

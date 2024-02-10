@@ -5,7 +5,7 @@ package com.hexaware.ccozyhaven.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -35,18 +35,26 @@ public class SecurityConfig {
 	JwtAuthFilter authFilter;
 	
 	@Bean
-	UserDetailsService userDetailsService() {
-		return new UserInfoUserDetailsService();
+	public UserDetailsService userDetailsService() {
+		return new UsersInfoUserDetailsService();
 	}
-	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
-		return http.csrf().disable()
-    			.authorizeHttpRequests().requestMatchers("/api/user/login","/api/user/register","/api/hotelownerr/login","/api/hotelowner/register","/api/admin/login").permitAll()
-    			.and()
-    			.authorizeHttpRequests().requestMatchers("/api/admin/**","/api/user/**","/api/hotelowner/**")
-    			.authenticated().and().formLogin().and().build();
-	}
+	
+	  @Bean
+	    public  SecurityFilterChain   getSecurityFilterChain(HttpSecurity http) throws Exception {
+	    	
+	    		return http.csrf().disable()
+	    			.authorizeHttpRequests().requestMatchers("/api/user/login","/api/user/register","/api/hotelowner/login","/api/hotelowner/register","/api/admin/login","api/admin/register","/swagger-ui/","/swagger-resources/").permitAll()
+	    			.and()
+	    			.authorizeHttpRequests().requestMatchers("api/admin/**","api/user/**","api/hotelowner/**", "api/room", "api/review", "api/reservation", "api/hotel")
+	    			.authenticated().and()   //.formLogin().and().build();
+	    			.sessionManagement()
+	    			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+	    			.and()
+	    			.authenticationProvider(authenticationProvider())
+	    			.addFilterBefore(authFilter	, UsernamePasswordAuthenticationFilter.class)
+	    			.build();
+	    	
+	    }
 	
 	@Bean
 	public PasswordEncoder getPasswordEncoder() {
@@ -54,7 +62,7 @@ public class SecurityConfig {
 	}
 	
 	@Bean
-    public AuthenticationProvider myauthenticationProvider(){
+    public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider authenticationProvider=new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userDetailsService());
         authenticationProvider.setPasswordEncoder(getPasswordEncoder());

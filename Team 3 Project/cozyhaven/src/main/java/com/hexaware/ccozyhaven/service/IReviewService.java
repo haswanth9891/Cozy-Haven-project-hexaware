@@ -4,8 +4,10 @@ import java.util.List;
 
 import com.hexaware.ccozyhaven.dto.ReviewDTO;
 import com.hexaware.ccozyhaven.entities.Review;
+import com.hexaware.ccozyhaven.exceptions.AuthorizationException;
 import com.hexaware.ccozyhaven.exceptions.HotelNotFoundException;
 import com.hexaware.ccozyhaven.exceptions.ReviewNotFoundException;
+import com.hexaware.ccozyhaven.exceptions.UnauthorizedAccessException;
 import com.hexaware.ccozyhaven.exceptions.UserNotFoundException;
 
 public interface IReviewService {
@@ -17,10 +19,10 @@ public interface IReviewService {
 		Review getReviewById(Long reviewId) throws ReviewNotFoundException;
 
 		// Update a review by its ID
-		void updateReviewById(Long reviewId, ReviewDTO reviewDTO) throws ReviewNotFoundException;
+		void updateReviewById(Long reviewId, ReviewDTO reviewDTO) throws ReviewNotFoundException, AuthorizationException, UnauthorizedAccessException;
 
 		// Delete a review by its ID
-		void deleteReviewById(Long reviewId) throws ReviewNotFoundException;
+		void deleteReviewById(Long reviewId) throws ReviewNotFoundException, AuthorizationException, UnauthorizedAccessException;
 
 		// Get all reviews
 		List<Review> getAllReviews();

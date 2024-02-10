@@ -7,25 +7,24 @@ import org.springframework.stereotype.Repository;
 import com.hexaware.ccozyhaven.dto.UserDTO;
 
 import com.hexaware.ccozyhaven.entities.User;
+import com.hexaware.ccozyhaven.exceptions.AuthorizationException;
 import com.hexaware.ccozyhaven.exceptions.DataAlreadyPresentException;
+import com.hexaware.ccozyhaven.exceptions.UnauthorizedAccessException;
 import com.hexaware.ccozyhaven.exceptions.UserNotFoundException;
 
 @Repository
 public interface IUserService {
+	
+	public boolean login(String username, String password);
 
-//	// User registration
-//    User registerUser(UserDTO userDTO);
-//
-//    // User login
-//    boolean loginUser(String username, String password);
-	// add the user
-	// public User addUser(User user);
+	Long register(UserDTO userDTO) throws DataAlreadyPresentException;
 
-	User updateUser(Long userId, UserDTO updatedUserDTO) throws UserNotFoundException;
 
-	boolean login(String username, String password);
+	User updateUser(Long userId, UserDTO updatedUserDTO) throws UserNotFoundException, AuthorizationException, UnauthorizedAccessException;
 
-	boolean register(UserDTO userDTO) throws DataAlreadyPresentException;
+	void deleteUser(Long userId) throws UserNotFoundException, AuthorizationException, UnauthorizedAccessException;
+
+	
 	
 }
 

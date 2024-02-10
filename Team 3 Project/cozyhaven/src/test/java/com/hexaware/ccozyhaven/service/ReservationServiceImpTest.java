@@ -110,13 +110,7 @@ class ReservationServiceImpTest {
 		assertNotNull(reservations);
 	}
 
-	@Disabled
-	@Test
-	void testCancelReservation() {
-		Long userId = 2L;
-		Long reservationId = 5L;
-		assertDoesNotThrow(() -> reservationService.cancelReservation(userId, reservationId));
-	}
+	
 
 	@Disabled
 	@Test

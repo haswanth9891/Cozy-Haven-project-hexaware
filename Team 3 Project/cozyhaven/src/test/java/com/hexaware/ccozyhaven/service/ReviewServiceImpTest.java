@@ -14,8 +14,10 @@ import com.hexaware.ccozyhaven.dto.ReviewDTO;
 import com.hexaware.ccozyhaven.entities.Hotel;
 import com.hexaware.ccozyhaven.entities.Review;
 import com.hexaware.ccozyhaven.entities.User;
+import com.hexaware.ccozyhaven.exceptions.AuthorizationException;
 import com.hexaware.ccozyhaven.exceptions.HotelNotFoundException;
 import com.hexaware.ccozyhaven.exceptions.ReviewNotFoundException;
+import com.hexaware.ccozyhaven.exceptions.UnauthorizedAccessException;
 import com.hexaware.ccozyhaven.exceptions.UserNotFoundException;
 import com.hexaware.ccozyhaven.repository.HotelRepository;
 import com.hexaware.ccozyhaven.repository.ReviewRepository;
@@ -98,7 +100,7 @@ class ReviewServiceImpTest {
     }
     
     @Test
-    void testUpdateReviewById() throws ReviewNotFoundException {
+    void testUpdateReviewById() throws ReviewNotFoundException, AuthorizationException, UnauthorizedAccessException {
         
         Long existingReviewId = 2L;
         ReviewDTO updatedReviewDTO = new ReviewDTO(null, 4, "Good", new Date());
@@ -117,7 +119,7 @@ class ReviewServiceImpTest {
 
 
 	@Test
-	void testDeleteReviewById() throws ReviewNotFoundException {
+	void testDeleteReviewById() throws ReviewNotFoundException, AuthorizationException, UnauthorizedAccessException {
 	    
 	    Long existingReviewId = 3L;
 

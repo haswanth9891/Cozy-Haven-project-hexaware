@@ -81,6 +81,25 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<String>(e.toString(),HttpStatus.NOT_ACCEPTABLE);
 	}
 	
+
+	@ExceptionHandler({UnauthorizedAccessException.class})
+	public ResponseEntity<String> handleExp(UnauthorizedAccessException e) {
+		
+		return new ResponseEntity<String>(e.toString(),HttpStatus.NOT_ACCEPTABLE);
+	}
+	
+	@ExceptionHandler({HotelOwnerMismatchException.class})
+	public ResponseEntity<String> handleExp(HotelOwnerMismatchException e) {
+		
+		return new ResponseEntity<String>(e.toString(),HttpStatus.NOT_ACCEPTABLE);
+	}
+	
+	@ExceptionHandler({AuthorizationException.class})
+	public ResponseEntity<String> handleExp(AuthorizationException e) {
+		
+		return new ResponseEntity<String>(e.toString(),HttpStatus.NOT_ACCEPTABLE);
+	}
+	
 	
 	
 }

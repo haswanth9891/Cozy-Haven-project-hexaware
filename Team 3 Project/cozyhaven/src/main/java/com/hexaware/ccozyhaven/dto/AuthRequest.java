@@ -1,13 +1,13 @@
 package com.hexaware.ccozyhaven.dto;
 
-public class LoginDTO {
+public class AuthRequest {
 
 	private String username;
 	private String password;
-	public LoginDTO() {
+	public AuthRequest() {
 		super();
 	}
-	public LoginDTO(String username, String password) {
+	public AuthRequest(String username, String password) {
 		super();
 		this.username = username;
 		this.password = password;
