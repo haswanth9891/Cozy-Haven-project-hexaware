@@ -26,6 +26,10 @@ public class HotelOwner {
 	@NotBlank(message = "Username cannot be blank")
 	@Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
 	private String hotelOwnerName;
+	
+	@NotBlank(message = "Username is required")
+	@Pattern(regexp = "^[a-zA-Z0-9_]+$", message = "Username should contain only alphanumeric characters and underscores")
+	private String username;
 
 	@Column(name = "password")
 	@NotBlank(message = "Password cannot be blank")
@@ -61,20 +65,58 @@ public class HotelOwner {
 
 	
 
-	public HotelOwner(
+
+
+
+
+
+	public String getUsername() {
+		return username;
+	}
+
+
+
+
+
+
+
+
+
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+
+
+
+
+
+
+
+
+
+	public HotelOwner(Long hotelOwnerId,
 			@NotBlank(message = "Username cannot be blank") @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters") String hotelOwnerName,
+			@NotBlank(message = "Username is required") @Pattern(regexp = "^[a-zA-Z0-9_]+$", message = "Username should contain only alphanumeric characters and underscores") String username,
 			@NotBlank(message = "Password cannot be blank") @Size(min = 6, message = "Password must be at least 6 characters") String password,
 			@NotBlank(message = "Email cannot be blank") @Email(message = "Invalid email format") String email,
 			@Pattern(regexp = "^(male|female|non-binary)$", message = "Invalid gender") String gender,
-			@NotBlank(message = "Address is required") String address, Hotel hotel) {
+			@NotBlank(message = "Address is required") String address) {
 		super();
+		this.hotelOwnerId = hotelOwnerId;
 		this.hotelOwnerName = hotelOwnerName;
+		this.username = username;
 		this.password = password;
 		this.email = email;
 		this.gender = gender;
 		this.address = address;
-		this.hotel = hotel;
 	}
+
+
+
+
+
 
 
 

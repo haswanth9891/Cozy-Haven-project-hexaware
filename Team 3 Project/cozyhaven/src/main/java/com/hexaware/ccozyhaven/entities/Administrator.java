@@ -26,6 +26,12 @@ public class Administrator {
 	
 	@Column(name = "lastName")
 	private String adminLastName;
+	
+
+    @NotBlank(message = "Username is required")
+    @Pattern(regexp = "^[a-zA-Z0-9_-]+$", message = "Username must contain only letters, numbers, underscores, and hyphens")
+    @Column(name = "UserName", nullable = false, unique = true)
+    private String userName;
 
 
     @NotBlank(message = "Password cannot be blank")
@@ -41,7 +47,7 @@ public class Administrator {
     
     
     @Column(columnDefinition = "varchar(5) default 'Admin'",nullable=false)
-	private String role = "ADMIN";
+	private String role;
     
 
 	public Administrator() {
@@ -92,15 +98,38 @@ public class Administrator {
 
 
 
+	
+
+
+
+
+	public String getUserName() {
+		return userName;
+	}
+
+
+
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+
+
+
 	public Administrator(Long adminId, String adminFirstName, String adminLastName,
+			@NotBlank(message = "Username is required") @Pattern(regexp = "^[a-zA-Z0-9_-]+$", message = "Username must contain only letters, numbers, underscores, and hyphens") String userName,
 			@NotBlank(message = "Password cannot be blank") @Size(min = 6, message = "Password must be at least 6 characters") String password,
-			@NotBlank(message = "Password cannot be blank") @Email(message = "Password cannot be blank") String email) {
+			@NotBlank(message = "Password cannot be blank") @Email(message = "Password cannot be blank") String email,
+			String role) {
 		super();
 		this.adminId = adminId;
 		this.adminFirstName = adminFirstName;
 		this.adminLastName = adminLastName;
+		this.userName = userName;
 		this.password = password;
 		this.email = email;
+		this.role = role;
 	}
 
 

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hexaware.ccozyhaven.dto.LoginDTO;
+import com.hexaware.ccozyhaven.dto.AuthRequest;
 import com.hexaware.ccozyhaven.dto.UserDTO;
 
 import com.hexaware.ccozyhaven.entities.User;
@@ -35,11 +35,11 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
-	 private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
 	@Autowired
 	private IUserService userService;
-	
+
 	@Autowired
 	JwtService jwtService;
 
@@ -47,26 +47,41 @@ public class UserController {
 	AuthenticationManager authenticationManager;
 
 	@PostMapping("/register")
-	public boolean registerUser(@RequestBody UserDTO userDTO) throws DataAlreadyPresentException {
-		LOGGER.info("Request Received to register new Customer: "+userDTO);
-		return userService.register(userDTO);
-	}
-	
-	@PostMapping("/login")
-	public String authenticateAndGetToken(@RequestBody LoginDTO loginDto) {
-		String token = null;
-		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsername(),loginDto.getPassword()));
-		if(authentication.isAuthenticated()) {
-			token= jwtService.generateToken(loginDto.getUsername());
-			if(token != null) {
-				LOGGER.info("Token for User: "+token);
-			}else {
-				LOGGER.warn("Token not generated");
-			}
-		}else {
-			throw new UsernameNotFoundException("Username not found");
+	public String registerUser(@RequestBody UserDTO userDTO) throws DataAlreadyPresentException {
+		LOGGER.info("Request Received to register new Customer: " + userDTO);
+		long userId = userService.register(userDTO);
+
+		if (userId != 0) {
+			return "User added successfully ";
+		} else {
+			return "failed to add user ";
 		}
-		return token;
+	}
+
+	@PostMapping("/login")
+	public String authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
+		Authentication authentication = 	authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+		 
+		String token = null;
+		
+				if(authentication.isAuthenticated()) {
+					
+				  // call generate token method from jwtService class
+					
+			token =		jwtService.generateToken(authRequest.getUsername());
+					
+			LOGGER.info("Tokent : "+token);
+					
+				}
+				else {
+					
+					LOGGER.info("invalid");
+					
+					 throw new UsernameNotFoundException("UserName or Password in Invalid / Invalid Request");
+					
+				}
+		
+				return token;
 	}
 
 	@PutMapping("/update/{userId}")
@@ -76,13 +91,14 @@ public class UserController {
 		LOGGER.info("Received request to update user with ID: {}", userId);
 
 		return userService.updateUser(userId, userDTO);
-		 
+
 	}
-	
-	 @DeleteMapping("/{userId}")
-	    public ResponseEntity<Void> deleteUser(@PathVariable Long userId) throws UserNotFoundException, AuthorizationException, UnauthorizedAccessException {
-	        userService.deleteUser(userId);
-	        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-	    }
+
+	@DeleteMapping("/{userId}")
+	public ResponseEntity<Void> deleteUser(@PathVariable Long userId)
+			throws UserNotFoundException, AuthorizationException, UnauthorizedAccessException {
+		userService.deleteUser(userId);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
 
 }

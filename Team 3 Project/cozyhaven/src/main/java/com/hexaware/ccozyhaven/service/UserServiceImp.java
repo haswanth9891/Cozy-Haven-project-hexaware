@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.hexaware.ccozyhaven.config.UserInfoUserDetails;
+
 import com.hexaware.ccozyhaven.dto.UserDTO;
 
 import com.hexaware.ccozyhaven.entities.User;
@@ -31,11 +31,7 @@ public class UserServiceImp implements IUserService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImp.class);
 
-	@Autowired
-	AuthenticationManager authenticationManager;
-
-	@Autowired
-	JwtService jwtService;
+	
 
 	@Autowired
 	PasswordEncoder passwordEncoder;
@@ -51,13 +47,9 @@ public class UserServiceImp implements IUserService {
 	}
 
 	@Override
-	public boolean register(UserDTO userDTO) throws DataAlreadyPresentException {
+	public Long register(UserDTO userDTO) throws DataAlreadyPresentException {
 
-		User UserByEmail = getUserByEmail(userDTO.getEmail());
-		if (userDTO.getEmail() == UserByEmail.getEmail()) {
-			LOGGER.warn("User is trying to enter DUPLICATE data while registering");
-			throw new DataAlreadyPresentException("PhoneNumber or Email already taken...Trying Logging in..!");
-		}
+		
 		User user = new User();
 		user.setFirstName(userDTO.getUserFirstName());
 		user.setLastName(userDTO.getUserLastName());
@@ -65,86 +57,60 @@ public class UserServiceImp implements IUserService {
 		user.setContactNumber(userDTO.getContactNumber());
 		user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 		user.setGender(userDTO.getGender());
+		user.setUsername(userDTO.getUserName());
 
 		user.setAddress(userDTO.getAddress());
+		user.setRole("USER");
 		LOGGER.info("Registering Customer: " + user);
 		User addedUser = userRepository.save(user);
 
 		if (addedUser != null) {
 			LOGGER.info("Registerd Customer: " + addedUser);
-			return true;
+			return user.getUserId();
 		}
 		LOGGER.error("Customer not registered");
-		return false;
+		return null;
 	}
 
 	@Override
-	@PreAuthorize("#userId == principal.id")
+	//@PreAuthorize("#userId == principal.id")
 	public User updateUser(Long userId, UserDTO updatedUserDTO) throws UserNotFoundException, AuthorizationException, UnauthorizedAccessException {
 		LOGGER.info("Updating user with ID {}", userId);
-		// Retrieve the authenticated user details from the security context
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-		// Check if the user is authenticated
-		if (authentication != null && authentication.isAuthenticated()) {
-			UserInfoUserDetails userDetails = (UserInfoUserDetails) authentication.getPrincipal();
-
-			// Check if the authenticated user ID matches the specified userId
-			if (!userDetails.getUsername().equals(updatedUserDTO.getEmail())) {
-				throw new AuthorizationException("You are not authorized to update this user.");
-			}
-
-			// Retrieve the user to be updated
+		
 
 			User existingUser = userRepository.findById(userId)
 					.orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
 
 			existingUser.setEmail(updatedUserDTO.getEmail());
 
-			existingUser.setFirstName(updatedUserDTO.getFirstName());
+			existingUser.setFirstName(updatedUserDTO.getUserFirstName());
 
-			existingUser.setLastName(updatedUserDTO.getLastName());
+			existingUser.setLastName(updatedUserDTO.getUserLastName());
 			existingUser.setContactNumber(updatedUserDTO.getContactNumber());
+			existingUser.setUsername(updatedUserDTO.getUserName());
 			existingUser.setGender(updatedUserDTO.getGender());
 			existingUser.setAddress(updatedUserDTO.getAddress());
 
 			LOGGER.info("User updated successfully");
 			return userRepository.save(existingUser);
-		} else {
-			throw new UnauthorizedAccessException("User not authenticated or invalid JWT token.");
+		
 		}
 
-	}
+	
 	
 	@Override
-	@PreAuthorize("#userId == principal.id") // Check if the authenticated user is the same as the user to be deleted
+	//@PreAuthorize("#userId == principal.id") // Check if the authenticated user is the same as the user to be deleted
 	public void deleteUser(Long userId) throws UserNotFoundException, AuthorizationException, UnauthorizedAccessException {
 	    LOGGER.info("Deleting user with ID {}", userId);
 
-	    // Retrieve the authenticated user details from the security context
-	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-	    // Check if the user is authenticated
-	    if (authentication != null && authentication.isAuthenticated()) {
-	        UserInfoUserDetails userDetails = (UserInfoUserDetails) authentication.getPrincipal();
-
-	        // Check if the authenticated user ID matches the specified userId
-	        if (!userDetails.getUsername().equals(userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId)).getEmail())) {
-	            throw new AuthorizationException("You are not authorized to delete this user.");
-	        }
+	    
 
 	        // Delete the user
 	        userRepository.deleteById(userId);
 
 	        LOGGER.info("User with ID {} deleted successfully", userId);
-	    } else {
-	        throw new UnauthorizedAccessException("User not authenticated or invalid JWT token.");
-	    }
+	   
 	}
 
-	public User getUserByEmail(String email) {
-		LOGGER.info("Finding " + email + " in database");
-		return userRepository.findByEmail(email).orElse(null);
-	}
-
+	
 }

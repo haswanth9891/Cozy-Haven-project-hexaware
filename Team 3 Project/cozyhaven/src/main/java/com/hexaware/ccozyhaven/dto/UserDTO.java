@@ -6,15 +6,16 @@ public class UserDTO {
 
     
     private Long userId;
-    @Size(min=3,max=20)
+    
 	private String userFirstName;
 
 	private String userLastName;
-	@Size(min=6,max=20)
+	
+	private String userName;
+	
     private String password;
     private String email;
-    private String firstName;
-    private String lastName;
+   
     private String contactNumber;
     private String gender;
     private String address;
@@ -25,22 +26,37 @@ public class UserDTO {
 		super();
 	}
 
-	public UserDTO(Long userId, @Size(min = 3, max = 20) String userFirstName, String userLastName,
-			@Size(min = 6, max = 20) String password, String email, String firstName, String lastName,
-			String contactNumber, String gender, String address, String role) {
+	
+
+	public String getUserName() {
+		return userName;
+	}
+
+
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+
+
+	public UserDTO(Long userId, @Size(min = 3, max = 20) String userFirstName, String userLastName, String userName,
+			@Size(min = 6, max = 20) String password, String email, String contactNumber, String gender, String address,
+			String role) {
 		super();
 		this.userId = userId;
 		this.userFirstName = userFirstName;
 		this.userLastName = userLastName;
+		this.userName = userName;
 		this.password = password;
 		this.email = email;
-		this.firstName = firstName;
-		this.lastName = lastName;
 		this.contactNumber = contactNumber;
 		this.gender = gender;
 		this.address = address;
 		this.role = role;
 	}
+
+
 
 	public Long getUserId() {
 		return userId;
@@ -82,21 +98,7 @@ public class UserDTO {
 		this.email = email;
 	}
 
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+	
 
 	public String getContactNumber() {
 		return contactNumber;
@@ -130,13 +132,16 @@ public class UserDTO {
 		this.role = role;
 	}
 
+
+
 	@Override
 	public String toString() {
 		return "UserDTO [userId=" + userId + ", userFirstName=" + userFirstName + ", userLastName=" + userLastName
-				+ ", password=" + password + ", email=" + email + ", firstName=" + firstName + ", lastName=" + lastName
-				+ ", contactNumber=" + contactNumber + ", gender=" + gender + ", address=" + address + ", role=" + role
-				+ "]";
+				+ ", userName=" + userName + ", password=" + password + ", email=" + email + ", contactNumber="
+				+ contactNumber + ", gender=" + gender + ", address=" + address + ", role=" + role + "]";
 	}
+
+	
 	
 
     

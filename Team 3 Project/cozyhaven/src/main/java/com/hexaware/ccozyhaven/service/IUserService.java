@@ -17,7 +17,7 @@ public interface IUserService {
 	
 	public boolean login(String username, String password);
 
-	boolean register(UserDTO userDTO) throws DataAlreadyPresentException;
+	Long register(UserDTO userDTO) throws DataAlreadyPresentException;
 
 
 	User updateUser(Long userId, UserDTO updatedUserDTO) throws UserNotFoundException, AuthorizationException, UnauthorizedAccessException;

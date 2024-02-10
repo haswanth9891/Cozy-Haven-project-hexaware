@@ -12,7 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import com.hexaware.ccozyhaven.config.UserInfoUserDetails;
+
 import com.hexaware.ccozyhaven.dto.ReviewDTO;
 import com.hexaware.ccozyhaven.entities.Hotel;
 import com.hexaware.ccozyhaven.entities.Review;
@@ -78,17 +78,7 @@ public class ReviewServiceImp implements IReviewService {
 		LOGGER.info("Updating review with ID {}", reviewId);
 		Review existingReview = getReviewById(reviewId);
 
-		// Retrieve the authenticated user details from the security context
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-		// Check if the user is authenticated
-		if (authentication != null && authentication.isAuthenticated()) {
-			UserInfoUserDetails userDetails = (UserInfoUserDetails) authentication.getPrincipal();
-
-			// Check if the authenticated user is the owner of the review
-			if (!existingReview.getUser().getEmail().equals(userDetails.getUsername())) {
-				throw new AuthorizationException("You are not authorized to update this review.");
-			}
+		
 
 			existingReview.setRating(reviewDTO.getRating());
 			existingReview.setReviewText(reviewDTO.getReviewText());
@@ -96,9 +86,7 @@ public class ReviewServiceImp implements IReviewService {
 
 			reviewRepository.save(existingReview);
 			LOGGER.info("Review updated successfully");
-		} else {
-			throw new UnauthorizedAccessException("User not authenticated or invalid JWT token.");
-		}
+		
 	}
 
 	@Override
@@ -108,23 +96,7 @@ public class ReviewServiceImp implements IReviewService {
 
 		Review reviewToDelete = getReviewById(reviewId);
 
-		// Retrieve the authenticated user details from the security context
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-		// Check if the user is authenticated
-		if (authentication != null && authentication.isAuthenticated()) {
-			UserInfoUserDetails userDetails = (UserInfoUserDetails) authentication.getPrincipal();
-
-			// Check if the authenticated user is the owner of the review
-			if (!reviewToDelete.getUser().getEmail().equals(userDetails.getUsername())) {
-				throw new AuthorizationException("You are not authorized to delete this review.");
-			}
-
-			reviewRepository.delete(reviewToDelete);
-			LOGGER.info("Review deleted successfully");
-		} else {
-			throw new UnauthorizedAccessException("User not authenticated or invalid JWT token.");
-		}
+		
 	}
 
 	@Override

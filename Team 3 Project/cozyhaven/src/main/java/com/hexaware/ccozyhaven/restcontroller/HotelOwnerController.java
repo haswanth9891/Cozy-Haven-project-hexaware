@@ -1,7 +1,5 @@
 package com.hexaware.ccozyhaven.restcontroller;
 
-
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hexaware.ccozyhaven.dto.HotelOwnerDTO;
-import com.hexaware.ccozyhaven.dto.LoginDTO;
+import com.hexaware.ccozyhaven.dto.AuthRequest;
 import com.hexaware.ccozyhaven.entities.HotelOwner;
 import com.hexaware.ccozyhaven.exceptions.AuthorizationException;
 import com.hexaware.ccozyhaven.exceptions.DataAlreadyPresentException;
@@ -34,77 +32,73 @@ import com.hexaware.ccozyhaven.service.JwtService;
 @RestController
 @RequestMapping("/api/hotelowner")
 public class HotelOwnerController {
-	
-	 private static final Logger LOGGER = LoggerFactory.getLogger(HotelOwnerController.class);
 
-	 
+	private static final Logger LOGGER = LoggerFactory.getLogger(HotelOwnerController.class);
+
 	@Autowired
 	private IHotelOwnerService hotelOwnerService;
-	
+
 	@Autowired
 	JwtService jwtService;
 
 	@Autowired
 	AuthenticationManager authenticationManager;
 
-	
-
 	@PostMapping("/register")
-	public boolean registerCustomer(@RequestBody HotelOwnerDTO hotelOwnerDTO) throws DataAlreadyPresentException {
-		LOGGER.info("Request Received to register new Hotel Owner: "+ hotelOwnerDTO);
-		return hotelOwnerService.registerHotelOwner(hotelOwnerDTO);
+	public String registerCustomer(@RequestBody HotelOwnerDTO hotelOwnerDTO) throws DataAlreadyPresentException {
+		LOGGER.info("Request Received to register new Hotel Owner: " + hotelOwnerDTO);
+		long hotelOwnerId = hotelOwnerService.registerHotelOwner(hotelOwnerDTO);
+
+		if (hotelOwnerId != 0) {
+			return "Hotel Owner added successfully ";
+		} else {
+			return "failed to add customer ";
+		}
+
 	}
-	
+
 	@PostMapping("/login")
-	public String authenticateAndGetToken(@RequestBody LoginDTO loginDto) {
+	public String authenticateAndGetToken(@RequestBody AuthRequest loginDto) {
 		String token = null;
-		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsername(),loginDto.getPassword()));
-		if(authentication.isAuthenticated()) {
-			token= jwtService.generateToken(loginDto.getUsername());
-			if(token != null) {
-				LOGGER.info("Token for Hotel Owner: "+token);
-			}else {
+		Authentication authentication = authenticationManager
+				.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword()));
+		if (authentication.isAuthenticated()) {
+			token = jwtService.generateToken(loginDto.getUsername());
+			if (token != null) {
+				LOGGER.info("Token for Hotel Owner: " + token);
+			} else {
 				LOGGER.warn("Token not generated");
 			}
-		}else {
+		} else {
 			throw new UsernameNotFoundException("Username not found");
 		}
 		return token;
 	}
 
-	 @PutMapping("/update/{hotelOwnerId}")
-	 @PreAuthorize("hasAuthority('HOTEL OWNER')")
-	    public ResponseEntity<String> updateHotelOwner(@PathVariable Long hotelOwnerId,
-	                                                   @RequestBody HotelOwnerDTO updatedHotelOwnerDTO) throws AuthorizationException, UnauthorizedAccessException {
-	        try {
-	            hotelOwnerService.updateHotelOwnerWithHotel(hotelOwnerId, updatedHotelOwnerDTO);
-	            return new ResponseEntity<>("HotelOwner updated successfully", HttpStatus.OK);
-	        } catch (HotelOwnerNotFoundException e) {
-	            LOGGER.error("Error updating HotelOwner with ID: {}", hotelOwnerId, e);
-	            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-	        }
-	    }
-	
+	@PutMapping("/update/{hotelOwnerId}")
+	@PreAuthorize("hasAuthority('HOTEL OWNER')")
+	public ResponseEntity<String> updateHotelOwner(@PathVariable Long hotelOwnerId,
+			@RequestBody HotelOwnerDTO updatedHotelOwnerDTO)
+			throws AuthorizationException, UnauthorizedAccessException {
+		try {
+			hotelOwnerService.updateHotelOwnerWithHotel(hotelOwnerId, updatedHotelOwnerDTO);
+			return new ResponseEntity<>("HotelOwner updated successfully", HttpStatus.OK);
+		} catch (HotelOwnerNotFoundException e) {
+			LOGGER.error("Error updating HotelOwner with ID: {}", hotelOwnerId, e);
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+		}
+	}
+
 	@DeleteMapping("/delete/{hotelOwnerId}")
 	@PreAuthorize("hasAuthority('HOTEL OWNER')")
-    public ResponseEntity<String> deleteHotelOwner(@PathVariable Long hotelOwnerId) throws AuthorizationException, UnauthorizedAccessException {
-        try {
-            hotelOwnerService.deleteHotelOwner(hotelOwnerId);
-            return new ResponseEntity<>("Hotel owner deleted successfully", HttpStatus.OK);
-        } catch (HotelOwnerNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
-    }
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-
+	public ResponseEntity<String> deleteHotelOwner(@PathVariable Long hotelOwnerId)
+			throws AuthorizationException, UnauthorizedAccessException {
+		try {
+			hotelOwnerService.deleteHotelOwner(hotelOwnerId);
+			return new ResponseEntity<>("Hotel owner deleted successfully", HttpStatus.OK);
+		} catch (HotelOwnerNotFoundException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+		}
+	}
 
 }

@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.hexaware.ccozyhaven.config.UserInfoUserDetails;
+
 import com.hexaware.ccozyhaven.dto.HotelDTO;
 import com.hexaware.ccozyhaven.dto.HotelOwnerDTO;
 
@@ -37,60 +37,44 @@ public class HotelOwnerServiceImp implements IHotelOwnerService {
 
 	@Autowired
 	HotelRepository hotelRepository;
-	
+
 	@Autowired
 	PasswordEncoder passwordEncoder;
-	
-	@Autowired
-	AuthenticationManager authenticationManager;
-	
-	@Autowired
-	JwtService jwtService;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(HotelOwnerServiceImp.class);
-	
+
 	@Override
 	public boolean login(String username, String password) {
 		LOGGER.info("Hotel Owner is loggin in...");
 		return false;
-		
-		
+
 	}
 
 	@Override
-	public boolean registerHotelOwner(HotelOwnerDTO hotelOwnerDTO) throws DataAlreadyPresentException {
-		
-			HotelOwner hotelOwnerByEmail = getHotelOwnerByEmail(hotelOwnerDTO.getEmail());
+	public Long registerHotelOwner(HotelOwnerDTO hotelOwnerDTO) throws DataAlreadyPresentException {
 
-			if (hotelOwnerDTO.getEmail().equals(hotelOwnerByEmail.getEmail())) {
-				LOGGER.warn("User is trying to enter DUPLICATE data while registering");
-				throw new DataAlreadyPresentException("Email already taken...Try Logging in..!");
-			}
+		HotelOwner hotelOwnerByEmail = getHotelOwnerByEmail(hotelOwnerDTO.getEmail());
 
-			LOGGER.info("Adding hotel owner with hotel: {}", hotelOwnerDTO);
+		LOGGER.info("Adding hotel owner with hotel: {}", hotelOwnerDTO);
 
-			HotelOwner hotelOwner = convertHotelOwnerDTOToEntity(hotelOwnerDTO);
-			HotelDTO hotelDTO = hotelOwnerDTO.getHotelDTO();
-			Hotel hotel = convertHotelDTOToEntity(hotelDTO);
+		HotelOwner hotelOwner = convertHotelOwnerDTOToEntity(hotelOwnerDTO);
+		HotelDTO hotelDTO = hotelOwnerDTO.getHotelDTO();
+		Hotel hotel = convertHotelDTOToEntity(hotelDTO);
+		hotelOwner.setRole("HOTEL_OWNER");
+		hotel.setHotelOwner(hotelOwner);
+		hotelOwner.setHotel(hotel);
 
-			hotel.setHotelOwner(hotelOwner);
-			hotelOwner.setHotel(hotel);
+		Hotel addedHotel = hotelRepository.save(hotel);
+		HotelOwner addedHotelOwner = hotelOwnerRepository.save(hotelOwner);
 
-			Hotel addedHotel =hotelRepository.save(hotel);
-			HotelOwner addedHotelOwner = hotelOwnerRepository.save(hotelOwner);
+		if ((addedHotelOwner != null) && (addedHotel != null)) {
+			LOGGER.info("Registerd Hotel Owner with Hotel Details: " + addedHotelOwner + " " + addedHotel);
+			return addedHotelOwner.getHotelOwnerId();
+		}
+		LOGGER.error("Hotel Owner not registered");
+		return null;
 
-			if((addedHotelOwner != null) && (addedHotel != null)) {
-				LOGGER.info("Registerd Hotel Owner with Hotel Details: "+addedHotelOwner + " " + addedHotel);
-				return true;
-			}
-			LOGGER.error("Hotel Owner not registered");
-			return false;
-
-			
-		
 	}
-
-
 
 	private HotelOwner convertHotelOwnerDTOToEntity(HotelOwnerDTO hotelOwnerDTO) {
 		HotelOwner hotelOwner = new HotelOwner();
@@ -98,6 +82,7 @@ public class HotelOwnerServiceImp implements IHotelOwnerService {
 		hotelOwner.setHotelOwnerName(hotelOwnerDTO.getHotelOwnerName());
 		hotelOwner.setPassword(passwordEncoder.encode(hotelOwnerDTO.getPassword()));
 		hotelOwner.setEmail(hotelOwnerDTO.getEmail());
+		hotelOwner.setUsername(hotelOwnerDTO.getUserName());
 		hotelOwner.setGender(hotelOwnerDTO.getGender());
 		hotelOwner.setAddress(hotelOwnerDTO.getAddress());
 		return hotelOwner;
@@ -118,34 +103,20 @@ public class HotelOwnerServiceImp implements IHotelOwnerService {
 	}
 
 	@Override
-	@PreAuthorize("#hotelOwnerId == principal.id")
+	// @PreAuthorize("#hotelOwnerId == principal.id")
 	public void updateHotelOwnerWithHotel(Long hotelOwnerId, HotelOwnerDTO updatedHotelOwnerDTO)
 			throws HotelOwnerNotFoundException, AuthorizationException, UnauthorizedAccessException {
 
 		LOGGER.info("Updating hotel owner with ID: {}", hotelOwnerId);
 		HotelOwner existingHotelOwner = hotelOwnerRepository.findById(hotelOwnerId)
-	            .orElseThrow(() -> new HotelOwnerNotFoundException("HotelOwner not found with id: " + hotelOwnerId));
-
-	    // Check if the authenticated user is the owner of the hotel
-	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	    if (authentication != null && authentication.isAuthenticated()) {
-	        UserInfoUserDetails userDetails = (UserInfoUserDetails) authentication.getPrincipal();
-
-	        // Check if the authenticated user is the owner of the hotel
-	        if (!existingHotelOwner.getEmail().equals(userDetails.getUsername())) {
-	            throw new AuthorizationException("You are not authorized to update this hotel owner.");
-	        }
-	    } else {
-	        throw new UnauthorizedAccessException("User not authenticated or invalid JWT token.");
-	    }
-
-	
+				.orElseThrow(() -> new HotelOwnerNotFoundException("HotelOwner not found with id: " + hotelOwnerId));
 
 		HotelOwner updatedHotelOwner = convertHotelOwnerDTOToEntity(updatedHotelOwnerDTO);
 
 		existingHotelOwner.setHotelOwnerName(updatedHotelOwner.getHotelOwnerName());
 		existingHotelOwner.setEmail(updatedHotelOwner.getEmail());
 		existingHotelOwner.setGender(updatedHotelOwner.getGender());
+		existingHotelOwner.setUsername(updatedHotelOwner.getUsername());
 		existingHotelOwner.setAddress(updatedHotelOwner.getAddress());
 
 		HotelDTO updatedHotelDTO = updatedHotelOwnerDTO.getHotelDTO();
@@ -167,22 +138,11 @@ public class HotelOwnerServiceImp implements IHotelOwnerService {
 
 	@Override
 	@PreAuthorize("#hotelOwnerId == principal.id")
-	public void deleteHotelOwner(Long hotelOwnerId) throws HotelOwnerNotFoundException, AuthorizationException, UnauthorizedAccessException {
+	public void deleteHotelOwner(Long hotelOwnerId)
+			throws HotelOwnerNotFoundException, AuthorizationException, UnauthorizedAccessException {
 		LOGGER.info("Deleting hotel owner with ID: {}", hotelOwnerId);
 		HotelOwner hotelOwnerToDelete = hotelOwnerRepository.findById(hotelOwnerId)
 				.orElseThrow(() -> new HotelOwnerNotFoundException("HotelOwner not found with id: " + hotelOwnerId));
-		 // Check if the authenticated user is the owner of the hotel
-	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	    if (authentication != null && authentication.isAuthenticated()) {
-	        UserInfoUserDetails userDetails = (UserInfoUserDetails) authentication.getPrincipal();
-
-	        // Check if the authenticated user is the owner of the hotel
-	        if (!hotelOwnerToDelete.getEmail().equals(userDetails.getUsername())) {
-	            throw new AuthorizationException("You are not authorized to delete this hotel owner.");
-	        }
-	    } else {
-	        throw new UnauthorizedAccessException("User not authenticated or invalid JWT token.");
-	    }
 
 		hotelOwnerRepository.delete(hotelOwnerToDelete);
 		LOGGER.info("Hotel owner deleted successfully");
@@ -193,7 +153,5 @@ public class HotelOwnerServiceImp implements IHotelOwnerService {
 		LOGGER.info("Finding " + email + " in database");
 		return hotelOwnerRepository.findByEmail(email).orElse(null);
 	}
-
-
 
 }

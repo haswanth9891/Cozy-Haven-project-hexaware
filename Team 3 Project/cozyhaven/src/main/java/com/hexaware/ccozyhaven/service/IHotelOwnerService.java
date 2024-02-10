@@ -22,7 +22,7 @@ import com.hexaware.ccozyhaven.exceptions.UnauthorizedAccessException;
 public interface IHotelOwnerService {
 	
 	
-	boolean registerHotelOwner(HotelOwnerDTO hotelOwnerDTO) throws DataAlreadyPresentException, DataAlreadyPresentException;
+	Long registerHotelOwner(HotelOwnerDTO hotelOwnerDTO) throws DataAlreadyPresentException, DataAlreadyPresentException;
 
 
 

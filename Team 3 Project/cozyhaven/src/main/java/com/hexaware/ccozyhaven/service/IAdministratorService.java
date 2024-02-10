@@ -17,7 +17,7 @@ public interface IAdministratorService {
 
 	String login(String username, String password);
 
-	boolean register(AdministratorDTO adminDto) throws DataAlreadyPresentException;
+	Long register(AdministratorDTO adminDto) throws DataAlreadyPresentException;
 
 	
 

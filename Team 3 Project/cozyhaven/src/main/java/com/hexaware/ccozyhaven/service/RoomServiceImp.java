@@ -12,7 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import com.hexaware.ccozyhaven.config.UserInfoUserDetails;
+
 import com.hexaware.ccozyhaven.dto.RoomDTO;
 import com.hexaware.ccozyhaven.entities.Hotel;
 import com.hexaware.ccozyhaven.entities.HotelOwner;
@@ -49,28 +49,7 @@ public class RoomServiceImp implements IRoomService {
 			throws HotelNotFoundException, HotelOwnerMismatchException, UnauthorizedAccessException {
 		LOGGER.info("Adding room to hotel");
 
-		// Retrieve the authenticated user details from the security context
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-		// Check if the user is authenticated and has a valid JWT token
-		if (authentication != null && authentication.isAuthenticated()) {
-			UserInfoUserDetails userDetails = (UserInfoUserDetails) authentication.getPrincipal();
-
-			// Assuming your user entity has a method to get the hotel owner ID, replace
-			// this with your actual method
-			Long hotelOwnerId = userDetails.getHotelOwnerId();
-
-			// Check if the hotel owner is the owner of the specified hotel
-			Hotel hotel = hotelRepository.findById(hotelId)
-					.orElseThrow(() -> new HotelNotFoundException("Hotel not found with id: " + hotelId));
-
-			if (!hotel.getHotelOwner().getHotelOwnerId().equals(hotelOwnerId)) {
-				throw new HotelOwnerMismatchException(
-						"The authenticated user is not the owner of the specified hotel.");
-			}
-		} else {
-			throw new UnauthorizedAccessException("User not authenticated or invalid JWT token.");
-		}
+		
 		Room room = new Room();
 		room.setRoomSize(roomDTO.getRoomSize());
 		room.setBedType(roomDTO.getBedType());
@@ -90,24 +69,12 @@ public class RoomServiceImp implements IRoomService {
 	public Room editRoom(Long roomId, RoomDTO updatedRoomDTO)
 			throws RoomNotFoundException, UnauthorizedAccessException, AuthorizationException {
 		LOGGER.info("Editing room with ID {}", roomId);
-		// Retrieve the authenticated user details from the security context
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-		// Check if the user is authenticated and has a valid role
-		if (authentication != null && authentication.isAuthenticated()) {
-			UserInfoUserDetails userDetails = (UserInfoUserDetails) authentication.getPrincipal();
-
-			// Extract the hotel owner ID from the authenticated user
-			Long hotelOwnerId = userDetails.getHotelOwnerId();
-
-			// Retrieve the room
+		
 			Room existingRoom = roomRepository.findById(roomId)
 					.orElseThrow(() -> new RoomNotFoundException("Room not found with id: " + roomId));
 
 			// Check if the hotel owner is the owner of the room
-			if (!existingRoom.getHotel().getHotelOwner().getHotelOwnerId().equals(hotelOwnerId)) {
-				throw new AuthorizationException("You are not authorized to edit this room.");
-			}
+			
 
 			existingRoom.setRoomSize(updatedRoomDTO.getRoomSize());
 			existingRoom.setBedType(updatedRoomDTO.getBedType());
@@ -118,39 +85,22 @@ public class RoomServiceImp implements IRoomService {
 
 			LOGGER.info("Room with ID {} edited successfully", roomId);
 			return roomRepository.save(existingRoom);
-		} else {
-			throw new UnauthorizedAccessException("User not authenticated or invalid JWT token.");
+		
 		}
 
-	}
+	
 
 	@Override
 	public void removeRoom(Long roomId) throws RoomNotFoundException, UnauthorizedAccessException, AuthorizationException {
 		LOGGER.info("Removing room with ID {}", roomId);
-		// Retrieve the authenticated user details from the security context
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-		// Check if the user is authenticated and has a valid role
-		if (authentication != null && authentication.isAuthenticated()) {
-			UserInfoUserDetails userDetails = (UserInfoUserDetails) authentication.getPrincipal();
-
-			// Extract the hotel owner ID from the authenticated user
-			Long hotelOwnerId = userDetails.getHotelOwnerId();
-
-			// Retrieve the room to be deleted
+		
 			Room roomToDelete = roomRepository.findById(roomId)
 					.orElseThrow(() -> new RoomNotFoundException("Room not found with id: " + roomId));
 
-			// Check if the hotel owner is the owner of the room
-			if (!roomToDelete.getHotel().getHotelOwner().getHotelOwnerId().equals(hotelOwnerId)) {
-				throw new AuthorizationException("You are not authorized to remove this room.");
-			}
 
 			roomRepository.delete(roomToDelete);
 			LOGGER.info("Room with ID {} removed successfully", roomId);
-		} else {
-			throw new UnauthorizedAccessException("User not authenticated or invalid JWT token.");
-		}
+		
 
 	}
 
