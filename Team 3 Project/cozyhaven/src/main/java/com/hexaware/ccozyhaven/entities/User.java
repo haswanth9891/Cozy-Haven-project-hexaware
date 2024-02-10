@@ -19,64 +19,66 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "userId")
 public class User {
 
-    @Id
-    @Column(name = "user_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+	@Id
+	@Column(name = "user_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long userId;
 
-    @NotBlank(message = "Username is required")
-    @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
-    @Column(name = "user_name")
-    private String userName;
+	@NotBlank(message = "Password is required")
+	private String password;
 
-    @NotBlank(message = "Password is required")
-    private String password;
+	@Email(message = "Invalid email format")
+	private String email;
 
-    @Email(message = "Invalid email format")
-    private String email;
+	@NotBlank(message = "First name is required")
+	private String firstName;
 
-    @NotBlank(message = "First name is required")
-    private String firstName;
+	@NotBlank(message = "Last name is required")
+	private String lastName;
 
-    @NotBlank(message = "Last name is required")
-    private String lastName;
+	@Size(max = 10, message = "Contact number must be at most 10 characters")
+	@Pattern(regexp = "\\d{10}", message = "Invalid contact number")
+	@Column(name = "contact_number")
+	private String contactNumber;
 
-    @Size(max = 10, message = "Contact number must be at most 10 characters")
-    @Pattern(regexp = "\\d{10}", message = "Invalid contact number")
-    @Column(name = "contact_number")
-    private String contactNumber;
-    
-    @Pattern(regexp = "^(male|female|non-binary)$", message = "Invalid gender")
-    private String gender;
-    
+	@Pattern(regexp = "^(male|female|non-binary)$", message = "Invalid gender")
+	private String gender;
+
 	@NotBlank(message = "Address is required")
-    private String address;
+	private String address;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    @JsonIgnoreProperties("user")
-    private Set<Reservation> reservations = new HashSet<>();
+	private String role;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    private Set<Review> reviews = new HashSet<>();
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	@JsonIgnoreProperties("user")
+	private Set<Reservation> reservations = new HashSet<>();
 
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	private Set<Review> reviews = new HashSet<>();
+
+	
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+	
 	public User() {
 		super();
 	}
 
-	
 
-	public User(Long userId,
-			@NotBlank(message = "Username is required") @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters") String userName,
-			@NotBlank(message = "Password is required") String password,
+	public User(Long userId, @NotBlank(message = "Password is required") String password,
 			@Email(message = "Invalid email format") String email,
 			@NotBlank(message = "First name is required") String firstName,
 			@NotBlank(message = "Last name is required") String lastName,
 			@Size(max = 10, message = "Contact number must be at most 10 characters") @Pattern(regexp = "\\d{10}", message = "Invalid contact number") String contactNumber,
 			@Pattern(regexp = "^(male|female|non-binary)$", message = "Invalid gender") String gender,
-			@NotBlank(message = "Address is required") String address) {
+			@NotBlank(message = "Address is required") String address, String role) {
 		super();
 		this.userId = userId;
-		this.userName = userName;
 		this.password = password;
 		this.email = email;
 		this.firstName = firstName;
@@ -84,37 +86,8 @@ public class User {
 		this.contactNumber = contactNumber;
 		this.gender = gender;
 		this.address = address;
+		this.role = role;
 	}
-	
-	
-
-
-
-	
-
-
-
-	public User(
-			@NotBlank(message = "Username is required") @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters") String userName,
-			@NotBlank(message = "Password is required") String password,
-			@Email(message = "Invalid email format") String email,
-			@NotBlank(message = "First name is required") String firstName,
-			@NotBlank(message = "Last name is required") String lastName,
-			@Size(max = 10, message = "Contact number must be at most 10 characters") @Pattern(regexp = "\\d{10}", message = "Invalid contact number") String contactNumber,
-			@Pattern(regexp = "^(male|female|non-binary)$", message = "Invalid gender") String gender,
-			@NotBlank(message = "Address is required") String address) {
-		super();
-		this.userName = userName;
-		this.password = password;
-		this.email = email;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.contactNumber = contactNumber;
-		this.gender = gender;
-		this.address = address;
-	}
-
-
 
 	public Long getUserId() {
 		return userId;
@@ -122,14 +95,6 @@ public class User {
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
-	}
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
 	}
 
 	public String getPassword() {
@@ -171,12 +136,10 @@ public class User {
 	public void setContactNumber(String contactNumber) {
 		this.contactNumber = contactNumber;
 	}
-	
+
 	public String getGender() {
 		return gender;
 	}
-
-
 
 	public void setGender(String gender) {
 		this.gender = gender;
@@ -208,11 +171,9 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [userId=" + userId + ", userName=" + userName + ", password=" + password + ", email=" + email
-				+ ", firstName=" + firstName + ", lastName=" + lastName + ", contactNumber=" + contactNumber
-				+ ", address=" + address + ", reservations=" + reservations + ", reviews=" + reviews + "]";
+		return "User [userId=" + userId + ", password=" + password + ", email=" + email + ", firstName=" + firstName
+				+ ", lastName=" + lastName + ", contactNumber=" + contactNumber + ", gender=" + gender + ", address="
+				+ address + ", role=" + role + ", reservations=" + reservations + ", reviews=" + reviews + "]";
 	}
-    
-    
-   
+
 }

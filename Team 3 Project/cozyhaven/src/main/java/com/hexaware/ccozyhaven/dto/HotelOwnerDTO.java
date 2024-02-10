@@ -2,23 +2,34 @@ package com.hexaware.ccozyhaven.dto;
 
 import com.hexaware.ccozyhaven.entities.Hotel;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
+
 public class HotelOwnerDTO {
 
 	private Long hotelOwnerId;
 	private String hotelOwnerName;
+	
+	@Size(min=6,max=20)
 	private String password;
+	
+	@Email
 	private String email;
+	
+
 	private String gender;
 	private String address;
 	private HotelDTO hotelDTO = new HotelDTO();
+	
+	private String role;
 
 	public HotelOwnerDTO() {
 		super();
 
 	}
-
-	public HotelOwnerDTO(Long hotelOwnerId, String hotelOwnerName, String password, String email, String gender,
-			String address, HotelDTO hotelDTO) {
+	
+	public HotelOwnerDTO(Long hotelOwnerId, String hotelOwnerName, @Size(min = 6, max = 20) String password,
+			@Email String email, String gender, String address, HotelDTO hotelDTO, String role) {
 		super();
 		this.hotelOwnerId = hotelOwnerId;
 		this.hotelOwnerName = hotelOwnerName;
@@ -27,22 +38,7 @@ public class HotelOwnerDTO {
 		this.gender = gender;
 		this.address = address;
 		this.hotelDTO = hotelDTO;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public String getGender() {
-		return gender;
-	}
-
-	public void setGender(String gender) {
-		this.gender = gender;
+		this.role = role;
 	}
 
 	public Long getHotelOwnerId() {
@@ -77,6 +73,24 @@ public class HotelOwnerDTO {
 		this.email = email;
 	}
 
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
 	public HotelDTO getHotelDTO() {
 		return hotelDTO;
 	}
@@ -85,11 +99,21 @@ public class HotelOwnerDTO {
 		this.hotelDTO = hotelDTO;
 	}
 
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	
 	@Override
 	public String toString() {
 		return "HotelOwnerDTO [hotelOwnerId=" + hotelOwnerId + ", hotelOwnerName=" + hotelOwnerName + ", password="
 				+ password + ", email=" + email + ", gender=" + gender + ", address=" + address + ", hotelDTO="
-				+ hotelDTO + "]";
+				+ hotelDTO + ", role=" + role + "]";
 	}
+	
 
 }

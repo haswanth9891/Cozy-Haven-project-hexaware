@@ -7,12 +7,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hexaware.ccozyhaven.dto.AdministratorDTO;
+import com.hexaware.ccozyhaven.entities.Administrator;
 import com.hexaware.ccozyhaven.entities.HotelOwner;
 import com.hexaware.ccozyhaven.entities.Reservation;
 import com.hexaware.ccozyhaven.entities.User;
+import com.hexaware.ccozyhaven.exceptions.DataAlreadyPresentException;
 import com.hexaware.ccozyhaven.exceptions.InvalidCancellationException;
 import com.hexaware.ccozyhaven.exceptions.ReservationNotFoundException;
 import com.hexaware.ccozyhaven.exceptions.UserNotFoundException;
+import com.hexaware.ccozyhaven.repository.AdministratorRepository;
 import com.hexaware.ccozyhaven.repository.HotelOwnerRepository;
 import com.hexaware.ccozyhaven.repository.ReservationRepository;
 import com.hexaware.ccozyhaven.repository.UserRepository;
@@ -24,6 +28,9 @@ import jakarta.transaction.Transactional;
 public class AdministratorServiceImp implements IAdministratorService {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdministratorServiceImp.class);
+	
+	@Autowired
+	private AdministratorRepository adminRepository;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -33,6 +40,29 @@ public class AdministratorServiceImp implements IAdministratorService {
 
 	@Autowired
 	private ReservationRepository reservationRepository;
+	
+	@Override
+	public boolean login(String username, String password) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean register(AdministratorDTO adminDto) throws DataAlreadyPresentException {
+		Administrator localAdmin = adminRepository.findByEmail(adminDto.getEmail()).orElse(null);
+		if(localAdmin!=null) {
+			throw new DataAlreadyPresentException("Email Id already present");
+		}
+		Administrator admin = new Administrator();
+		admin.setAdminFirstName(adminDto.getAdminFirstName());
+		admin.setAdminLastName(adminDto.getAdminLastName());
+		admin.setEmail(adminDto.getEmail());
+		admin.setPassword(adminDto.getPassword());
+		admin.setRole("Admin");
+		Administrator savedAdmin = adminRepository.save(admin);
+		LOGGER.info("Saved Admin: "+savedAdmin);
+		return true;
+	}
 
 	@Override
 	public void deleteUserAccount(Long userId) throws UserNotFoundException {

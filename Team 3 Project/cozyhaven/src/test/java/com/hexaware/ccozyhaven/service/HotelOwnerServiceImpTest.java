@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.hexaware.ccozyhaven.dto.HotelDTO;
+import com.hexaware.ccozyhaven.dto.HotelOwnerDTO;
 import com.hexaware.ccozyhaven.entities.Hotel;
 import com.hexaware.ccozyhaven.entities.HotelOwner;
 
@@ -34,14 +36,14 @@ class HotelOwnerServiceImpTest {
 	@Test
 	public void testAddHotelOwnerWithHotel_Success() {
 
-		HotelOwner hotelOwner = new HotelOwner();
+		HotelOwnerDTO hotelOwner = new HotelOwnerDTO();
 		hotelOwner.setHotelOwnerName("Meena");
 		hotelOwner.setPassword("securePassword");
 		hotelOwner.setEmail("meean@example.com");
 		hotelOwner.setGender("male");
 		hotelOwner.setAddress("123 Main Street, City");
 
-		Hotel hotel = new Hotel();
+		HotelDTO hotel = new HotelDTO();
 		hotel.setHotelName("Rest Inn");
 		hotel.setLocation("Mumbai");
 		hotel.setHasDining(true);
@@ -51,8 +53,8 @@ class HotelOwnerServiceImpTest {
 		hotel.setHasSwimmingPool(false);
 		hotel.setHasFitnessCenter(true);
 
-		hotelOwner.setHotel(hotel);
-		hotel.setHotelOwner(hotelOwner);
+		hotelOwner.setHotelDTO(hotel);
+		
 
 		hotelOwnerService.addHotelOwnerWithHotel(hotelOwner);
 
@@ -73,7 +75,7 @@ class HotelOwnerServiceImpTest {
 	@Test
 	void testUpdateHotelOwner() throws HotelOwnerNotFoundException {
 
-		HotelOwner existingHotelOwner = new HotelOwner();
+		HotelOwnerDTO existingHotelOwner = new HotelOwnerDTO();
 		Long hotelOwnerId = 1L;
 		existingHotelOwner.setHotelOwnerName("Madhu");
 		existingHotelOwner.setPassword("securePassword");
@@ -81,7 +83,7 @@ class HotelOwnerServiceImpTest {
 		existingHotelOwner.setGender("male");
 		existingHotelOwner.setAddress("123 Main Street, City");
 
-		Hotel hotel = new Hotel();
+		HotelDTO hotel = new HotelDTO();
 		hotel.setHotelName("Luxury Inn");
 		hotel.setLocation("Downtown");
 		hotel.setHasDining(true);
@@ -91,10 +93,10 @@ class HotelOwnerServiceImpTest {
 		hotel.setHasSwimmingPool(false);
 		hotel.setHasFitnessCenter(true);
 
-		existingHotelOwner.setHotel(hotel);
+		existingHotelOwner.setHotelDTO(hotel);
 
 
-		HotelOwner updatedHotelOwner = hotelOwnerService.updateHotelOwner(hotelOwnerId, existingHotelOwner);
+		HotelOwner updatedHotelOwner = hotelOwnerService.updateHotelOwnerWithHotel(hotelOwnerId, existingHotelOwner);
 
 		
 		assertEquals(existingHotelOwner.getHotelOwnerName(), updatedHotelOwner.getHotelOwnerName());
@@ -104,15 +106,15 @@ class HotelOwnerServiceImpTest {
 		assertEquals(existingHotelOwner.getAddress(), updatedHotelOwner.getAddress());
 
 		
-		assertEquals(existingHotelOwner.getHotel().getHotelName(), updatedHotelOwner.getHotel().getHotelName());
-		assertEquals(existingHotelOwner.getHotel().getLocation(), updatedHotelOwner.getHotel().getLocation());
-		assertEquals(existingHotelOwner.getHotel().isHasDining(), updatedHotelOwner.getHotel().isHasDining());
-		assertEquals(existingHotelOwner.getHotel().isHasParking(), updatedHotelOwner.getHotel().isHasParking());
-		assertEquals(existingHotelOwner.getHotel().isHasFreeWiFi(), updatedHotelOwner.getHotel().isHasFreeWiFi());
-		assertEquals(existingHotelOwner.getHotel().isHasRoomService(), updatedHotelOwner.getHotel().isHasRoomService());
-		assertEquals(existingHotelOwner.getHotel().isHasSwimmingPool(),
+		assertEquals(existingHotelOwner.getHotelDTO().getHotelName(), updatedHotelOwner.getHotel().getHotelName());
+		assertEquals(existingHotelOwner.getHotelDTO().getLocation(), updatedHotelOwner.getHotel().getLocation());
+		assertEquals(existingHotelOwner.getHotelDTO().isHasDining(), updatedHotelOwner.getHotel().isHasDining());
+		assertEquals(existingHotelOwner.getHotelDTO().isHasParking(), updatedHotelOwner.getHotel().isHasParking());
+		assertEquals(existingHotelOwner.getHotelDTO().isHasFreeWiFi(), updatedHotelOwner.getHotel().isHasFreeWiFi());
+		assertEquals(existingHotelOwner.getHotelDTO().isHasRoomService(), updatedHotelOwner.getHotel().isHasRoomService());
+		assertEquals(existingHotelOwner.getHotelDTO().isHasSwimmingPool(),
 				updatedHotelOwner.getHotel().isHasSwimmingPool());
-		assertEquals(existingHotelOwner.getHotel().isHasFitnessCenter(),
+		assertEquals(existingHotelOwner.getHotelDTO().isHasFitnessCenter(),
 				updatedHotelOwner.getHotel().isHasFitnessCenter());
 
 	}

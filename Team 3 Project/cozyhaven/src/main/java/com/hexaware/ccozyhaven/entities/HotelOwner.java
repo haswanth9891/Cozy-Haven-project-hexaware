@@ -52,14 +52,30 @@ public class HotelOwner {
 		super();
 	}
 
+	private String role;
+
+	public String getRole() {
+		return role;
+	}
+
+
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+
+
 	
+
+
 
 	public HotelOwner(Long hotelOwnerId,
 			@NotBlank(message = "Username cannot be blank") @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters") String hotelOwnerName,
 			@NotBlank(message = "Password cannot be blank") @Size(min = 6, message = "Password must be at least 6 characters") String password,
 			@NotBlank(message = "Email cannot be blank") @Email(message = "Invalid email format") String email,
 			@Pattern(regexp = "^(male|female|non-binary)$", message = "Invalid gender") String gender,
-			@NotBlank(message = "Address is required") String address) {
+			@NotBlank(message = "Address is required") String address, String role) {
 		super();
 		this.hotelOwnerId = hotelOwnerId;
 		this.hotelOwnerName = hotelOwnerName;
@@ -67,23 +83,15 @@ public class HotelOwner {
 		this.email = email;
 		this.gender = gender;
 		this.address = address;
+		this.role = role;
 	}
 
 
 
-	public HotelOwner(
-			@NotBlank(message = "Username cannot be blank") @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters") String hotelOwnerName,
-			@NotBlank(message = "Password cannot be blank") @Size(min = 6, message = "Password must be at least 6 characters") String password,
-			@NotBlank(message = "Email cannot be blank") @Email(message = "Invalid email format") String email,
-			@Pattern(regexp = "^(male|female|non-binary)$", message = "Invalid gender") String gender,
-			@NotBlank(message = "Address is required") String address) {
-		super();
-		this.hotelOwnerName = hotelOwnerName;
-		this.password = password;
-		this.email = email;
-		this.gender = gender;
-		this.address = address;
-	}
+	
+
+	
+
 
 	public Long getHotelOwnerId() {
 		return hotelOwnerId;
@@ -142,10 +150,14 @@ public class HotelOwner {
 		this.address = address;
 	}
 
+
+
 	@Override
 	public String toString() {
 		return "HotelOwner [hotelOwnerId=" + hotelOwnerId + ", hotelOwnerName=" + hotelOwnerName + ", password="
-				+ password + ", email=" + email + ", hotel=" + hotel + "]";
+				+ password + ", email=" + email + ", gender=" + gender + ", address=" + address + ", hotel=" + hotel
+				+ ", role=" + role + "]";
 	}
+
 
 }

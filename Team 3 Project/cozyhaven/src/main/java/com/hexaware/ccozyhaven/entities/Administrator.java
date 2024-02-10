@@ -18,13 +18,15 @@ public class Administrator {
     @Id
     @Column(name = "admin_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    
     private Long adminId;
 
-    @NotBlank(message = "Username cannot be blank")
-    @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
-    @Column(name = "administrator_name")
-    private String userName;
+
+	@Column(name = "firstName")
+	private String adminFirstName;
+	
+	@Column(name = "lastName")
+	private String adminLastName;
+
 
     @NotBlank(message = "Password cannot be blank")
     @Size(min = 6, message = "Password must be at least 6 characters")
@@ -36,66 +38,88 @@ public class Administrator {
     @Column(name = "email")
     private String email;
     
-    @Pattern(regexp = "^(male|female|non-binary)$", message = "Invalid gender")
-    private String gender;
     
-    @NotBlank(message = "Address is required")
-    private String address;
+    
+    @Column(columnDefinition = "varchar(5) default 'Admin'",nullable=false)
+	private String role;
+    
 
 	public Administrator() {
 		super();
 	}
 
-	
-	
-	public Administrator(Long adminId,
-			@NotBlank(message = "Username cannot be blank") @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters") String userName,
+    
+    
+
+	@Override
+	public String toString() {
+		return "Administrator [adminId=" + adminId + ", adminFirstName=" + adminFirstName + ", adminLastName="
+				+ adminLastName + ", password=" + password + ", email=" + email + ", role=" + role + "]";
+	}
+
+
+
+
+	public String getAdminFirstName() {
+		return adminFirstName;
+	}
+
+
+
+
+	public void setAdminFirstName(String adminFirstName) {
+		this.adminFirstName = adminFirstName;
+	}
+
+
+
+
+	public String getAdminLastName() {
+		return adminLastName;
+	}
+
+
+
+
+	public void setAdminLastName(String adminLastName) {
+		this.adminLastName = adminLastName;
+	}
+
+
+
+
+	public Administrator(String adminFirstName, String adminLastName,
 			@NotBlank(message = "Password cannot be blank") @Size(min = 6, message = "Password must be at least 6 characters") String password,
 			@NotBlank(message = "Password cannot be blank") @Email(message = "Password cannot be blank") String email,
-			@Pattern(regexp = "^(male|female|non-binary)$", message = "Invalid gender") String gender,
-			@NotBlank(message = "Address is required") String address) {
+			String role) {
 		super();
-		this.adminId = adminId;
-		this.userName = userName;
+		this.adminFirstName = adminFirstName;
+		this.adminLastName = adminLastName;
 		this.password = password;
 		this.email = email;
-		this.gender = gender;
-		this.address = address;
-	}
-
-	public Administrator(
-			@NotBlank(message = "Username cannot be blank") @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters") String userName,
-			@NotBlank(message = "Password cannot be blank") @Size(min = 6, message = "Password must be at least 6 characters") String password,
-			@NotBlank(message = "Password cannot be blank") @Email(message = "Password cannot be blank") String email,
-			@Pattern(regexp = "^(male|female|non-binary)$", message = "Invalid gender") String gender,
-			@NotBlank(message = "Address is required") String address) {
-		super();
-		this.userName = userName;
-		this.password = password;
-		this.email = email;
-		this.gender = gender;
-		this.address = address;
+		this.role = role;
 	}
 
 
-	public String getGender() {
-		return gender;
+
+	public String getRole() {
+		return role;
 	}
 
 
-	public void setGender(String gender) {
-		this.gender = gender;
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 
-	public String getAddress() {
-		return address;
-	}
+
+	
+	
+	
 
 
-	public void setAddress(String address) {
-		this.address = address;
-	}
+	
 
 
 	public Long getAdminId() {
@@ -106,13 +130,7 @@ public class Administrator {
 		this.adminId = adminId;
 	}
 
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
+	
 
 	public String getPassword() {
 		return password;
@@ -130,11 +148,7 @@ public class Administrator {
 		this.email = email;
 	}
 
-	@Override
-	public String toString() {
-		return "Administrator [adminId=" + adminId + ", userName=" + userName + ", password=" + password + ", email="
-				+ email + "]";
-	}
+	
 
 	
 }

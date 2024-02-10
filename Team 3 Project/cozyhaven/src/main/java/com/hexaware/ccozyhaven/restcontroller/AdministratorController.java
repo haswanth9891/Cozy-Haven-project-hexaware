@@ -21,7 +21,7 @@ import com.hexaware.ccozyhaven.exceptions.UserNotFoundException;
 import com.hexaware.ccozyhaven.service.IAdministratorService;
 
 @RestController
-@RequestMapping("/cozyhaven-admin")
+@RequestMapping("/api/admin")
 public class AdministratorController {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdministratorController.class);

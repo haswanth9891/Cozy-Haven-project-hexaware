@@ -4,9 +4,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-
+import com.hexaware.ccozyhaven.dto.AdministratorDTO;
 import com.hexaware.ccozyhaven.entities.HotelOwner;
 import com.hexaware.ccozyhaven.entities.User;
+import com.hexaware.ccozyhaven.exceptions.DataAlreadyPresentException;
 import com.hexaware.ccozyhaven.exceptions.InvalidCancellationException;
 import com.hexaware.ccozyhaven.exceptions.ReservationNotFoundException;
 import com.hexaware.ccozyhaven.exceptions.UserNotFoundException;
@@ -36,5 +37,9 @@ public interface IAdministratorService {
 	// Manage room reservation in hotel by the user
 	void manageRoomReservation(Long reservationId, String reservationStatus)
 			throws ReservationNotFoundException, InvalidCancellationException;
+
+	boolean login(String username, String password);
+
+	boolean register(AdministratorDTO adminDto) throws DataAlreadyPresentException;
 
 }
