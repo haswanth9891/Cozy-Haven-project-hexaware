@@ -29,7 +29,7 @@ public interface IReservationService {
 
 	public List<Reservation> getUserReservations(Long userId);
 
-	public void cancelReservation(Long userId, Long reservationId) throws ReservationNotFoundException;
+//	public void cancelReservation(Long userId, Long reservationId) throws ReservationNotFoundException;
 
 	public void cancelReservationAndRequestRefund(Long userId, Long reservationId)
 			throws InvalidCancellationException, ReservationNotFoundException;

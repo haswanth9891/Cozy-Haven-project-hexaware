@@ -41,7 +41,7 @@ public class Administrator {
     
     
     @Column(columnDefinition = "varchar(5) default 'Admin'",nullable=false)
-	private String role;
+	private String role = "ADMIN";
     
 
 	public Administrator() {
@@ -88,17 +88,21 @@ public class Administrator {
 
 
 
-	public Administrator(String adminFirstName, String adminLastName,
+	
+
+
+
+	public Administrator(Long adminId, String adminFirstName, String adminLastName,
 			@NotBlank(message = "Password cannot be blank") @Size(min = 6, message = "Password must be at least 6 characters") String password,
-			@NotBlank(message = "Password cannot be blank") @Email(message = "Password cannot be blank") String email,
-			String role) {
+			@NotBlank(message = "Password cannot be blank") @Email(message = "Password cannot be blank") String email) {
 		super();
+		this.adminId = adminId;
 		this.adminFirstName = adminFirstName;
 		this.adminLastName = adminLastName;
 		this.password = password;
 		this.email = email;
-		this.role = role;
 	}
+
 
 
 

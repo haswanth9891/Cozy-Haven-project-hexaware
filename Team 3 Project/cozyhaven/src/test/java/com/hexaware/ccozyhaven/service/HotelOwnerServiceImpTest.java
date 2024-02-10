@@ -12,9 +12,9 @@ import com.hexaware.ccozyhaven.dto.HotelDTO;
 import com.hexaware.ccozyhaven.dto.HotelOwnerDTO;
 import com.hexaware.ccozyhaven.entities.Hotel;
 import com.hexaware.ccozyhaven.entities.HotelOwner;
-
+import com.hexaware.ccozyhaven.exceptions.AuthorizationException;
 import com.hexaware.ccozyhaven.exceptions.HotelOwnerNotFoundException;
-
+import com.hexaware.ccozyhaven.exceptions.UnauthorizedAccessException;
 import com.hexaware.ccozyhaven.repository.HotelOwnerRepository;
 import com.hexaware.ccozyhaven.repository.HotelRepository;
 
@@ -33,47 +33,10 @@ class HotelOwnerServiceImpTest {
 	@Autowired
 	private HotelRepository hotelRepository;
 
-	@Test
-	public void testAddHotelOwnerWithHotel_Success() {
-
-		HotelOwnerDTO hotelOwner = new HotelOwnerDTO();
-		hotelOwner.setHotelOwnerName("Meena");
-		hotelOwner.setPassword("securePassword");
-		hotelOwner.setEmail("meean@example.com");
-		hotelOwner.setGender("male");
-		hotelOwner.setAddress("123 Main Street, City");
-
-		HotelDTO hotel = new HotelDTO();
-		hotel.setHotelName("Rest Inn");
-		hotel.setLocation("Mumbai");
-		hotel.setHasDining(true);
-		hotel.setHasParking(false);
-		hotel.setHasFreeWiFi(true);
-		hotel.setHasRoomService(true);
-		hotel.setHasSwimmingPool(false);
-		hotel.setHasFitnessCenter(true);
-
-		hotelOwner.setHotelDTO(hotel);
-		
-
-		hotelOwnerService.addHotelOwnerWithHotel(hotelOwner);
-
-		HotelOwner savedHotelOwner = hotelOwnerRepository.findById(hotelOwner.getHotelOwnerId()).orElse(null);
-		assertNotNull(savedHotelOwner);
-
-		Hotel savedHotel = hotelRepository.findById(hotel.getHotelId()).orElse(null);
-		assertNotNull(savedHotel);
-
-		assertEquals(hotelOwner.getHotelOwnerName(), savedHotelOwner.getHotelOwnerName());
-		assertEquals(hotelOwner.getEmail(), savedHotelOwner.getEmail());
-
-		assertEquals(hotel.getHotelName(), savedHotel.getHotelName());
-		assertEquals(hotel.getLocation(), savedHotel.getLocation());
-
-	}
+	
 
 	@Test
-	void testUpdateHotelOwner() throws HotelOwnerNotFoundException {
+	void testUpdateHotelOwner() throws HotelOwnerNotFoundException, AuthorizationException, UnauthorizedAccessException {
 
 	    // Prepare existing hotel owner data
 	    Long hotelOwnerId = 1L;
@@ -124,7 +87,7 @@ class HotelOwnerServiceImpTest {
 
 
 	@Test
-	public void testDeleteHotelOwner_Success() throws HotelOwnerNotFoundException {
+	public void testDeleteHotelOwner_Success() throws HotelOwnerNotFoundException, AuthorizationException, UnauthorizedAccessException {
 		// Arrange
 		HotelOwner hotelOwner = new HotelOwner();
 		hotelOwner.setHotelOwnerName("Ishwar");

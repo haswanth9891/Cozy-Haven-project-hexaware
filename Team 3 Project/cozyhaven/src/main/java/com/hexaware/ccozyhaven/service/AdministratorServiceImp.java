@@ -5,6 +5,11 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.hexaware.ccozyhaven.dto.AdministratorDTO;
@@ -30,6 +35,12 @@ public class AdministratorServiceImp implements IAdministratorService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdministratorServiceImp.class);
 	
 	@Autowired
+	AuthenticationManager authenticationManager;
+	
+	@Autowired
+	JwtService jwtService;
+	
+	@Autowired
 	private AdministratorRepository adminRepository;
 
 	@Autowired
@@ -42,9 +53,23 @@ public class AdministratorServiceImp implements IAdministratorService {
 	private ReservationRepository reservationRepository;
 	
 	@Override
-	public boolean login(String username, String password) {
-		// TODO Auto-generated method stub
-		return false;
+	public String login(String username, String password) {
+		String token = null;
+		Authentication authentication = authenticationManager
+				.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+		if (authentication.isAuthenticated()) {
+			token = jwtService.generateToken(username);
+			if (token != null) {
+				LOGGER.info("Token Generated for Admin: " + token);
+			} else {
+				LOGGER.warn("Token not generated");
+			}
+		} else {
+			throw new UsernameNotFoundException("Username not found");
+		}
+		return token;
+		
+		
 	}
 
 	@Override
@@ -57,10 +82,9 @@ public class AdministratorServiceImp implements IAdministratorService {
 		admin.setAdminFirstName(adminDto.getAdminFirstName());
 		admin.setAdminLastName(adminDto.getAdminLastName());
 		admin.setEmail(adminDto.getEmail());
-		admin.setPassword(adminDto.getPassword());
-		admin.setRole("Admin");
+		admin.setPassword(new BCryptPasswordEncoder().encode(adminDto.getPassword()));
 		Administrator savedAdmin = adminRepository.save(admin);
-		LOGGER.info("Saved Admin: "+savedAdmin);
+		LOGGER.info("Admin Created: " + savedAdmin);
 		return true;
 	}
 

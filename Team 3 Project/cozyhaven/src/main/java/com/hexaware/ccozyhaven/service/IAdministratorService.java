@@ -15,12 +15,11 @@ import com.hexaware.ccozyhaven.exceptions.UserNotFoundException;
 @Repository
 public interface IAdministratorService {
 
-//	//Administrator registration
-//	Administrator registerAdministrator(AdministratorDTO adminDTO);
-//	
-//	
-//	// Administrator login
-//	boolean loginAdministrator(String username, String password);
+	String login(String username, String password);
+
+	boolean register(AdministratorDTO adminDto) throws DataAlreadyPresentException;
+
+	
 
 	// Delete user account by user ID
 	void deleteUserAccount(Long userId) throws UserNotFoundException;
@@ -38,8 +37,6 @@ public interface IAdministratorService {
 	void manageRoomReservation(Long reservationId, String reservationStatus)
 			throws ReservationNotFoundException, InvalidCancellationException;
 
-	boolean login(String username, String password);
-
-	boolean register(AdministratorDTO adminDto) throws DataAlreadyPresentException;
+	
 
 }

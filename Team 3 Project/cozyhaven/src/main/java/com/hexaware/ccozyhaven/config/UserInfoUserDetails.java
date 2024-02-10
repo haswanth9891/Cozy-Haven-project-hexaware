@@ -21,6 +21,7 @@ public class UserInfoUserDetails implements UserDetails {
 	
 	private String username;
 	private String password;
+	private Long hotelOwnerId;
 	private List<GrantedAuthority> authorities;
 
 	public UserInfoUserDetails (Administrator adminInfo) {
@@ -43,6 +44,7 @@ public class UserInfoUserDetails implements UserDetails {
 	public UserInfoUserDetails (HotelOwner hotelOwnerInfo) {
 		username=hotelOwnerInfo.getEmail();
         password=hotelOwnerInfo.getPassword();
+        hotelOwnerId = hotelOwnerInfo.getHotelOwnerId();
         authorities= Arrays.stream(hotelOwnerInfo.getRole().split(","))
                 .map(SimpleGrantedAuthority::new) // .map(str -> new SimpleGrantedAuthority(str))
                 .collect(Collectors.toList());
@@ -61,6 +63,10 @@ public class UserInfoUserDetails implements UserDetails {
 	@Override
 	public String getUsername() {
 		return username;
+	}
+	
+	public Long getHotelOwnerId() {
+		return hotelOwnerId;
 	}
 
 	@Override
@@ -82,5 +88,13 @@ public class UserInfoUserDetails implements UserDetails {
 	public boolean isEnabled() {
 		return true;
 	}
+
+	
+
+	public void setHotelOwnerId(Long hotelOwnerId) {
+		this.hotelOwnerId = hotelOwnerId;
+	}
+	
+	
 
 }	

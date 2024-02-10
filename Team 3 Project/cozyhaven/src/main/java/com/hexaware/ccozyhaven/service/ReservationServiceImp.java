@@ -10,6 +10,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.hexaware.ccozyhaven.dto.BookedRoomDTO;
@@ -60,9 +61,18 @@ public class ReservationServiceImp implements IReservationService {
 
 
 	@Override
+	@PreAuthorize("#userId == principal.id")
 	public boolean reservationRoom(Long userId, List<BookedRoomDTO> bookedRooms, LocalDate checkInDate,
 			LocalDate checkOutDate) throws RoomNotAvailableException, RoomNotFoundException, UserNotFoundException, InconsistentHotelException {
 		LOGGER.info("Making a reservation for user with ID: {} and rooms", userId);
+		
+		 Set<Long> uniqueRoomIds = new HashSet<>();
+		    for (BookedRoomDTO bookedRoom : bookedRooms) {
+		        Long roomId = bookedRoom.getRoomId();
+		        if (!uniqueRoomIds.add(roomId)) {
+		            throw new IllegalArgumentException("Duplicate room ID found: " + roomId);
+		        }
+		    }
 
 		for (BookedRoomDTO bookedRoom : bookedRooms) {
 			if (!isRoomAvailable(bookedRoom.getRoomId(), checkInDate, checkOutDate)) {
@@ -242,21 +252,12 @@ public class ReservationServiceImp implements IReservationService {
 		return reservationRepository.findByUserId(userId);
 	}
 
-	@Override
-	public void cancelReservation(Long userId, Long reservationId) throws ReservationNotFoundException {
-		LOGGER.info("Cancelling reservation with ID: {} for user with ID: {}", reservationId, userId);
 
-		Reservation reservation = reservationRepository.findByReservationIdAndUser_UserId(reservationId, userId)
-				.orElseThrow(() -> new ReservationNotFoundException("Reservation not found with id: " + reservationId));
-
-		reservation.setReservationStatus("CANCELLED");
-		reservationRepository.save(reservation);
-		LOGGER.info("Reservation cancelled successfully");
-
-	}
 
 	@Override
+	@PreAuthorize("#userId == principal.id")
 	public void cancelReservationAndRequestRefund(Long userId, Long reservationId)
+	
 			throws InvalidCancellationException, ReservationNotFoundException {
 		LOGGER.info("Cancelling reservation with refund request for ID: {} for user with ID: {}", reservationId,
 				userId);

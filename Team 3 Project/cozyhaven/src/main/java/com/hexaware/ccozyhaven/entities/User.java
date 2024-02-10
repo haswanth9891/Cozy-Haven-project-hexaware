@@ -47,7 +47,7 @@ public class User {
 	@NotBlank(message = "Address is required")
 	private String address;
 
-	private String role;
+	private String role = "USER";
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	@JsonIgnoreProperties("user")
@@ -70,15 +70,16 @@ public class User {
 	}
 
 
-	public User(Long userId, @NotBlank(message = "Password is required") String password,
+	
+
+	public User(@NotBlank(message = "Password is required") String password,
 			@Email(message = "Invalid email format") String email,
 			@NotBlank(message = "First name is required") String firstName,
 			@NotBlank(message = "Last name is required") String lastName,
 			@Size(max = 10, message = "Contact number must be at most 10 characters") @Pattern(regexp = "\\d{10}", message = "Invalid contact number") String contactNumber,
 			@Pattern(regexp = "^(male|female|non-binary)$", message = "Invalid gender") String gender,
-			@NotBlank(message = "Address is required") String address, String role) {
+			@NotBlank(message = "Address is required") String address, String role, Set<Reservation> reservations) {
 		super();
-		this.userId = userId;
 		this.password = password;
 		this.email = email;
 		this.firstName = firstName;
@@ -87,6 +88,7 @@ public class User {
 		this.gender = gender;
 		this.address = address;
 		this.role = role;
+		this.reservations = reservations;
 	}
 
 	public Long getUserId() {

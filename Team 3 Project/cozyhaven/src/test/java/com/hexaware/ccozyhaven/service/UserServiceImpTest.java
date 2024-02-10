@@ -8,6 +8,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.hexaware.ccozyhaven.dto.UserDTO;
 import com.hexaware.ccozyhaven.entities.User;
+import com.hexaware.ccozyhaven.exceptions.AuthorizationException;
+import com.hexaware.ccozyhaven.exceptions.UnauthorizedAccessException;
 import com.hexaware.ccozyhaven.exceptions.UserNotFoundException;
 import com.hexaware.ccozyhaven.repository.UserRepository;
 
@@ -22,7 +24,7 @@ class UserServiceImpTest {
     @Autowired
     private UserRepository userRepository;
     @Test
-    void testUpdateUser() throws UserNotFoundException {
+    void testUpdateUser() throws UserNotFoundException, AuthorizationException, UnauthorizedAccessException {
         
         User existingUser = new User();
         existingUser.setUserId(1L);

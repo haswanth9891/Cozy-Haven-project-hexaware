@@ -42,10 +42,17 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
 		return http.csrf().disable()
-    			.authorizeHttpRequests().requestMatchers("/api/user/login","/api/user/register","/api/hotelownerr/login","/api/hotelowner/register","/api/admin/login").permitAll()
+    			.authorizeHttpRequests().requestMatchers("/api/user/login","/api/user/register","/api/hotelowner/login","/api/hotelowner/register","/api/admin/login","/swagger-ui/**","/swagger-resources/**").permitAll()
     			.and()
-    			.authorizeHttpRequests().requestMatchers("/api/admin/**","/api/user/**","/api/hotelowner/**")
-    			.authenticated().and().formLogin().and().build();
+    			.authorizeHttpRequests().anyRequest()   //requestMatchers("/api/admin/**","/api/customer/**")
+    			.authenticated()
+    			.and()
+			    .sessionManagement()
+    			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+    			.and()
+    			.authenticationProvider(authenticationProvider())
+    			.addFilterBefore(authFilter	, UsernamePasswordAuthenticationFilter.class)
+    			.build();
 	}
 	
 	@Bean
@@ -54,7 +61,7 @@ public class SecurityConfig {
 	}
 	
 	@Bean
-    public AuthenticationProvider myauthenticationProvider(){
+    public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider authenticationProvider=new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userDetailsService());
         authenticationProvider.setPasswordEncoder(getPasswordEncoder());
