@@ -26,7 +26,6 @@ class UserServiceImpTest {
         
         User existingUser = new User();
         existingUser.setUserId(1L);
-        existingUser.setUserName("john_doe_user");
         existingUser.setEmail("john.doe@example.com");
         existingUser.setFirstName("John");
         existingUser.setLastName("Doe");

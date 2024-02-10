@@ -47,7 +47,6 @@ class ReviewServiceImpTest {
         ReviewDTO reviewDTO = new ReviewDTO(null, 5, "Excellent", new Date());
 
         User user = new User();
-        user.setUserName("john_doe_user");
         user.setEmail("john.doe@example.com");
         user.setFirstName("John");
         user.setLastName("Doe");

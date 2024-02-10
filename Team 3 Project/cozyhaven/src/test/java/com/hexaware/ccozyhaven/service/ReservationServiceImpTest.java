@@ -3,6 +3,7 @@ package com.hexaware.ccozyhaven.service;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -11,7 +12,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.hexaware.ccozyhaven.dto.BookedRoomDTO;
 import com.hexaware.ccozyhaven.entities.Reservation;
+import com.hexaware.ccozyhaven.entities.Room;
+import com.hexaware.ccozyhaven.entities.User;
+import com.hexaware.ccozyhaven.exceptions.InconsistentHotelException;
 import com.hexaware.ccozyhaven.exceptions.InvalidRefundException;
 import com.hexaware.ccozyhaven.exceptions.RefundProcessedException;
 import com.hexaware.ccozyhaven.exceptions.ReservationNotFoundException;
@@ -19,6 +24,8 @@ import com.hexaware.ccozyhaven.exceptions.RoomNotAvailableException;
 import com.hexaware.ccozyhaven.exceptions.RoomNotFoundException;
 import com.hexaware.ccozyhaven.exceptions.UserNotFoundException;
 import com.hexaware.ccozyhaven.repository.ReservationRepository;
+import com.hexaware.ccozyhaven.repository.RoomRepository;
+import com.hexaware.ccozyhaven.repository.UserRepository;
 
 @SpringBootTest
 class ReservationServiceImpTest {
@@ -28,6 +35,12 @@ class ReservationServiceImpTest {
 
 	@Autowired
 	ReservationRepository reservationRepository;
+	
+	@Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private RoomRepository roomRepository;
 
 	@Test
 	void testViewReservationByHotelId() {
@@ -55,17 +68,39 @@ class ReservationServiceImpTest {
 
 	@Disabled
 	@Test
-	void testReservationRoom() throws RoomNotAvailableException, RoomNotFoundException, UserNotFoundException {
-		Long userId = 2L;
+	void testReservationRoom() throws RoomNotAvailableException, RoomNotFoundException, UserNotFoundException, InconsistentHotelException {
+	    // Arrange: Prepare test data
+	    Long userId = 2L;
+
+	    List<BookedRoomDTO> bookedRooms = new ArrayList<>();
+	    
 		Long roomId = 5L;
 		int numberOfAdults = 2;
 		int numberOfChildren = 1;
-		LocalDate checkInDate = LocalDate.now();
-		LocalDate checkOutDate = LocalDate.now().plusDays(7);
 
-		boolean result = reservationService.reservationRoom(userId, roomId, numberOfAdults, numberOfChildren,
-				checkInDate, checkOutDate);
-		assertTrue(result);
+	    LocalDate checkInDate = LocalDate.now();
+	    LocalDate checkOutDate = LocalDate.now().plusDays(7);
+
+	    // Create a User
+	    User user = new User();
+	    user.setUserId(userId);
+	    // Save the user to the in-memory database
+	    userRepository.save(user);
+
+	    // Create a Room
+	    Room room = new Room();
+	    // Save the room to the in-memory database
+	    roomRepository.save(room);
+
+	    // Act: Call the method to be tested
+	    try {
+	        boolean reservationResult = reservationService.reservationRoom(userId, bookedRooms, checkInDate, checkOutDate);
+
+	        // Assert: Validate the result
+	        assertTrue(reservationResult, "Reservation should be successful");
+	    } catch (Exception e) {
+	        fail("Exception occurred: " + e.getMessage());
+	    }
 	}
 
 	@Test
