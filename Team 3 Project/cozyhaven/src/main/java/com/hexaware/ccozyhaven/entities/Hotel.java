@@ -23,6 +23,14 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+/*
+ * Author: Nafisa 
+ * 
+ * Entity description: contains properties related to Hotel , getter and setters , 
+ * constructors and relevant validations and mappings
+*/
+
+
 
 @Entity
 @Table(name = "hotel_details")

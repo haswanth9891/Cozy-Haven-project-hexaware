@@ -13,6 +13,15 @@ import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+/*
+ * Author: Haswanth
+ * 
+ * Entity description: contains properties related to room , getter and setters , 
+ * constructors and relevant validations and mappings
+*/
+
+
+
 
 @Entity
 @Table(name = "Room_Details")

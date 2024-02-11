@@ -31,7 +31,12 @@ import com.hexaware.ccozyhaven.repository.RoomRepository;
 import com.hexaware.ccozyhaven.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
-
+/*
+ * Author: Nafisa
+ * 
+ * Service description: Provides business logic related to the Reservation entity.
+ * It contains methods for registering a new Reservation, logging in, updating details, etc.
+ */
 @Service
 @Transactional
 public class ReservationServiceImp implements IReservationService {

@@ -14,6 +14,12 @@ import com.hexaware.ccozyhaven.entities.Hotel;
 import com.hexaware.ccozyhaven.entities.Room;
 import com.hexaware.ccozyhaven.exceptions.HotelNotFoundException;
 import com.hexaware.ccozyhaven.service.IHotelService;
+/*
+ * Author: Nafisa
+ * 
+ * Controller description: Handles HTTP requests related to the Hotel entity.
+ * It contains methods for registering a new Hotel, logging in, updating details, etc.
+ */
 
 @RestController
 @RequestMapping("/cozyhaven-hotel")

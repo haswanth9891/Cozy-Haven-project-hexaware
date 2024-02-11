@@ -11,6 +11,15 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
+/*
+ * Author: Nafisa 
+ * 
+ * Entity description: contains properties related to Administrator, getter and setters , 
+ * constructors and relevant validations and mappings
+*/
+
+
+
 @Entity
 @Table(name = "Administrator_Details")
 public class Administrator {

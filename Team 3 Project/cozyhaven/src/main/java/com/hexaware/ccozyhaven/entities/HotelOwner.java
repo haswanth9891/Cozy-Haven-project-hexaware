@@ -10,7 +10,12 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-
+/*
+ * Author: Nafisa 
+ * 
+ * Entity description: contains properties related to HotelOwner , getter and setters , 
+ * constructors and relevant validations and mappings
+*/
 
 
 @Entity

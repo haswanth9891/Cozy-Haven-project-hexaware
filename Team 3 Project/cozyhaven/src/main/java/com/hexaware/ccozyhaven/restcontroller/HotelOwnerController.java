@@ -28,6 +28,14 @@ import com.hexaware.ccozyhaven.exceptions.UnauthorizedAccessException;
 import com.hexaware.ccozyhaven.service.HotelOwnerServiceImp;
 import com.hexaware.ccozyhaven.service.IHotelOwnerService;
 import com.hexaware.ccozyhaven.service.JwtService;
+/*
+ * Author: Nafisa
+ * 
+ * Controller description: Handles HTTP requests related to the HotelOwner entity.
+ * It contains methods for registering a new HotelOwner, logging in, updating details, etc.
+ */
+
+
 
 @RestController
 @RequestMapping("/api/hotelowner")

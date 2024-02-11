@@ -14,6 +14,16 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+/*
+ * Author: Haswanth
+ * 
+ * Entity description: contains properties related to user , getter and setters , 
+ * constructors and relevant validations and mappings
+*/
+
+
+
+
 @Entity
 @Table(name = "User_Details")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "userId")

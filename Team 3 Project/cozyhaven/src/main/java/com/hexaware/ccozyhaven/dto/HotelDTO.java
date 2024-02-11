@@ -1,5 +1,13 @@
 package com.hexaware.ccozyhaven.dto;
 
+
+/*
+ * Author: Nafisa
+ * 
+ * DTO description: Represents the data transfer object for Hotel entity.
+ * It contains fields relevant to Hotel, getter and setters, constructors, and relevant validations.
+ */
+
 public class HotelDTO {
 
 	private Long hotelId;

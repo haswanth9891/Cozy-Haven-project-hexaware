@@ -24,6 +24,12 @@ import com.hexaware.ccozyhaven.exceptions.UserNotFoundException;
 import com.hexaware.ccozyhaven.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
+/*
+ * Author: Haswanth
+ * 
+ * Service description: Provides business logic related to the User entity.
+ * It contains methods for registering a new User, logging in, updating details, etc.
+ */
 
 @Service
 @Transactional
@@ -31,7 +37,12 @@ public class UserServiceImp implements IUserService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImp.class);
 
-	
+	@Autowired
+	public UserServiceImp(PasswordEncoder passwordEncoder, UserRepository userRepository) {
+	    this.passwordEncoder = passwordEncoder;
+	    this.userRepository = userRepository;
+	}
+
 
 	@Autowired
 	PasswordEncoder passwordEncoder;
@@ -58,7 +69,6 @@ public class UserServiceImp implements IUserService {
 		user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 		user.setGender(userDTO.getGender());
 		user.setUsername(userDTO.getUserName());
-
 		user.setAddress(userDTO.getAddress());
 		user.setRole("USER");
 		LOGGER.info("Registering Customer: " + user);

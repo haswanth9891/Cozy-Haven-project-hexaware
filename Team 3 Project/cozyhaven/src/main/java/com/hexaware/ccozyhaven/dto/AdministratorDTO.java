@@ -2,6 +2,14 @@ package com.hexaware.ccozyhaven.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
+/*
+ * Author: Nafisa
+ * 
+ * DTO description: Represents the data transfer object for Administrator entity.
+ * It contains fields relevant to Administrator, getter and setters, constructors, and relevant validations.
+ */
+
+
 
 public class AdministratorDTO {
 

@@ -11,6 +11,16 @@ import org.springframework.stereotype.Repository;
 import com.hexaware.ccozyhaven.entities.Hotel;
 
 import com.hexaware.ccozyhaven.entities.Room;
+/*
+ * Author: Nafisa
+ * 
+ * Repository description: Handles database operations related to the Hotel entity.
+ * It extends JpaRepository to leverage Spring Data JPA features.
+ */
+
+
+
+
 
 @Repository
 public interface HotelRepository extends JpaRepository<Hotel,Long>{

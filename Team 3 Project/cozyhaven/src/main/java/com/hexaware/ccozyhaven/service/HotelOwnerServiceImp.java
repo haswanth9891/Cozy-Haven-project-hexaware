@@ -27,6 +27,15 @@ import com.hexaware.ccozyhaven.repository.HotelOwnerRepository;
 import com.hexaware.ccozyhaven.repository.HotelRepository;
 
 import jakarta.transaction.Transactional;
+/*
+ * Author: Nafisa
+ * 
+ * Service description: Provides business logic related to the HotelOwner entity.
+ * It contains methods for registering a new HotelOwner, logging in, updating details, etc.
+ */
+
+
+
 
 @Service
 @Transactional

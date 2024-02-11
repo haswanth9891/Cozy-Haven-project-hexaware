@@ -10,6 +10,16 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.hexaware.ccozyhaven.entities.Room;
+/*
+ * Author: Haswanth
+ * 
+ * Repository description: Handles database operations related to the Room entity.
+ * It extends JpaRepository to leverage Spring Data JPA features.
+ */
+
+
+
+
 
 @Repository
 public interface RoomRepository extends JpaRepository<Room, Long> {

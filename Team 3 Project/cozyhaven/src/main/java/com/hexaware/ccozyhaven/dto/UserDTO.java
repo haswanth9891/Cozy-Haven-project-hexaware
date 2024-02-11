@@ -1,6 +1,12 @@
 package com.hexaware.ccozyhaven.dto;
 
 import jakarta.validation.constraints.Size;
+/*
+ * Author: Haswanth
+ * 
+ * DTO description: Represents the data transfer object for User entity.
+ * It contains fields relevant to User, getter and setters, constructors, and relevant validations.
+ */
 
 public class UserDTO {
 

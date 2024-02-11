@@ -1,7 +1,12 @@
 package com.hexaware.ccozyhaven.dto;
 
 import java.util.Date;
-
+/*
+ * Author: Nafisa
+ * 
+ * DTO description: Represents the data transfer object for Reservation entity.
+ * It contains fields relevant to Reservation, getter and setters, constructors, and relevant validations.
+ */
 
 
 

@@ -7,6 +7,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.hexaware.ccozyhaven.entities.HotelOwner;
+/*
+ * Author: Nafisa
+ * 
+ * Repository description: Handles database operations related to the HotelOwner entity.
+ * It extends JpaRepository to leverage Spring Data JPA features.
+ */
 
 @Repository
 public interface HotelOwnerRepository extends JpaRepository<HotelOwner, Long>{

@@ -43,9 +43,12 @@ public class SecurityConfig {
 	    public  SecurityFilterChain   getSecurityFilterChain(HttpSecurity http) throws Exception {
 	    	
 	    		return http.csrf().disable()
-	    			.authorizeHttpRequests().requestMatchers("/api/user/login","/api/user/register","/api/hotelowner/login","/api/hotelowner/register","/api/admin/login","api/admin/register","/swagger-ui/","/swagger-resources/").permitAll()
+	    			.authorizeHttpRequests().requestMatchers("/api/user/login", "/api/user/register", "/api/hotelowner/login",
+	                        "/api/hotelowner/register", "/api/admin/login", "/api/admin/register",
+	                        "/swagger-ui/**", "/swagger-resources/**").permitAll()
 	    			.and()
-	    			.authorizeHttpRequests().requestMatchers("api/admin/**","api/user/**","api/hotelowner/**", "api/room", "api/review", "api/reservation", "api/hotel")
+	    			.authorizeHttpRequests().requestMatchers("/api/admin/**", "/api/user/**", "/api/hotelowner/**", "/api/room/**",
+	                        "/api/review/**", "/api/reservation/**", "/api/hotel/**")
 	    			.authenticated().and()   //.formLogin().and().build();
 	    			.sessionManagement()
 	    			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)

@@ -17,6 +17,17 @@ import jakarta.validation.constraints.Size;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+/*
+ * Author: Haswanth
+ * 
+ * Entity description: contains properties related to review, getter and setters , 
+ * constructors and relevant validations and mappings
+*/
+
+
+
+
+
 
 @Entity
 @Table(name = "Review_Details")

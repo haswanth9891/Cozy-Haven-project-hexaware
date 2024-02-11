@@ -30,6 +30,12 @@ import com.hexaware.ccozyhaven.exceptions.RoomNotAvailableException;
 import com.hexaware.ccozyhaven.exceptions.RoomNotFoundException;
 import com.hexaware.ccozyhaven.exceptions.UserNotFoundException;
 import com.hexaware.ccozyhaven.service.IReservationService;
+/*
+ * Author: Nafisa
+ * 
+ * Controller description: Handles HTTP requests related to the Reservation entity.
+ * It contains methods for registering a new Reservation, logging in, updating details, etc.
+ */
 
 @RestController
 @RequestMapping("/cozyhaven-reservation")

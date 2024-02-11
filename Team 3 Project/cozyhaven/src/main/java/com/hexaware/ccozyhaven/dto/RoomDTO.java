@@ -1,5 +1,11 @@
 package com.hexaware.ccozyhaven.dto;
 
+/*
+ * Author: Haswanth
+ * 
+ * DTO description: Represents the data transfer object for Room entity.
+ * It contains fields relevant to Room, getter and setters, constructors, and relevant validations.
+ */
 public class RoomDTO {
 
 	private Long roomId;

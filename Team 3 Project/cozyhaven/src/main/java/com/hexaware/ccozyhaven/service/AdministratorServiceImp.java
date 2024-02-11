@@ -28,6 +28,15 @@ import com.hexaware.ccozyhaven.repository.ReservationRepository;
 import com.hexaware.ccozyhaven.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
+/*
+ * Author: Nafisa
+ * 
+ * Service description: Provides business logic related to the Administrator entity.
+ * It contains methods for registering a new administrator, logging in, updating details, etc.
+ */
+
+
+
 
 @Service
 @Transactional

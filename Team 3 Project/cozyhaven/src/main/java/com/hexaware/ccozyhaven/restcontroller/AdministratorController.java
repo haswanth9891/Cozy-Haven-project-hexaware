@@ -31,6 +31,12 @@ import com.hexaware.ccozyhaven.service.IAdministratorService;
 import com.hexaware.ccozyhaven.service.JwtService;
 
 import jakarta.validation.Valid;
+/*
+ * Author: Nafisa
+ * 
+ * Controller description: Handles HTTP requests related to the Administrator entity.
+ * It contains methods for registering a new administrator, logging in, updating details, etc.
+ */
 
 @RestController
 @RequestMapping("/api/admin")

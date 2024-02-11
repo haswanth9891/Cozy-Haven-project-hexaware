@@ -31,6 +31,13 @@ import com.hexaware.ccozyhaven.service.IUserService;
 import com.hexaware.ccozyhaven.service.JwtService;
 
 import jakarta.validation.Valid;
+/*
+ * Author: Haswanth
+ * 
+ * Controller description: Handles HTTP requests related to the User entity.
+ * It contains methods for registering a new User, logging in, updating details, etc.
+ */
+
 
 @RestController
 @RequestMapping("/api/user")
@@ -59,30 +66,25 @@ public class UserController {
 	}
 
 	@PostMapping("/login")
-	public String authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
-		Authentication authentication = 	authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
-		 
-		String token = null;
-		
-				if(authentication.isAuthenticated()) {
-					
-				  // call generate token method from jwtService class
-					
-			token =		jwtService.generateToken(authRequest.getUsername());
-					
-			LOGGER.info("Tokent : "+token);
-					
-				}
-				else {
-					
-					LOGGER.info("invalid");
-					
-					 throw new UsernameNotFoundException("UserName or Password in Invalid / Invalid Request");
-					
-				}
-		
-				return token;
+	public ResponseEntity<String> authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
+	    try {
+	        Authentication authentication = authenticationManager.authenticate(
+	                new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+
+	        if (authentication.isAuthenticated()) {
+	            String token = jwtService.generateToken(authRequest.getUsername());
+	            LOGGER.info("Token: {}", token);
+	            return ResponseEntity.ok(token);
+	        } else {
+	            LOGGER.info("Invalid credentials");
+	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+	        }
+	    } catch (UsernameNotFoundException e) {
+	        LOGGER.info("Username not found: {}", authRequest.getUsername());
+	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+	    }
 	}
+
 
 	@PutMapping("/update/{userId}")
 	@PreAuthorize("hasAuthority('USER')")

@@ -11,7 +11,12 @@ import org.springframework.stereotype.Repository;
 
 
 import com.hexaware.ccozyhaven.entities.Reservation;
-
+/*
+ * Author: Nafisa
+ * 
+ * Repository description: Handles database operations related to the Reservation entity.
+ * It extends JpaRepository to leverage Spring Data JPA features.
+ */
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 

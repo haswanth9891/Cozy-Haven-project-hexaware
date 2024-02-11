@@ -13,6 +13,16 @@ import com.hexaware.ccozyhaven.exceptions.HotelNotFoundException;
 import com.hexaware.ccozyhaven.repository.HotelRepository;
 
 import jakarta.transaction.Transactional;
+/*
+ * Author: Nafisa
+ * 
+ * Service description: Provides business logic related to the Hotel entity.
+ * It contains methods for registering a new Hotel, logging in, updating details, etc.
+ */
+
+
+
+
 
 @Service
 @Transactional

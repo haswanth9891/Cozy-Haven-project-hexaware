@@ -5,7 +5,12 @@ import java.util.Date;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-
+/*
+ * Author: Haswanth
+ * 
+ * DTO description: Represents the data transfer object for Review entity.
+ * It contains fields relevant to Review, getter and setters, constructors, and relevant validations.
+ */
 
 public class ReviewDTO {
 	

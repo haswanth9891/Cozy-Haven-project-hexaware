@@ -27,6 +27,12 @@ import com.hexaware.ccozyhaven.repository.ReviewRepository;
 import com.hexaware.ccozyhaven.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
+/*
+ * Author: Haswanth
+ * 
+ * Service description: Provides business logic related to the Review entity.
+ * It contains methods for registering a new Review, logging in, updating details, etc.
+ */
 
 @Service
 @Transactional

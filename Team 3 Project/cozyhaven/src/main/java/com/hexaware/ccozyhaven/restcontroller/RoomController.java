@@ -26,6 +26,13 @@ import com.hexaware.ccozyhaven.exceptions.HotelOwnerMismatchException;
 import com.hexaware.ccozyhaven.exceptions.RoomNotFoundException;
 import com.hexaware.ccozyhaven.exceptions.UnauthorizedAccessException;
 import com.hexaware.ccozyhaven.service.IRoomService;
+/*
+ * Author: Haswanth
+ * 
+ * Controller description: Handles HTTP requests related to the Room entity.
+ * It contains methods for registering a new Room, logging in, updating details, etc.
+ */
+
 
 @RestController
 @RequestMapping("/cozyhaven-room")

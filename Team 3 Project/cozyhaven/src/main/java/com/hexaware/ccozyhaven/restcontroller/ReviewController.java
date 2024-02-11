@@ -27,6 +27,14 @@ import com.hexaware.ccozyhaven.exceptions.UserNotFoundException;
 import com.hexaware.ccozyhaven.service.IReviewService;
 
 import jakarta.validation.Valid;
+/*
+ * Author: Haswanth
+ * 
+ * Controller description: Handles HTTP requests related to the Review entity.
+ * It contains methods for registering a new Review, logging in, updating details, etc.
+ */
+
+
 
 @RestController
 @RequestMapping("/cozyhaven/review")
