@@ -70,7 +70,7 @@ public class AdministratorServiceImp implements IAdministratorService {
 	public Long register(AdministratorDTO adminDTO) throws DataAlreadyPresentException {
 		Administrator admin = new Administrator();
 		admin.setAdminId(adminDTO.getAdminId());
-		admin.setUserName(adminDTO.getUserName());
+		admin.setUsername(adminDTO.getUsername());
 		admin.setPassword(passwordEncoder.encode(adminDTO.getPassword()));
 		admin.setAdminFirstName(adminDTO.getAdminFirstName());
 		admin.setAdminLastName(adminDTO.getAdminLastName());

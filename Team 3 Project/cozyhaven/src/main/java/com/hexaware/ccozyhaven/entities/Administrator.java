@@ -40,7 +40,7 @@ public class Administrator {
     @NotBlank(message = "Username is required")
     @Pattern(regexp = "^[a-zA-Z0-9_-]+$", message = "Username must contain only letters, numbers, underscores, and hyphens")
     @Column(name = "UserName", nullable = false, unique = true)
-    private String userName;
+    private String username;
 
 
     @NotBlank(message = "Password cannot be blank")
@@ -64,29 +64,15 @@ public class Administrator {
 	}
 
     
-    
-
-	@Override
-	public String toString() {
-		return "Administrator [adminId=" + adminId + ", adminFirstName=" + adminFirstName + ", adminLastName="
-				+ adminLastName + ", password=" + password + ", email=" + email + ", role=" + role + "]";
-	}
-
-
-
-
+  
 	public String getAdminFirstName() {
 		return adminFirstName;
 	}
 
 
-
-
 	public void setAdminFirstName(String adminFirstName) {
 		this.adminFirstName = adminFirstName;
 	}
-
-
 
 
 	public String getAdminLastName() {
@@ -103,31 +89,27 @@ public class Administrator {
 
 
 
-	
-
-
-
-	
-
-
-
-
-	public String getUserName() {
-		return userName;
+	public String getUsername() {
+		return username;
 	}
 
 
 
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUsername(String username) {
+		this.username = username;
 	}
+
+
+
+
+	
 
 
 
 
 	public Administrator(Long adminId, String adminFirstName, String adminLastName,
-			@NotBlank(message = "Username is required") @Pattern(regexp = "^[a-zA-Z0-9_-]+$", message = "Username must contain only letters, numbers, underscores, and hyphens") String userName,
+			@NotBlank(message = "Username is required") @Pattern(regexp = "^[a-zA-Z0-9_-]+$", message = "Username must contain only letters, numbers, underscores, and hyphens") String username,
 			@NotBlank(message = "Password cannot be blank") @Size(min = 6, message = "Password must be at least 6 characters") String password,
 			@NotBlank(message = "Password cannot be blank") @Email(message = "Password cannot be blank") String email,
 			String role) {
@@ -135,7 +117,7 @@ public class Administrator {
 		this.adminId = adminId;
 		this.adminFirstName = adminFirstName;
 		this.adminLastName = adminLastName;
-		this.userName = userName;
+		this.username = username;
 		this.password = password;
 		this.email = email;
 		this.role = role;
@@ -153,16 +135,6 @@ public class Administrator {
 	public void setRole(String role) {
 		this.role = role;
 	}
-
-
-
-	
-	
-	
-
-
-	
-
 
 	public Long getAdminId() {
 		return adminId;
@@ -188,6 +160,15 @@ public class Administrator {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+
+
+	@Override
+	public String toString() {
+		return "Administrator [adminId=" + adminId + ", adminFirstName=" + adminFirstName + ", adminLastName="
+				+ adminLastName + ", username=" + username + ", password=" + password + ", email=" + email + ", role="
+				+ role + "]";
 	}
 
 	

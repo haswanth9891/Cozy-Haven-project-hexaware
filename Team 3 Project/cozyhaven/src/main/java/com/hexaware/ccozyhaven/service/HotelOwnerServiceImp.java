@@ -91,7 +91,7 @@ public class HotelOwnerServiceImp implements IHotelOwnerService {
 		hotelOwner.setHotelOwnerName(hotelOwnerDTO.getHotelOwnerName());
 		hotelOwner.setPassword(passwordEncoder.encode(hotelOwnerDTO.getPassword()));
 		hotelOwner.setEmail(hotelOwnerDTO.getEmail());
-		hotelOwner.setUsername(hotelOwnerDTO.getUserName());
+		hotelOwner.setUsername(hotelOwnerDTO.getUsername());
 		hotelOwner.setGender(hotelOwnerDTO.getGender());
 		hotelOwner.setAddress(hotelOwnerDTO.getAddress());
 		return hotelOwner;

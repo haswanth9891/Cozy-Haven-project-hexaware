@@ -16,7 +16,7 @@ public class HotelOwnerDTO {
 	private Long hotelOwnerId;
 	private String hotelOwnerName;
 	
-	private String userName;
+	private String username;
 	
 	@Size(min=6,max=20)
 	private String password;
@@ -35,34 +35,29 @@ public class HotelOwnerDTO {
 		super();
 
 	}
-	
-	
 
-	public HotelOwnerDTO(Long hotelOwnerId, String hotelOwnerName, String userName,
-			@Size(min = 6, max = 20) String password, @Email String email, String gender, String address) {
+	public HotelOwnerDTO(Long hotelOwnerId, String hotelOwnerName, String username,
+			@Size(min = 6, max = 20) String password, @Email String email, String gender, String address,
+			HotelDTO hotelDTO, String role) {
 		super();
 		this.hotelOwnerId = hotelOwnerId;
 		this.hotelOwnerName = hotelOwnerName;
-		this.userName = userName;
+		this.username = username;
 		this.password = password;
 		this.email = email;
 		this.gender = gender;
 		this.address = address;
+		this.hotelDTO = hotelDTO;
+		this.role = role;
 	}
 
-
-
-	public String getUserName() {
-		return userName;
+	public String getUsername() {
+		return username;
 	}
 
-
-
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUsername(String username) {
+		this.username = username;
 	}
-
-
 
 	public Long getHotelOwnerId() {
 		return hotelOwnerId;
@@ -130,14 +125,16 @@ public class HotelOwnerDTO {
 		this.role = role;
 	}
 
-
-
 	@Override
 	public String toString() {
-		return "HotelOwnerDTO [hotelOwnerId=" + hotelOwnerId + ", hotelOwnerName=" + hotelOwnerName + ", userName="
-				+ userName + ", password=" + password + ", email=" + email + ", gender=" + gender + ", address="
-				+ address + ", role=" + role + "]";
+		return "HotelOwnerDTO [hotelOwnerId=" + hotelOwnerId + ", hotelOwnerName=" + hotelOwnerName + ", username="
+				+ username + ", password=" + password + ", email=" + email + ", gender=" + gender + ", address="
+				+ address + ", hotelDTO=" + hotelDTO + ", role=" + role + "]";
 	}
+
+
+
+	
 
 	
 	

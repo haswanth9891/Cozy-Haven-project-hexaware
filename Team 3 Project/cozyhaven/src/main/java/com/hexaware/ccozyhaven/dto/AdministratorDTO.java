@@ -19,7 +19,7 @@ public class AdministratorDTO {
 
 	
 	private String adminLastName;
-	private String userName;
+	private String username;
 	
 	@Size(min=5,max=20)
 	private String password;
@@ -34,18 +34,21 @@ public class AdministratorDTO {
 
 	}
 
-	
-
-	public AdministratorDTO(Long adminId, String adminFirstName, String adminLastName, String userName,
-			@Size(min = 5, max = 20) String password, @Email String email) {
+	public AdministratorDTO(Long adminId, String adminFirstName, String adminLastName, String username,
+			@Size(min = 5, max = 20) String password, @Email String email, String role) {
 		super();
 		this.adminId = adminId;
 		this.adminFirstName = adminFirstName;
 		this.adminLastName = adminLastName;
-		this.userName = userName;
+		this.username = username;
 		this.password = password;
 		this.email = email;
+		this.role = role;
 	}
+
+
+
+
 
 
 
@@ -97,27 +100,20 @@ public class AdministratorDTO {
 		this.role = role;
 	}
 
-
-
-	public String getUserName() {
-		return userName;
+	public String getUsername() {
+		return username;
 	}
 
-
-
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUsername(String username) {
+		this.username = username;
 	}
-
-
 
 	@Override
 	public String toString() {
 		return "AdministratorDTO [adminId=" + adminId + ", adminFirstName=" + adminFirstName + ", adminLastName="
-				+ adminLastName + ", userName=" + userName + ", password=" + password + ", email=" + email + ", role="
+				+ adminLastName + ", username=" + username + ", password=" + password + ", email=" + email + ", role="
 				+ role + "]";
 	}
 
-	
 
 }
