@@ -31,7 +31,8 @@ public class User {
 
 	@Id
 	@Column(name = "user_id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence")
+    @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 7001)
 	private Long userId;
 	
 	@NotBlank(message = "Username is required")

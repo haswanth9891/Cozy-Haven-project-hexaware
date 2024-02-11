@@ -31,7 +31,8 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 public class Reservation {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reservation_sequence")
+    @SequenceGenerator(name = "reservation_sequence", sequenceName = "reservation_sequence", allocationSize = 5111)
 
 	@Column(name = "reservation_id")
 	private Long reservationId;
