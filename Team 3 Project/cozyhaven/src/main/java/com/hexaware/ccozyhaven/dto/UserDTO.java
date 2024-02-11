@@ -17,7 +17,7 @@ public class UserDTO {
 
 	private String userLastName;
 	
-	private String userName;
+	private String username;
 	
     private String password;
     private String email;
@@ -32,28 +32,22 @@ public class UserDTO {
 		super();
 	}
 
-	
+	public String getUsername() {
+		return username;
+	}
 
-	public String getUserName() {
-		return userName;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-
-
-	public UserDTO(Long userId, @Size(min = 3, max = 20) String userFirstName, String userLastName, String userName,
-			@Size(min = 6, max = 20) String password, String email, String contactNumber, String gender, String address,
-			String role) {
+	public UserDTO(Long userId, String userFirstName, String userLastName, String username, String password,
+			String email, String contactNumber, String gender, String address, String role) {
 		super();
 		this.userId = userId;
 		this.userFirstName = userFirstName;
 		this.userLastName = userLastName;
-		this.userName = userName;
+		this.username = username;
 		this.password = password;
 		this.email = email;
 		this.contactNumber = contactNumber;
@@ -61,8 +55,6 @@ public class UserDTO {
 		this.address = address;
 		this.role = role;
 	}
-
-
 
 	public Long getUserId() {
 		return userId;
@@ -138,15 +130,16 @@ public class UserDTO {
 		this.role = role;
 	}
 
-
-
 	@Override
 	public String toString() {
 		return "UserDTO [userId=" + userId + ", userFirstName=" + userFirstName + ", userLastName=" + userLastName
-				+ ", userName=" + userName + ", password=" + password + ", email=" + email + ", contactNumber="
+				+ ", username=" + username + ", password=" + password + ", email=" + email + ", contactNumber="
 				+ contactNumber + ", gender=" + gender + ", address=" + address + ", role=" + role + "]";
 	}
 
+
+
+	
 	
 	
 

@@ -24,6 +24,8 @@ public interface IUserService {
 
 	void deleteUser(Long userId) throws UserNotFoundException, AuthorizationException, UnauthorizedAccessException;
 
+	public User findById(Long userId);
+
 	
 	
 }

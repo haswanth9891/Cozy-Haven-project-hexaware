@@ -37,11 +37,7 @@ public class UserServiceImp implements IUserService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImp.class);
 
-	@Autowired
-	public UserServiceImp(PasswordEncoder passwordEncoder, UserRepository userRepository) {
-	    this.passwordEncoder = passwordEncoder;
-	    this.userRepository = userRepository;
-	}
+	
 
 
 	@Autowired
@@ -68,7 +64,7 @@ public class UserServiceImp implements IUserService {
 		user.setContactNumber(userDTO.getContactNumber());
 		user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 		user.setGender(userDTO.getGender());
-		user.setUsername(userDTO.getUserName());
+		user.setUsername(userDTO.getUsername());
 		user.setAddress(userDTO.getAddress());
 		user.setRole("USER");
 		LOGGER.info("Registering Customer: " + user);
@@ -97,7 +93,7 @@ public class UserServiceImp implements IUserService {
 
 			existingUser.setLastName(updatedUserDTO.getUserLastName());
 			existingUser.setContactNumber(updatedUserDTO.getContactNumber());
-			existingUser.setUsername(updatedUserDTO.getUserName());
+			existingUser.setUsername(updatedUserDTO.getUsername());
 			existingUser.setGender(updatedUserDTO.getGender());
 			existingUser.setAddress(updatedUserDTO.getAddress());
 
@@ -121,6 +117,12 @@ public class UserServiceImp implements IUserService {
 	        LOGGER.info("User with ID {} deleted successfully", userId);
 	   
 	}
+
+	@Override
+    public User findById(Long userId) {
+        // Use the userRepository to find a user by ID
+        return userRepository.findById(userId).orElse(null);
+    }
 
 	
 }
