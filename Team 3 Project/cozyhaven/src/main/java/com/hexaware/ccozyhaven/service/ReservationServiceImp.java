@@ -66,7 +66,7 @@ public class ReservationServiceImp implements IReservationService {
 
 
 	@Override
-	//@PreAuthorize("#userId == principal.id")
+	
 	public boolean reservationRoom(Long userId, List<BookedRoomDTO> bookedRooms, LocalDate checkInDate,
 			LocalDate checkOutDate) throws RoomNotAvailableException, RoomNotFoundException, UserNotFoundException, InconsistentHotelException {
 		LOGGER.info("Making a reservation for user with ID: {} and rooms", userId);
@@ -260,7 +260,6 @@ public class ReservationServiceImp implements IReservationService {
 
 
 	@Override
-	//@PreAuthorize("#userId == principal.id")
 	public void cancelReservationAndRequestRefund(Long userId, Long reservationId)
 	
 			throws InvalidCancellationException, ReservationNotFoundException {

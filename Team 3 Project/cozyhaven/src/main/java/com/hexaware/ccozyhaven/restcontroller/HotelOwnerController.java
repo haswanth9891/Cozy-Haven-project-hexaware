@@ -20,12 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hexaware.ccozyhaven.dto.HotelOwnerDTO;
 import com.hexaware.ccozyhaven.dto.AuthRequest;
-import com.hexaware.ccozyhaven.entities.HotelOwner;
+
 import com.hexaware.ccozyhaven.exceptions.AuthorizationException;
 import com.hexaware.ccozyhaven.exceptions.DataAlreadyPresentException;
 import com.hexaware.ccozyhaven.exceptions.HotelOwnerNotFoundException;
 import com.hexaware.ccozyhaven.exceptions.UnauthorizedAccessException;
-import com.hexaware.ccozyhaven.service.HotelOwnerServiceImp;
+
 import com.hexaware.ccozyhaven.service.IHotelOwnerService;
 import com.hexaware.ccozyhaven.service.JwtService;
 /*
@@ -84,7 +84,7 @@ public class HotelOwnerController {
 	}
 
 	@PutMapping("/update/{hotelOwnerId}")
-	@PreAuthorize("hasAuthority('HOTEL OWNER')")
+	@PreAuthorize("hasAuthority('HOTEL_OWNER')")
 	public ResponseEntity<String> updateHotelOwner(@PathVariable Long hotelOwnerId,
 			@RequestBody HotelOwnerDTO updatedHotelOwnerDTO)
 			throws AuthorizationException, UnauthorizedAccessException {
@@ -98,10 +98,11 @@ public class HotelOwnerController {
 	}
 
 	@DeleteMapping("/delete/{hotelOwnerId}")
-	@PreAuthorize("hasAuthority('HOTEL OWNER')")
+	@PreAuthorize("hasAuthority('HOTEL_OWNER')")
 	public ResponseEntity<String> deleteHotelOwner(@PathVariable Long hotelOwnerId)
 			throws AuthorizationException, UnauthorizedAccessException {
 		try {
+			LOGGER.info("delete hotel owner");
 			hotelOwnerService.deleteHotelOwner(hotelOwnerId);
 			return new ResponseEntity<>("Hotel owner deleted successfully", HttpStatus.OK);
 		} catch (HotelOwnerNotFoundException e) {

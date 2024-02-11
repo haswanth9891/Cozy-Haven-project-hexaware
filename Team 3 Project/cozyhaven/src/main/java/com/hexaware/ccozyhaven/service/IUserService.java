@@ -22,7 +22,7 @@ public interface IUserService {
 
 	User updateUser(Long userId, UserDTO updatedUserDTO) throws UserNotFoundException, AuthorizationException, UnauthorizedAccessException;
 
-	void deleteUser(Long userId) throws UserNotFoundException, AuthorizationException, UnauthorizedAccessException;
+	String deleteUser(Long userId) throws UserNotFoundException, AuthorizationException, UnauthorizedAccessException;
 
 	public User findById(Long userId);
 

@@ -66,8 +66,7 @@ public class UserController {
 	}
 
 	@PostMapping("/login")
-    
-	 public String  authenticateAndGetTokent(@RequestBody  AuthRequest authRequest) {
+    public String  authenticateAndGetTokent(@RequestBody  AuthRequest authRequest) {
 		 
 		
 		 
@@ -108,10 +107,12 @@ public class UserController {
 	}
 
 	@DeleteMapping("/delete/{userId}")
-	public ResponseEntity<Void> deleteUser(@PathVariable Long userId)
+	@PreAuthorize("hasAuthority('USER')")
+	public String deleteUser(@PathVariable Long userId)
 			throws UserNotFoundException, AuthorizationException, UnauthorizedAccessException {
-		userService.deleteUser(userId);
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		return userService.deleteUser(userId);
+		
+		
 	}
 
 }
