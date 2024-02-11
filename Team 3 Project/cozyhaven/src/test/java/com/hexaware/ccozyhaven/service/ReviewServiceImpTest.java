@@ -43,41 +43,22 @@ class ReviewServiceImpTest {
 	
  // Test Case 1: Add review by user Id and hotel Id
     @Test
-    @Disabled
     void testAddReviewWithUserAndHotel() throws UserNotFoundException, HotelNotFoundException {
-        
+        // Assume user with ID 1 and hotel with ID 1 exist in the database
+        User existingUser = userRepository.findById(1L)
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: 1"));
+        Hotel existingHotel = hotelRepository.findById(1L)
+                .orElseThrow(() -> new HotelNotFoundException("Hotel not found with id: 1"));
+
+        // Create a ReviewDTO
         ReviewDTO reviewDTO = new ReviewDTO(null, 5, "Excellent", new Date());
 
-        User user = new User();
-        user.setEmail("john.doe@example.com");
-        user.setFirstName("John");
-        user.setLastName("Doe");
-        user.setContactNumber("1234567890");
-        user.setGender("male");
-        user.setAddress("123 Main St");
-        user.setPassword("john@123"); // Add the desired password here
-        userRepository.save(user);
-        
-       
-        Hotel hotel = new Hotel();
-        hotel.setHotelName("Hotel ABC");
-        hotel.setLocation("Location XYZ");
-        hotel.setHasDining(true);
-        hotel.setHasParking(true);
-        hotel.setHasFreeWiFi(true);
-        hotel.setHasRoomService(true);
-        hotel.setHasSwimmingPool(true);
-        hotel.setHasFitnessCenter(true);
+        // Act
+        assertDoesNotThrow(() -> reviewService.addReviewWithUserAndHotel(reviewDTO, existingUser.getUserId(),
+                existingHotel.getHotelId()));
 
-        // Saving user and hotel
-        userRepository.save(user);
-        hotelRepository.save(hotel);
-
-       
-        assertDoesNotThrow(() -> reviewService.addReviewWithUserAndHotel(reviewDTO, user.getUserId(), hotel.getHotelId()));
-
-       
-        List<Review> reviews = reviewService.getAllReviews();
+        // Assert
+        List<Review> reviews = reviewRepository.findAll();
         assertEquals(1, reviews.size());
         assertEquals("Excellent", reviews.get(0).getReviewText());
         assertNotNull(reviews.get(0).getReviewId());

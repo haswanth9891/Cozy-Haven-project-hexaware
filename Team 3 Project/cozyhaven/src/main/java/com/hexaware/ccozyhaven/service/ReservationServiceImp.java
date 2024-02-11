@@ -169,7 +169,7 @@ public class ReservationServiceImp implements IReservationService {
 			double baseFare = room.getBaseFare();
 
 			int maxCapacity = calculateMaxCapacity(room);
-			int occupancy = room.getMaxOccupancy() + 1;
+			int occupancy = room.getMaxOccupancy() ;
 
 			int totalPeople = numberOfAdults + numberOfChildren;
 			if (totalPeople > maxCapacity) {

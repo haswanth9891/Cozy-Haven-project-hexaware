@@ -2,129 +2,173 @@ package com.hexaware.ccozyhaven.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.hexaware.ccozyhaven.dto.HotelDTO;
 import com.hexaware.ccozyhaven.dto.HotelOwnerDTO;
-import com.hexaware.ccozyhaven.entities.Hotel;
 import com.hexaware.ccozyhaven.entities.HotelOwner;
 import com.hexaware.ccozyhaven.exceptions.AuthorizationException;
+import com.hexaware.ccozyhaven.exceptions.DataAlreadyPresentException;
 import com.hexaware.ccozyhaven.exceptions.HotelOwnerNotFoundException;
 import com.hexaware.ccozyhaven.exceptions.UnauthorizedAccessException;
 import com.hexaware.ccozyhaven.repository.HotelOwnerRepository;
 import com.hexaware.ccozyhaven.repository.HotelRepository;
 
+import jakarta.transaction.Transactional;
 @SpringBootTest
+@Transactional
 class HotelOwnerServiceImpTest {
+	 
+	 @Autowired
+	    private IHotelOwnerService hotelOwnerService;
 
-	@Autowired
-	private HotelOwnerServiceImp hotelOwnerService;
+	    @Autowired
+	    private HotelOwnerRepository hotelOwnerRepository;
 
-	@Autowired
-	private HotelServiceImp hotelService;
-
-	@Autowired
-	private HotelOwnerRepository hotelOwnerRepository;
-
-	@Autowired
-	private HotelRepository hotelRepository;
-
+	    @Autowired
+	    private HotelRepository hotelRepository;
 	
 
 	@Test
-	void testUpdateHotelOwner() throws HotelOwnerNotFoundException, AuthorizationException, UnauthorizedAccessException {
-
-	    // Prepare existing hotel owner data
-	    Long hotelOwnerId = 1L;
-	    HotelOwnerDTO existingHotelOwnerDTO = new HotelOwnerDTO();
-	    existingHotelOwnerDTO.setHotelOwnerId(hotelOwnerId);
-	    existingHotelOwnerDTO.setHotelOwnerName("Madhu");
-	    existingHotelOwnerDTO.setPassword("securePassword");
-	    existingHotelOwnerDTO.setEmail("john.doe@example.com");
-	    existingHotelOwnerDTO.setGender("male");
-	    existingHotelOwnerDTO.setAddress("123 Main Street, City");
-
-	    HotelDTO existingHotelDTO = new HotelDTO();
-	    existingHotelDTO.setHotelName("Luxury Inn");
-	    existingHotelDTO.setLocation("Downtown");
-	    existingHotelDTO.setHasDining(true);
-	    existingHotelDTO.setHasParking(true);
-	    existingHotelDTO.setHasFreeWiFi(true);
-	    existingHotelDTO.setHasRoomService(true);
-	    existingHotelDTO.setHasSwimmingPool(false);
-	    existingHotelDTO.setHasFitnessCenter(true);
-
-	    existingHotelOwnerDTO.setHotelDTO(existingHotelDTO);
-
-	    // Update hotel owner using the service
-	    hotelOwnerService.updateHotelOwnerWithHotel(hotelOwnerId, existingHotelOwnerDTO);
-
-	    // Retrieve updated hotel owner from the repository
-	    HotelOwner updatedHotelOwner = hotelOwnerRepository.findById(hotelOwnerId)
-	            .orElseThrow(() -> new HotelOwnerNotFoundException("HotelOwner not found with id: " + hotelOwnerId));
-
-	    // Assertions
-	    assertEquals(existingHotelOwnerDTO.getHotelOwnerName(), updatedHotelOwner.getHotelOwnerName());
-	    assertEquals(existingHotelOwnerDTO.getEmail(), updatedHotelOwner.getEmail());
-	    assertEquals(existingHotelOwnerDTO.getGender(), updatedHotelOwner.getGender());
-	    assertEquals(existingHotelOwnerDTO.getAddress(), updatedHotelOwner.getAddress());
-
-	    // Hotel assertions
-	    Hotel updatedHotel = updatedHotelOwner.getHotel();
-	    assertEquals(existingHotelDTO.getHotelName(), updatedHotel.getHotelName());
-	    assertEquals(existingHotelDTO.getLocation(), updatedHotel.getLocation());
-	    assertEquals(existingHotelDTO.isHasDining(), updatedHotel.isHasDining());
-	    assertEquals(existingHotelDTO.isHasParking(), updatedHotel.isHasParking());
-	    assertEquals(existingHotelDTO.isHasFreeWiFi(), updatedHotel.isHasFreeWiFi());
-	    assertEquals(existingHotelDTO.isHasRoomService(), updatedHotel.isHasRoomService());
-	    assertEquals(existingHotelDTO.isHasSwimmingPool(), updatedHotel.isHasSwimmingPool());
-	    assertEquals(existingHotelDTO.isHasFitnessCenter(), updatedHotel.isHasFitnessCenter());
-	}
-
-
-	@Test
-	public void testDeleteHotelOwner_Success() throws HotelOwnerNotFoundException, AuthorizationException, UnauthorizedAccessException {
-		// Arrange
-		HotelOwner hotelOwner = new HotelOwner();
-		hotelOwner.setHotelOwnerName("Ishwar");
-		hotelOwner.setPassword("ishwari123");
-		hotelOwner.setEmail("ishwar456@example.com");
-		hotelOwner.setGender("female");
-		hotelOwner.setAddress("123 Main Street, City");
-
-		Hotel hotel = new Hotel();
-		hotel.setHotelName("Madhu1 Inn");
-		hotel.setLocation("Mumbai");
-		hotel.setHasDining(true);
-		hotel.setHasParking(false);
-		hotel.setHasFreeWiFi(true);
-		hotel.setHasRoomService(true);
-		hotel.setHasSwimmingPool(true);
-		hotel.setHasFitnessCenter(false);
-
-		hotelOwner.setHotel(hotel);
-		hotel.setHotelOwner(hotelOwner);
-
-		hotelOwnerRepository.save(hotelOwner);
-
-		Long hotelOwnerId = hotelOwner.getHotelOwnerId();
-
-		hotelOwnerService.deleteHotelOwner(hotelOwnerId);
-
-		assertFalse(hotelOwnerRepository.existsById(hotelOwnerId));
+	void testLogin() {
+	
 	}
 
 	@Test
-	public void testDeleteHotelOwner_HotelOwnerNotFound() {
+    void testRegisterHotelOwner() throws DataAlreadyPresentException {
+        // Arrange
+        HotelOwnerDTO hotelOwnerDTO = new HotelOwnerDTO();
+        hotelOwnerDTO.setHotelOwnerName("John Doe");
+        hotelOwnerDTO.setEmail("john.doe@example.com");
+        hotelOwnerDTO.setUsername("john_doe_owner");
+        hotelOwnerDTO.setPassword("john@123");
+        hotelOwnerDTO.setGender("male");
+        hotelOwnerDTO.setAddress("123 Main St");
 
-		Long nonExistentHotelOwnerId = 999L;
+        HotelDTO hotelDTO = new HotelDTO();
+        hotelDTO.setHotelName("Hotel ABC");
+        hotelDTO.setLocation("Location XYZ");
+        hotelDTO.setHasDining(true);
+        hotelDTO.setHasParking(true);
+        hotelDTO.setHasFreeWiFi(true);
+        hotelDTO.setHasRoomService(true);
+        hotelDTO.setHasSwimmingPool(true);
+        hotelDTO.setHasFitnessCenter(true);
 
-		assertThrows(HotelOwnerNotFoundException.class,
-				() -> hotelOwnerService.deleteHotelOwner(nonExistentHotelOwnerId));
-	}
+        hotelOwnerDTO.setHotelDTO(hotelDTO);
 
+        // Act
+        Long hotelOwnerId = hotelOwnerService.registerHotelOwner(hotelOwnerDTO);
+
+        // Assert
+        assertNotNull(hotelOwnerId);
+        HotelOwner savedHotelOwner = hotelOwnerRepository.findById(hotelOwnerId).orElse(null);
+        assertNotNull(savedHotelOwner);
+        assertEquals("John Doe", savedHotelOwner.getHotelOwnerName());
+        assertNotNull(savedHotelOwner.getHotel());
+        assertEquals("Hotel ABC", savedHotelOwner.getHotel().getHotelName());
+    }
+
+	@Test
+    void testUpdateHotelOwnerWithHotel() throws HotelOwnerNotFoundException, AuthorizationException, UnauthorizedAccessException, DataAlreadyPresentException {
+        // Arrange
+        HotelOwnerDTO hotelOwnerDTO = new HotelOwnerDTO();
+        hotelOwnerDTO.setHotelOwnerName("John Doe");
+        hotelOwnerDTO.setEmail("john.doe@example.com");
+        hotelOwnerDTO.setUsername("john_doe_owner");
+        hotelOwnerDTO.setPassword("john@123");
+        hotelOwnerDTO.setGender("male");
+        hotelOwnerDTO.setAddress("123 Main St");
+
+        HotelDTO hotelDTO = new HotelDTO();
+        hotelDTO.setHotelName("Hotel ABC");
+        hotelDTO.setLocation("Location XYZ");
+        hotelDTO.setHasDining(true);
+        hotelDTO.setHasParking(true);
+        hotelDTO.setHasFreeWiFi(true);
+        hotelDTO.setHasRoomService(true);
+        hotelDTO.setHasSwimmingPool(true);
+        hotelDTO.setHasFitnessCenter(true);
+
+        hotelOwnerDTO.setHotelDTO(hotelDTO);
+
+        Long hotelOwnerId = hotelOwnerService.registerHotelOwner(hotelOwnerDTO);
+
+        HotelOwnerDTO updatedHotelOwnerDTO = new HotelOwnerDTO();
+        updatedHotelOwnerDTO.setHotelOwnerName("Updated Name");
+        updatedHotelOwnerDTO.setEmail("updated.email@example.com");
+        updatedHotelOwnerDTO.setUsername("updated_owner");
+        updatedHotelOwnerDTO.setGender("female");
+        updatedHotelOwnerDTO.setAddress("Updated Address");
+
+        HotelDTO updatedHotelDTO = new HotelDTO();
+        updatedHotelDTO.setHotelName("Updated Hotel");
+        updatedHotelDTO.setLocation("Updated Location");
+        updatedHotelDTO.setHasDining(false);
+        updatedHotelDTO.setHasParking(false);
+        updatedHotelDTO.setHasFreeWiFi(false);
+        updatedHotelDTO.setHasRoomService(false);
+        updatedHotelDTO.setHasSwimmingPool(false);
+        updatedHotelDTO.setHasFitnessCenter(false);
+
+        updatedHotelOwnerDTO.setHotelDTO(updatedHotelDTO);
+
+        // Act
+        hotelOwnerService.updateHotelOwnerWithHotel(hotelOwnerId, updatedHotelOwnerDTO);
+
+        // Assert
+        HotelOwner updatedHotelOwner = hotelOwnerRepository.findById(hotelOwnerId).orElse(null);
+        assertNotNull(updatedHotelOwner);
+        assertEquals("Updated Name", updatedHotelOwner.getHotelOwnerName());
+        assertEquals("updated.email@example.com", updatedHotelOwner.getEmail());
+        assertEquals("updated_owner", updatedHotelOwner.getUsername());
+        assertEquals("female", updatedHotelOwner.getGender());
+        assertEquals("Updated Address", updatedHotelOwner.getAddress());
+
+        assertNotNull(updatedHotelOwner.getHotel());
+        assertEquals("Updated Hotel", updatedHotelOwner.getHotel().getHotelName());
+        assertEquals("Updated Location", updatedHotelOwner.getHotel().getLocation());
+        assertFalse(updatedHotelOwner.getHotel().isHasDining());
+        assertFalse(updatedHotelOwner.getHotel().isHasParking());
+        assertFalse(updatedHotelOwner.getHotel().isHasFreeWiFi());
+        assertFalse(updatedHotelOwner.getHotel().isHasRoomService());
+        assertFalse(updatedHotelOwner.getHotel().isHasSwimmingPool());
+        assertFalse(updatedHotelOwner.getHotel().isHasFitnessCenter());
+    }
+
+	@Test
+    void testDeleteHotelOwnerById() throws HotelOwnerNotFoundException, AuthorizationException, UnauthorizedAccessException, DataAlreadyPresentException {
+        // Arrange
+        HotelOwnerDTO hotelOwnerDTO = new HotelOwnerDTO();
+        hotelOwnerDTO.setHotelOwnerName("John Doe");
+        hotelOwnerDTO.setEmail("john.doe@example.com");
+        hotelOwnerDTO.setUsername("john_doe_owner");
+        hotelOwnerDTO.setPassword("john@123");
+        hotelOwnerDTO.setGender("male");
+        hotelOwnerDTO.setAddress("123 Main St");
+
+        HotelDTO hotelDTO = new HotelDTO();
+        hotelDTO.setHotelName("Hotel ABC");
+        hotelDTO.setLocation("Location XYZ");
+        hotelDTO.setHasDining(true);
+        hotelDTO.setHasParking(true);
+        hotelDTO.setHasFreeWiFi(true);
+        hotelDTO.setHasRoomService(true);
+        hotelDTO.setHasSwimmingPool(true);
+        hotelDTO.setHasFitnessCenter(true);
+
+        hotelOwnerDTO.setHotelDTO(hotelDTO);
+
+        Long hotelOwnerId = hotelOwnerService.registerHotelOwner(hotelOwnerDTO);
+
+        // Act
+        String result = hotelOwnerService.deleteHotelOwner(hotelOwnerId);
+
+        // Assert
+        assertEquals("Hotel Owner with ID: " + hotelOwnerId + " deleted successfully", result);
+        assertFalse(hotelOwnerRepository.existsById(hotelOwnerId));
+        assertNull(hotelRepository.findById(hotelOwnerId));
+    }
 }

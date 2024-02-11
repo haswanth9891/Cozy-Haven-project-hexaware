@@ -13,7 +13,10 @@ import com.hexaware.ccozyhaven.entities.Hotel;
 import com.hexaware.ccozyhaven.entities.Room;
 import com.hexaware.ccozyhaven.exceptions.HotelNotFoundException;
 
+import jakarta.transaction.Transactional;
+
 @SpringBootTest
+@Transactional
 class HotelServiceImpTest {
 
 	@Autowired

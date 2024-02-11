@@ -27,7 +27,10 @@ import com.hexaware.ccozyhaven.repository.ReservationRepository;
 import com.hexaware.ccozyhaven.repository.RoomRepository;
 import com.hexaware.ccozyhaven.repository.UserRepository;
 
+import jakarta.transaction.Transactional;
+
 @SpringBootTest
+@Transactional
 class ReservationServiceImpTest {
 
 	@Autowired

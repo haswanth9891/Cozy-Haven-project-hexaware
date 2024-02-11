@@ -20,6 +20,7 @@ import jakarta.transaction.Transactional;
 @Transactional
 class UserServiceImpTest {
 	
+
 	@Autowired
     private IUserService userService;
 
@@ -28,8 +29,34 @@ class UserServiceImpTest {
    
     @Autowired
     private PasswordEncoder passwordEncoder;
-    
+	
+	
+
     @Test
+    void testLogin() {
+        // Arrange
+        User existingUser = new User();
+        existingUser.setFirstName("John");
+        existingUser.setLastName("Doe");
+        existingUser.setEmail("john.doe@example.com");
+        existingUser.setContactNumber("1234567890");
+        existingUser.setPassword("$2a$10$abcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij"); // Replace with the encoded password
+        existingUser.setGender("male");
+        existingUser.setUsername("john_doe");
+        existingUser.setAddress("123 Main St");
+        existingUser.setRole("USER");
+
+        // Save the existing user to the database
+        User savedUser = userRepository.save(existingUser);
+
+        // Act
+        boolean loginResult = userService.login("john_doe", "your_password");
+
+        // Assert
+        assertTrue(loginResult);
+    }
+
+	@Test
     void testRegister() throws DataAlreadyPresentException {
         // Create a UserDTO
         UserDTO userDTO = new UserDTO();
@@ -61,12 +88,8 @@ class UserServiceImpTest {
         assertEquals("USER", user.getRole());
     }
   
-    
-    
-    
-    
-    
-    @Test
+
+	@Test
     public void testUpdateUser() throws UserNotFoundException, AuthorizationException, UnauthorizedAccessException {
         // Arrange
         Long userId = 1L;
@@ -105,8 +128,8 @@ class UserServiceImpTest {
         assertEquals(updatedUserDTO.getGender(), updatedUser.getGender());
         assertEquals(updatedUserDTO.getAddress(), updatedUser.getAddress());
     }
-    
-    @Test
+
+	@Test
     public void testDeleteUserNotFound() {
         // Arrange
         Long userId = 1L;
@@ -114,6 +137,38 @@ class UserServiceImpTest {
         // Act and Assert
         assertThrows(UserNotFoundException.class, () -> userService.deleteUser(userId));
     }
-    
+
+	 @Test
+	    void testFindById() throws UserNotFoundException, AuthorizationException, UnauthorizedAccessException {
+	        // Arrange
+	        User existingUser = new User();
+	        existingUser.setFirstName("John");
+	        existingUser.setLastName("Doe");
+	        existingUser.setEmail("john.doe@example.com");
+	        existingUser.setContactNumber("1234567890");
+	        existingUser.setPassword("password");
+	        existingUser.setGender("male");
+	        existingUser.setUsername("john_doe");
+	        existingUser.setAddress("123 Main St");
+	        existingUser.setRole("USER");
+
+	        // Save the existing user to the database
+	        User savedUser = userRepository.save(existingUser);
+
+	        // Act
+	        User foundUser = userService.findById(savedUser.getUserId());
+
+	        // Assert
+	        assertNotNull(foundUser);
+	        assertEquals(savedUser.getUserId(), foundUser.getUserId());
+	        assertEquals(existingUser.getFirstName(), foundUser.getFirstName());
+	        assertEquals(existingUser.getLastName(), foundUser.getLastName());
+	        assertEquals(existingUser.getEmail(), foundUser.getEmail());
+	        assertEquals(existingUser.getContactNumber(), foundUser.getContactNumber());
+	        assertEquals(existingUser.getGender(), foundUser.getGender());
+	        assertEquals(existingUser.getUsername(), foundUser.getUsername());
+	        assertEquals(existingUser.getAddress(), foundUser.getAddress());
+	        assertEquals(existingUser.getRole(), foundUser.getRole());
+	    }
 
 }

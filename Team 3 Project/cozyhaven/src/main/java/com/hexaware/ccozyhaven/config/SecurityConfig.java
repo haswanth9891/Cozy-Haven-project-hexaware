@@ -44,7 +44,7 @@ public class SecurityConfig {
 	    	
 	    		return http.csrf().disable()
 	    			.authorizeHttpRequests().requestMatchers("api/admin/add-admin","/api/user/login", "/api/user/register", "/api/hotelowner/login",
-	                        "/api/hotelowner/register", "/api/admin/login", "/api/hotel/getall","/api-hotel/available-rooms/{hotelId}","/api/hotel/get/{hotelId}", "/api/review/getall", "api/review/getall-by-hotel-id/{hotelId}","/api/room/search","/api/room/availability/{roomId}",
+	                        "/api/hotelowner/register", "/api/admin/login", "/api/hotel/getall","/api/hotel/available-rooms/{hotelId}","/api/hotel/get/{hotelId}", "/api/review/getall", "api/review/getall-by-hotel-id/{hotelId}","/api/room/search","/api/room/availability/{roomId}",
 	                        "/api/room/calculateTotalFare/{roomId}","/swagger-ui/", "/swagger-resources/").permitAll()
 	    			.and()
 	    			.authorizeHttpRequests().anyRequest()

@@ -116,12 +116,12 @@ class RoomServiceImpTest {
 
 	@Test
 	void testIsRoomAvailable() throws RoomNotFoundException {
-	    // Arrange
+	    
 	    Long roomId = 3L;
 	    LocalDate checkInDate = LocalDate.of(2024, 3, 20);
 	    LocalDate checkOutDate = LocalDate.of(2024, 3, 25);
 
-	    // Act
+	  
 	    boolean isAvailable = roomService.isRoomAvailable(roomId, checkInDate, checkOutDate);
 
 	    // Assert
@@ -130,12 +130,12 @@ class RoomServiceImpTest {
 	}
 	@Test
 	void testCalculateTotalFare() throws RoomNotFoundException {
-	    // Arrange
+	   
 	    Long roomId = 3L;
 	    int numberOfAdults = 2;
 	    int numberOfChildren = 2;
 
-	    // Act
+	    
 	    double totalFare = roomService.calculateTotalFare(roomId, numberOfAdults, numberOfChildren);
 
 	    // Assert
