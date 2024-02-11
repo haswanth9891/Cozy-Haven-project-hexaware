@@ -30,7 +30,8 @@ public class Room {
 
 	@Id
 	@Column(name = "room_id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "room_sequence")
+    @SequenceGenerator(name = "room_sequence", sequenceName = "room_sequence", allocationSize = 201)
 	private Long roomId;
 
 	@NotBlank(message = "Room size is required")

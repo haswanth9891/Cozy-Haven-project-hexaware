@@ -75,7 +75,7 @@ public class AdministratorServiceImp implements IAdministratorService {
 		admin.setAdminFirstName(adminDTO.getAdminFirstName());
 		admin.setAdminLastName(adminDTO.getAdminLastName());
 		admin.setEmail(adminDTO.getEmail());
-		admin.setRole("admin");
+		admin.setRole("ADMIN");
 		
 		adminRepository.save(admin);
 
