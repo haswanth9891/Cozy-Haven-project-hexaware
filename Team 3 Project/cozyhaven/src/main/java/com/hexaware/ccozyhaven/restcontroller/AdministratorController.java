@@ -92,40 +92,40 @@ public class AdministratorController {
 		return token;
 	}
 
-	@DeleteMapping("/deleteUserAccount/{userId}")
-	@PreAuthorize("hasAuthority('ADMIN')")
+	@DeleteMapping("/delete-user-account/{userId}")
+	//@PreAuthorize("hasAuthority('ADMIN')")
 	public String deleteUserAccount(@PathVariable Long userId) throws UserNotFoundException {
 		LOGGER.info("Received request to delete user account with ID: {}", userId);
 		administratorService.deleteUserAccount(userId);
 		return "User account deleted successfully";
 	}
 
-	@DeleteMapping("/deleteHotelOwnerAccount/{hotelOwnerId}")
-	@PreAuthorize("hasAuthority('ADMIN')")
+	@DeleteMapping("/delete-hotelowner-account/{hotelOwnerId}")
+	//@PreAuthorize("hasAuthority('ADMIN')")
 	public String deleteHotelOwnerAccount(@PathVariable Long hotelOwnerId) throws UserNotFoundException {
 		LOGGER.info("Received request to delete hotel owner account with ID: {}", hotelOwnerId);
 		administratorService.deleteHotelOwnerAccount(hotelOwnerId);
 		return "Hotel owner account deleted successfully";
 	}
 
-	@GetMapping("/viewAllUsers")
-	@PreAuthorize("hasAuthority('ADMIN')")
+	@GetMapping("/getall-users")
+	//@PreAuthorize("hasAuthority('ADMIN')")
 	public List<User> viewAllUsers() {
 		LOGGER.info("Received request to view all users");
 		List<User> users = administratorService.viewAllUser();
 		return users;
 	}
 
-	@GetMapping("/viewAllHotelOwners")
-	@PreAuthorize("hasAuthority('ADMIN')")
+	@GetMapping("/getall-hotelowners")
+	//@PreAuthorize("hasAuthority('ADMIN')")
 	public List<HotelOwner> viewAllHotelOwners() {
 		LOGGER.info("Received request to view all hotel owners");
 		List<HotelOwner> hotelOwners = administratorService.viewAllHotelOwner();
 		return hotelOwners;
 	}
 
-	@DeleteMapping("/manageRoomReservation/{reservationId}")
-	@PreAuthorize("hasAuthority('ADMIN')")
+	@DeleteMapping("/manage-room-reservation/{reservationId}")
+	//@PreAuthorize("hasAuthority('ADMIN')")
 	public String manageRoomReservation(@PathVariable Long reservationId,
 			@RequestParam(name = "reservationStatus") String reservationStatus)
 			throws ReservationNotFoundException, InvalidCancellationException {

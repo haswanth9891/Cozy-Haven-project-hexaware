@@ -38,7 +38,7 @@ import com.hexaware.ccozyhaven.service.IReservationService;
  */
 
 @RestController
-@RequestMapping("/cozyhaven-reservation")
+@RequestMapping("/api/reservation")
 public class ReservationController {
 	
 	 private static final Logger LOGGER = LoggerFactory.getLogger(ReservationController.class);

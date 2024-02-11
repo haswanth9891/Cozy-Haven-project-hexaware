@@ -22,7 +22,7 @@ import com.hexaware.ccozyhaven.service.IHotelService;
  */
 
 @RestController
-@RequestMapping("/cozyhaven-hotel")
+@RequestMapping("/api/hotel")
 public class HotelController {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(HotelController.class);
@@ -36,7 +36,7 @@ public class HotelController {
         return hotelService.getAllHotels();
     }
     
-    @GetMapping("/get-by-id/{hotelId}")
+    @GetMapping("/get/{hotelId}")
     public Hotel getHotelDetailsById(@PathVariable Long hotelId) throws HotelNotFoundException {
     	 LOGGER.info("Received request to get hotel details for ID: {}", hotelId);
         return hotelService.getHotelDetailsById(hotelId);
