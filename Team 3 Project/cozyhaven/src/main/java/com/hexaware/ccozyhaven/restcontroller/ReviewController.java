@@ -37,7 +37,7 @@ import jakarta.validation.Valid;
 
 
 @RestController
-@RequestMapping("/cozyhaven/review")
+@RequestMapping("/api/review")
 public class ReviewController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ReviewController.class);
 
@@ -107,7 +107,7 @@ public class ReviewController {
 		return new ResponseEntity<>(reviews, HttpStatus.OK);
 	}
 
-	@GetMapping("/allreviews/hotel/{hotelId}")
+	@GetMapping("/getall-by-hotel-id/{hotelId}")
 	public ResponseEntity<List<Review>> getAllReviewsForHotel(@PathVariable Long hotelId) {
 		try {
 			List<Review> reviews = reviewService.getAllReviewsForHotel(hotelId);
@@ -119,7 +119,7 @@ public class ReviewController {
 		}
 	}
 
-	@GetMapping("/allreviews/user/{userId}")
+	@GetMapping("/getall-by-user-id/{userId}")
 	public ResponseEntity<List<Review>> getAllReviewsByUser(@PathVariable Long userId) {
 		try {
 			List<Review> reviews = reviewService.getAllReviewsByUser(userId);

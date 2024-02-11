@@ -94,6 +94,7 @@ public class UserServiceImp implements IUserService {
 			existingUser.setLastName(updatedUserDTO.getUserLastName());
 			existingUser.setContactNumber(updatedUserDTO.getContactNumber());
 			existingUser.setUsername(updatedUserDTO.getUsername());
+			existingUser.setPassword(updatedUserDTO.getPassword());
 			existingUser.setGender(updatedUserDTO.getGender());
 			existingUser.setAddress(updatedUserDTO.getAddress());
 

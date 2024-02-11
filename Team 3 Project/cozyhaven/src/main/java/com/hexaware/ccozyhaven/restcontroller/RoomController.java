@@ -35,7 +35,7 @@ import com.hexaware.ccozyhaven.service.IRoomService;
 
 
 @RestController
-@RequestMapping("/cozyhaven-room")
+@RequestMapping("/api/room")
 public class RoomController {
     private static final Logger LOGGER = LoggerFactory.getLogger(RoomController.class);
 
@@ -43,7 +43,7 @@ public class RoomController {
 	@Autowired
 	private IRoomService roomService;
 
-	@PostMapping("/add-room")
+	@PostMapping("/add")
 	@PreAuthorize("hasAuthority('HOTEL_OWNER')")
     public Room addRoomsToHotel(@RequestBody RoomDTO roomDTO, @RequestParam Long hotelId) throws HotelNotFoundException, HotelOwnerMismatchException, UnauthorizedAccessException {
 		LOGGER.info("Received request to add a room to the hotel with ID: {}", hotelId);

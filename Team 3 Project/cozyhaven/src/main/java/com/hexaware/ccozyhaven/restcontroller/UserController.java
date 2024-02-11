@@ -107,7 +107,7 @@ public class UserController {
 
 	}
 
-	@DeleteMapping("/{userId}")
+	@DeleteMapping("/delete/{userId}")
 	public ResponseEntity<Void> deleteUser(@PathVariable Long userId)
 			throws UserNotFoundException, AuthorizationException, UnauthorizedAccessException {
 		userService.deleteUser(userId);
