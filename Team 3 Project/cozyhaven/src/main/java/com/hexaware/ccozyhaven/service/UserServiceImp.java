@@ -79,7 +79,7 @@ public class UserServiceImp implements IUserService {
 	}
 
 	@Override
-	//@PreAuthorize("#userId == principal.id")
+	
 	public User updateUser(Long userId, UserDTO updatedUserDTO) throws UserNotFoundException, AuthorizationException, UnauthorizedAccessException {
 		LOGGER.info("Updating user with ID {}", userId);
 		
@@ -106,22 +106,26 @@ public class UserServiceImp implements IUserService {
 	
 	
 	@Override
-	//@PreAuthorize("#userId == principal.id") // Check if the authenticated user is the same as the user to be deleted
-	public void deleteUser(Long userId) throws UserNotFoundException, AuthorizationException, UnauthorizedAccessException {
+	
+	public String deleteUser(Long userId) throws UserNotFoundException, AuthorizationException, UnauthorizedAccessException {
 	    LOGGER.info("Deleting user with ID {}", userId);
-
-	    
-
+	    try {
 	        // Delete the user
 	        userRepository.deleteById(userId);
 
 	        LOGGER.info("User with ID {} deleted successfully", userId);
+	        return "User with ID " + userId + " deleted successfully";
+	    
+	    } catch (Exception e) {
+	        LOGGER.error("Error deleting user with ID {}: {}", userId, e.getMessage());
+	        return "Error deleting user with ID " + userId + ": " + e.getMessage();
+	    }
+
 	   
 	}
 
 	@Override
-    public User findById(Long userId) {
-        // Use the userRepository to find a user by ID
+    public User findById(Long userId) { 
         return userRepository.findById(userId).orElse(null);
     }
 

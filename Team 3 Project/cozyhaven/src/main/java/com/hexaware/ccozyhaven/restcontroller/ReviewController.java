@@ -120,6 +120,7 @@ public class ReviewController {
 	}
 
 	@GetMapping("/getall-by-user-id/{userId}")
+	@PreAuthorize("hasAuthority('HOTEL_OWNER','ADMIN','USER')")
 	public ResponseEntity<List<Review>> getAllReviewsByUser(@PathVariable Long userId) {
 		try {
 			List<Review> reviews = reviewService.getAllReviewsByUser(userId);

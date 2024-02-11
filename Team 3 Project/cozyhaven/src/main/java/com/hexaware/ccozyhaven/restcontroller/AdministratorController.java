@@ -53,8 +53,8 @@ public class AdministratorController {
 	@Autowired
 	AuthenticationManager authenticationManager;
 
-	@PostMapping("/register")
-	// @PreAuthorize("hasAuthority('ADMIN')")
+	@PostMapping("/add-admin")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public String createNewAdmin(@RequestBody @Valid AdministratorDTO adminDTO) throws DataAlreadyPresentException {
 		LOGGER.info("Request received to create new Admin: " + adminDTO);
 		long adminId = administratorService.register(adminDTO);
@@ -67,7 +67,7 @@ public class AdministratorController {
 	}
 
 	@PostMapping("/login")
-	public String login(@RequestBody AuthRequest authRequest) {
+	public String login(@RequestBody @Valid AuthRequest authRequest) {
 		LOGGER.info("Request received to login as user: " + authRequest.getUsername() + ", Password: "
 				+ authRequest.getPassword());
 		Authentication authentication = authenticationManager.authenticate(
@@ -93,7 +93,7 @@ public class AdministratorController {
 	}
 
 	@DeleteMapping("/delete-user-account/{userId}")
-	//@PreAuthorize("hasAuthority('ADMIN')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public String deleteUserAccount(@PathVariable Long userId) throws UserNotFoundException {
 		LOGGER.info("Received request to delete user account with ID: {}", userId);
 		administratorService.deleteUserAccount(userId);
@@ -101,7 +101,7 @@ public class AdministratorController {
 	}
 
 	@DeleteMapping("/delete-hotelowner-account/{hotelOwnerId}")
-	//@PreAuthorize("hasAuthority('ADMIN')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public String deleteHotelOwnerAccount(@PathVariable Long hotelOwnerId) throws UserNotFoundException {
 		LOGGER.info("Received request to delete hotel owner account with ID: {}", hotelOwnerId);
 		administratorService.deleteHotelOwnerAccount(hotelOwnerId);
@@ -109,7 +109,7 @@ public class AdministratorController {
 	}
 
 	@GetMapping("/getall-users")
-	//@PreAuthorize("hasAuthority('ADMIN')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public List<User> viewAllUsers() {
 		LOGGER.info("Received request to view all users");
 		List<User> users = administratorService.viewAllUser();
@@ -117,7 +117,7 @@ public class AdministratorController {
 	}
 
 	@GetMapping("/getall-hotelowners")
-	//@PreAuthorize("hasAuthority('ADMIN')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public List<HotelOwner> viewAllHotelOwners() {
 		LOGGER.info("Received request to view all hotel owners");
 		List<HotelOwner> hotelOwners = administratorService.viewAllHotelOwner();
@@ -125,7 +125,7 @@ public class AdministratorController {
 	}
 
 	@DeleteMapping("/manage-room-reservation/{reservationId}")
-	//@PreAuthorize("hasAuthority('ADMIN')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public String manageRoomReservation(@PathVariable Long reservationId,
 			@RequestParam(name = "reservationStatus") String reservationStatus)
 			throws ReservationNotFoundException, InvalidCancellationException {

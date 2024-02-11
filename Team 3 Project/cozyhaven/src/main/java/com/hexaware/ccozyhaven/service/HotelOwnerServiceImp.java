@@ -62,7 +62,7 @@ public class HotelOwnerServiceImp implements IHotelOwnerService {
 	@Override
 	public Long registerHotelOwner(HotelOwnerDTO hotelOwnerDTO) throws DataAlreadyPresentException {
 
-		HotelOwner hotelOwnerByEmail = getHotelOwnerByEmail(hotelOwnerDTO.getEmail());
+		
 
 		LOGGER.info("Adding hotel owner with hotel: {}", hotelOwnerDTO);
 
@@ -112,7 +112,7 @@ public class HotelOwnerServiceImp implements IHotelOwnerService {
 	}
 
 	@Override
-	// @PreAuthorize("#hotelOwnerId == principal.id")
+	
 	public void updateHotelOwnerWithHotel(Long hotelOwnerId, HotelOwnerDTO updatedHotelOwnerDTO)
 			throws HotelOwnerNotFoundException, AuthorizationException, UnauthorizedAccessException {
 
@@ -146,8 +146,8 @@ public class HotelOwnerServiceImp implements IHotelOwnerService {
 	}
 
 	@Override
-	@PreAuthorize("#hotelOwnerId == principal.id")
-	public void deleteHotelOwner(Long hotelOwnerId)
+	
+	public String deleteHotelOwner(Long hotelOwnerId)
 			throws HotelOwnerNotFoundException, AuthorizationException, UnauthorizedAccessException {
 		LOGGER.info("Deleting hotel owner with ID: {}", hotelOwnerId);
 		HotelOwner hotelOwnerToDelete = hotelOwnerRepository.findById(hotelOwnerId)
@@ -156,11 +156,9 @@ public class HotelOwnerServiceImp implements IHotelOwnerService {
 		hotelOwnerRepository.delete(hotelOwnerToDelete);
 		LOGGER.info("Hotel owner deleted successfully");
 
+		return "Hotel Owner with ID: " + hotelOwnerId + "deleted succesfully";
 	}
 
-	public HotelOwner getHotelOwnerByEmail(String email) {
-		LOGGER.info("Finding " + email + " in database");
-		return hotelOwnerRepository.findByEmail(email).orElse(null);
-	}
+	
 
 }

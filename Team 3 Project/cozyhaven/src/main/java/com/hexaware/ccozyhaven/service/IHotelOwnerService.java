@@ -30,7 +30,7 @@ public interface IHotelOwnerService {
 	
 
 
-	void deleteHotelOwner(Long hotelOwnerId) throws HotelOwnerNotFoundException, AuthorizationException, UnauthorizedAccessException;
+	String deleteHotelOwner(Long hotelOwnerId) throws HotelOwnerNotFoundException, AuthorizationException, UnauthorizedAccessException;
 
 	
 

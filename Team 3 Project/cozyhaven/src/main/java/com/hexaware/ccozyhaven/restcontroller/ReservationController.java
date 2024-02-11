@@ -72,6 +72,7 @@ public class ReservationController {
 	}
 	
 	@GetMapping("/get-by-user/{userId}")
+	@PreAuthorize("hasAuthority('HOTEL_OWNER','ADMIN','USER')")
 	public List<Reservation> getUserReservations(@PathVariable Long userId) {
 		 LOGGER.info("Received request to view reservations by user ID: {}", userId);
         return reservationService.getUserReservations(userId);
@@ -88,8 +89,9 @@ public class ReservationController {
     }
     
     
-    @PreAuthorize("hasAuthority('USER')")
+   
     @PostMapping("/make-reservation")
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<String> reserveRooms(
             @RequestParam Long userId,
             @RequestBody List<BookedRoomDTO> bookedRooms,
