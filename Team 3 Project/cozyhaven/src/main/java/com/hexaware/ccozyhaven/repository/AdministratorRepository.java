@@ -23,6 +23,6 @@ public interface AdministratorRepository extends JpaRepository<Administrator, Lo
 	
 	
 	
-	 Optional<Administrator> findByUserName(String username);
+	 Optional<Administrator> findByUsername(String username);
 
 }

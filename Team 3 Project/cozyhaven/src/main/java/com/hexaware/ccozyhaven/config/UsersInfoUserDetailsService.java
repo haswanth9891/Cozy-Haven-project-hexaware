@@ -38,7 +38,7 @@ public class UsersInfoUserDetailsService implements UserDetailsService {
          }
 
          // Check if the username exists in the admin table
-         Optional<Administrator> admin = adminRepo.findByUserName(username);
+         Optional<Administrator> admin = adminRepo.findByUsername(username);
          if (admin.isPresent()) {
              return new AdminInfoDetails(admin.get());
          }
