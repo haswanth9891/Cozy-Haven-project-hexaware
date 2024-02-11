@@ -54,7 +54,7 @@ public class AdministratorController {
 	AuthenticationManager authenticationManager;
 
 	@PostMapping("/add-admin")
-	@PreAuthorize("hasAuthority('ADMIN')")
+	//@PreAuthorize("hasAuthority('ADMIN')")
 	public String createNewAdmin(@RequestBody @Valid AdministratorDTO adminDTO) throws DataAlreadyPresentException {
 		LOGGER.info("Request received to create new Admin: " + adminDTO);
 		long adminId = administratorService.register(adminDTO);

@@ -36,8 +36,7 @@ public class Review {
 
 	@Id
 	@Column(name = "review_id")
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "review_sequence")
-    @SequenceGenerator(name = "review_sequence", sequenceName = "review_sequence", allocationSize = 10111)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long reviewId;
 
 	@Min(value = 1, message = "Rating must be at least 1")
