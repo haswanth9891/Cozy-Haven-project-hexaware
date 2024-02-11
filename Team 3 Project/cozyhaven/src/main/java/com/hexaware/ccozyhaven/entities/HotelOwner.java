@@ -24,8 +24,7 @@ import jakarta.validation.constraints.Size;
 public class HotelOwner {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hotel_owner_sequence")
-    @SequenceGenerator(name = "hotel_owner_sequence", sequenceName = "hotel_owner_sequence", allocationSize = 101)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long hotelOwnerId;
 
 	@Column(name = "hotel_owner_name")

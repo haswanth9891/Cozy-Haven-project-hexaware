@@ -39,8 +39,7 @@ import jakarta.validation.constraints.Size;
 public class Hotel {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hotel_sequence")
-    @SequenceGenerator(name = "hotel_sequence", sequenceName = "hotel_sequence", allocationSize = 1001)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long hotelId;
 
     @Column(name = "hotel_name")
