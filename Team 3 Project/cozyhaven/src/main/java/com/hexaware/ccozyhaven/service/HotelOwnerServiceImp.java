@@ -30,11 +30,14 @@ import jakarta.transaction.Transactional;
 @Transactional
 public class HotelOwnerServiceImp implements IHotelOwnerService {
 
-	@Autowired
-	HotelOwnerRepository hotelOwnerRepository;
+	 private final HotelOwnerRepository hotelOwnerRepository;
+	    private final HotelRepository hotelRepository;
 
-	@Autowired
-	HotelRepository hotelRepository;
+	    @Autowired
+	    public HotelOwnerServiceImp(HotelOwnerRepository hotelOwnerRepository, HotelRepository hotelRepository) {
+	        this.hotelOwnerRepository = hotelOwnerRepository;
+	        this.hotelRepository = hotelRepository;
+	    }
 
 	@Autowired
 	PasswordEncoder passwordEncoder;
@@ -64,7 +67,8 @@ public class HotelOwnerServiceImp implements IHotelOwnerService {
 		HotelOwner addedHotelOwner = hotelOwnerRepository.save(hotelOwner);
 
 		if ((addedHotelOwner != null) && (addedHotel != null)) {
-			LOGGER.info("Registerd Hotel Owner with Hotel Details: " + addedHotelOwner + " " + addedHotel);
+			LOGGER.info("Registered Hotel Owner with Hotel Details: Owner={}, Hotel={}", addedHotelOwner, addedHotel);
+
 			return addedHotelOwner.getHotelOwnerId();
 		}
 		LOGGER.error("Hotel Owner not registered");

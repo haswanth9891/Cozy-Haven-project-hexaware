@@ -60,7 +60,7 @@ class UserServiceImpTest {
 	}
 
 	@Test
-	public void testUpdateUser() throws UserNotFoundException {
+	 void testUpdateUser() throws UserNotFoundException {
 
 		Long userId = 1L;
 		UserDTO updatedUserDTO = new UserDTO();

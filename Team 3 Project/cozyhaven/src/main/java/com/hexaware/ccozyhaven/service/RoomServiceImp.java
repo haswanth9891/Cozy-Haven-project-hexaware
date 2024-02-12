@@ -19,7 +19,7 @@ import com.hexaware.ccozyhaven.exceptions.HotelNotFoundException;
 import com.hexaware.ccozyhaven.exceptions.HotelOwnerMismatchException;
 import com.hexaware.ccozyhaven.exceptions.RoomNotFoundException;
 
-import com.hexaware.ccozyhaven.repository.HotelRepository;
+
 import com.hexaware.ccozyhaven.repository.ReservationRepository;
 import com.hexaware.ccozyhaven.repository.RoomRepository;
 
@@ -37,14 +37,19 @@ public class RoomServiceImp implements IRoomService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RoomServiceImp.class);
 
-	@Autowired
-	RoomRepository roomRepository;
-
-	@Autowired
-	HotelRepository hotelRepository;
-
-	@Autowired
-	private ReservationRepository reservationRepository;
+	private final RoomRepository roomRepository;
+   
+    private final ReservationRepository reservationRepository;
+    
+    private static String roomNotFound = "Room not found with id: ";
+    @Autowired
+    public RoomServiceImp(
+            RoomRepository roomRepository,
+            ReservationRepository reservationRepository
+    ) {
+        this.roomRepository = roomRepository;
+        this.reservationRepository = reservationRepository;
+    }
 
 	@Override
 	public Room addRoomToHotel(RoomDTO roomDTO, Long hotelId)
@@ -72,7 +77,7 @@ public class RoomServiceImp implements IRoomService {
 		LOGGER.info("Editing room with ID {}", roomId);
 
 		Room existingRoom = roomRepository.findById(roomId)
-				.orElseThrow(() -> new RoomNotFoundException("Room not found with id: " + roomId));
+				.orElseThrow(() -> new RoomNotFoundException(roomNotFound + roomId));
 
 		existingRoom.setRoomSize(updatedRoomDTO.getRoomSize());
 		existingRoom.setBedType(updatedRoomDTO.getBedType());
@@ -92,7 +97,7 @@ public class RoomServiceImp implements IRoomService {
 		LOGGER.info("Removing room with ID {}", roomId);
 
 		Room roomToDelete = roomRepository.findById(roomId)
-				.orElseThrow(() -> new RoomNotFoundException("Room not found with id: " + roomId));
+				.orElseThrow(() -> new RoomNotFoundException(roomNotFound + roomId));
 
 		roomRepository.delete(roomToDelete);
 		LOGGER.info("Room with ID {} removed successfully", roomId);
@@ -117,7 +122,7 @@ public class RoomServiceImp implements IRoomService {
 		Optional<Room> optionalRoom = roomRepository.findById(roomId);
 
 		if (optionalRoom.isPresent()) {
-			Room room = optionalRoom.get();
+			
 
 			List<Reservation> overlappingReservations = reservationRepository.findOverlappingReservations(roomId,
 					checkInDate, checkOutDate);
@@ -126,7 +131,7 @@ public class RoomServiceImp implements IRoomService {
 
 		} else {
 			LOGGER.error("Room not found with ID: {}", roomId);
-			throw new RoomNotFoundException("Room not found with id: " + roomId);
+			throw new RoomNotFoundException(roomNotFound + roomId);
 		}
 
 	}
@@ -156,10 +161,10 @@ public class RoomServiceImp implements IRoomService {
 						maxCapacity, baseFare);
 			}
 
-			double totalFare = baseFare + additionalCharge;
-			return totalFare;
+			return  baseFare + additionalCharge;
+			
 		} else {
-			throw new RoomNotFoundException("Room not found with id: " + roomId);
+			throw new RoomNotFoundException(roomNotFound + roomId);
 		}
 	}
 

@@ -33,12 +33,15 @@ public class UserServiceImp implements IUserService {
 	@Autowired
 	PasswordEncoder passwordEncoder;
 
-	@Autowired
-	private UserRepository userRepository;
+	private final UserRepository userRepository;
+
+    @Autowired
+    public  UserServiceImp(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
 	@Override
 	public boolean login(String username, String password) {
-		// TODO Auto-generated method stub
 		LOGGER.info("User is loggin in...");
 		return false;
 	}
@@ -56,11 +59,13 @@ public class UserServiceImp implements IUserService {
 		user.setUsername(userDTO.getUsername());
 		user.setAddress(userDTO.getAddress());
 		user.setRole("USER");
-		LOGGER.info("Registering Customer: " + user);
+		LOGGER.info("Registering Customer: {}", user);
+
 		User addedUser = userRepository.save(user);
 
 		if (addedUser != null) {
-			LOGGER.info("Registerd Customer: " + addedUser);
+			LOGGER.info("Registered Customer: {}", addedUser);
+
 			return user.getUserId();
 		}
 		LOGGER.error("Customer not registered");

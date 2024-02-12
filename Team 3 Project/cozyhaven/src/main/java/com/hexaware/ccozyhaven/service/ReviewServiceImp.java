@@ -36,14 +36,22 @@ public class ReviewServiceImp implements IReviewService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ReviewServiceImp.class);
 
-	@Autowired
-	private ReviewRepository reviewRepository;
+	 private final ReviewRepository reviewRepository;
+	    private final UserRepository userRepository;
+	    private final HotelRepository hotelRepository;
+	
+	
+	 @Autowired
+	    public ReviewServiceImp(
+	            ReviewRepository reviewRepository,
+	            UserRepository userRepository,
+	            HotelRepository hotelRepository
+	    ) {
+	        this.reviewRepository = reviewRepository;
+	        this.userRepository = userRepository;
+	        this.hotelRepository = hotelRepository;
+	    }
 
-	@Autowired
-	private UserRepository userRepository;
-
-	@Autowired
-	private HotelRepository hotelRepository;
 
 	@Override
 	public void addReviewWithUserAndHotel(ReviewDTO reviewDTO, Long userId, Long hotelId)

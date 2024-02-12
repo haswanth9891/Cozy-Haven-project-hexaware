@@ -43,12 +43,20 @@ public class ReservationServiceImp implements IReservationService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ReservationServiceImp.class);
 
-	@Autowired
-	ReservationRepository reservationRepository;
-	@Autowired
-	private UserRepository userRepository;
-	@Autowired
-	private RoomRepository roomRepository;
+	 private final ReservationRepository reservationRepository;
+	    private final UserRepository userRepository;
+	    private final RoomRepository roomRepository;
+
+	    @Autowired
+	    public ReservationServiceImp(
+	            ReservationRepository reservationRepository,
+	            UserRepository userRepository,
+	            RoomRepository roomRepository
+	    ) {
+	        this.reservationRepository = reservationRepository;
+	        this.userRepository = userRepository;
+	        this.roomRepository = roomRepository;
+	    }
 	
 	private static String roomNotFound = "Room not found with id: ";
 
@@ -285,7 +293,7 @@ public class ReservationServiceImp implements IReservationService {
 		Reservation reservation = reservationRepository.findByReservationIdAndUser_UserId(reservationId, userId)
 				.orElseThrow(() -> new ReservationNotFoundException("Reservation not found with id: " + reservationId));
 		String reservationStatus = "CANCELLED";
-		if (reservation.getReservationStatus() != reservationStatus) {
+		if (!reservation.getReservationStatus().equals(reservationStatus)) {
 
 			reservation.setReservationStatus(reservationStatus);
 			reservationRepository.save(reservation);

@@ -162,7 +162,7 @@ class HotelOwnerServiceImpTest {
 	}
 
 	@Test
-	public void testDeleteHotelOwner_HotelOwnerNotFound() {
+	 void testDeleteHotelOwner_HotelOwnerNotFound() {
 
 		Long nonExistentHotelOwnerId = 999L;
 

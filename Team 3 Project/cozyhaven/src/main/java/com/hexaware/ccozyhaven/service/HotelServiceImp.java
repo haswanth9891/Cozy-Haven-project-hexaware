@@ -26,8 +26,12 @@ public class HotelServiceImp implements IHotelService{
 	
 	 private static final Logger LOGGER = LoggerFactory.getLogger(HotelServiceImp.class);
 	
-	@Autowired
-	private HotelRepository hotelRepository;
+	 private final HotelRepository hotelRepository;
+
+	    @Autowired
+	    public HotelServiceImp(HotelRepository hotelRepository) {
+	        this.hotelRepository = hotelRepository;
+	    }
 
 	@Override
 	public List<Hotel> getAllHotels() {
