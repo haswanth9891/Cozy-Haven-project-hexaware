@@ -17,10 +17,6 @@ import com.hexaware.ccozyhaven.entities.Room;
  * It extends JpaRepository to leverage Spring Data JPA features.
  */
 
-
-
-
-
 @Repository
 public interface RoomRepository extends JpaRepository<Room, Long> {
 

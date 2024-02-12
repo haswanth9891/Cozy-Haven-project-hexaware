@@ -21,8 +21,6 @@ public interface IReservationService {
 	public double refundAmount(Long reservationId)
 			throws RefundProcessedException, InvalidRefundException, ReservationNotFoundException;
 
-	
-
 
 	boolean reservationRoom(Long userId, List<BookedRoomDTO> bookedRooms, LocalDate checkInDate, LocalDate checkOutDate)
 			throws RoomNotAvailableException, RoomNotFoundException, UserNotFoundException, InconsistentHotelException;

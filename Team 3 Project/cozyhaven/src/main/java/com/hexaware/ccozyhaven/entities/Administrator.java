@@ -18,8 +18,6 @@ import jakarta.validation.constraints.Size;
  * constructors and relevant validations and mappings
 */
 
-
-
 @Entity
 @Table(name = "Administrator_Details")
 public class Administrator {
@@ -64,7 +62,23 @@ public class Administrator {
 	}
 
     
-  
+
+	public Administrator(Long adminId, String adminFirstName, String adminLastName,
+			@NotBlank(message = "Username is required") @Pattern(regexp = "^[a-zA-Z0-9_-]+$", message = "Username must contain only letters, numbers, underscores, and hyphens") String username,
+			@NotBlank(message = "Password cannot be blank") @Size(min = 6, message = "Password must be at least 6 characters") String password,
+			@NotBlank(message = "Password cannot be blank") @Email(message = "Password cannot be blank") String email,
+			String role) {
+		super();
+		this.adminId = adminId;
+		this.adminFirstName = adminFirstName;
+		this.adminLastName = adminLastName;
+		this.username = username;
+		this.password = password;
+		this.email = email;
+		this.role = role;
+	}
+
+
 	public String getAdminFirstName() {
 		return adminFirstName;
 	}
@@ -99,31 +113,6 @@ public class Administrator {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-
-
-
-
-	
-
-
-
-
-	public Administrator(Long adminId, String adminFirstName, String adminLastName,
-			@NotBlank(message = "Username is required") @Pattern(regexp = "^[a-zA-Z0-9_-]+$", message = "Username must contain only letters, numbers, underscores, and hyphens") String username,
-			@NotBlank(message = "Password cannot be blank") @Size(min = 6, message = "Password must be at least 6 characters") String password,
-			@NotBlank(message = "Password cannot be blank") @Email(message = "Password cannot be blank") String email,
-			String role) {
-		super();
-		this.adminId = adminId;
-		this.adminFirstName = adminFirstName;
-		this.adminLastName = adminLastName;
-		this.username = username;
-		this.password = password;
-		this.email = email;
-		this.role = role;
-	}
-
-
 
 
 	public String getRole() {

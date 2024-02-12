@@ -1,7 +1,5 @@
 package com.hexaware.ccozyhaven.dto;
 
-import com.hexaware.ccozyhaven.entities.Hotel;
-
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 /*

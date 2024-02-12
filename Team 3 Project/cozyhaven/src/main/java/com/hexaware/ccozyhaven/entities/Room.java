@@ -21,8 +21,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 */
 
 
-
-
 @Entity
 @Table(name = "Room_Details")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "roomId")
@@ -73,10 +71,6 @@ public class Room {
 	}
 
 	
-
-	
-
-
 	public Room(Long roomId,
 			@NotBlank(message = "Room size is required") @Size(max = 20, message = "Room size must be at most 20 characters") String roomSize,
 			@NotBlank(message = "Bed type is required") @Size(max = 20, message = "Bed type must be at most 20 characters") @Pattern(regexp = "single bed|double bed|king size", message = "Invalid bed type") String bedType,
@@ -97,12 +91,6 @@ public class Room {
 
 
 
-
-
-
-
-
-
 	public Room(
 			@NotBlank(message = "Room size is required") @Size(max = 20, message = "Room size must be at most 20 characters") String roomSize,
 			@NotBlank(message = "Bed type is required") @Size(max = 20, message = "Bed type must be at most 20 characters") @Pattern(regexp = "single bed|double bed|king size", message = "Invalid bed type") String bedType,
@@ -119,8 +107,6 @@ public class Room {
 		this.reservations = reservations;
 		this.hotel = hotel;
 	}
-
-
 
 
 

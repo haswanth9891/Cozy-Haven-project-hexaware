@@ -11,17 +11,12 @@ import jakarta.validation.constraints.Size;
 public class UserDTO {
 
     
-    private Long userId;
-    
+    private Long userId;   
 	private String userFirstName;
-
-	private String userLastName;
-	
-	private String username;
-	
+	private String userLastName;	
+	private String username;	
     private String password;
-    private String email;
-   
+    private String email;   
     private String contactNumber;
     private String gender;
     private String address;
@@ -32,15 +27,7 @@ public class UserDTO {
 		super();
 	}
 
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-
+	
 	public UserDTO(Long userId, String userFirstName, String userLastName, String username, String password,
 			String email, String contactNumber, String gender, String address, String role) {
 		super();
@@ -79,7 +66,15 @@ public class UserDTO {
 	public void setUserLastName(String userLastName) {
 		this.userLastName = userLastName;
 	}
+	public String getUsername() {
+		return username;
+	}
 
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	
+	
 	public String getPassword() {
 		return password;
 	}
@@ -96,7 +91,6 @@ public class UserDTO {
 		this.email = email;
 	}
 
-	
 
 	public String getContactNumber() {
 		return contactNumber;

@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.hexaware.ccozyhaven.config.UsersInfoUserDetailsService;
-import com.hexaware.ccozyhaven.service.AdministratorServiceImp;
 import com.hexaware.ccozyhaven.service.JwtService;
 
 import jakarta.servlet.FilterChain;

@@ -15,20 +15,11 @@ import jakarta.validation.constraints.Min;
 public class ReviewDTO {
 	
 
-	@Min(value = 1, message = "Rating must be at least 1")
-	@Max(value = 5, message = "Rating must be at most 5")
-	@Column(name = "rating")
-    private Long reviewId;
-
-   
-    private int rating;
-
-    
-    private String reviewText;
-
-    
+	
+    private Long reviewId; 
+    private int rating;   
+    private String reviewText;    
     private Date reviewDate;
-
 
 	public ReviewDTO() {
 		super();

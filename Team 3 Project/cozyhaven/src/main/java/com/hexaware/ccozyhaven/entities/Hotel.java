@@ -3,10 +3,10 @@ package com.hexaware.ccozyhaven.entities;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -19,7 +19,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.SequenceGenerator;
+
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -89,24 +89,13 @@ public class Hotel {
     @OneToOne(mappedBy = "hotel" , cascade = CascadeType.ALL)
     @JoinColumn(name="hotel_id")
     @JsonIdentityReference(alwaysAsId = true)
-    
     private HotelOwner hotelOwner;
 
-   
-	public HotelOwner getHotelOwner() {
-		return hotelOwner;
-	}
-
-	public void setHotelOwner(HotelOwner hotelOwner) {
-		this.hotelOwner = hotelOwner;
-	}
 
 	public Hotel() {
         super();
     }
-	
-	
-	
+
 
 	public Hotel(Long hotelId,
 			@NotBlank(message = "Hotel name cannot be blank") @Size(min = 3, max = 100, message = "Hotel name must be between 3 and 100 characters") String hotelName,
@@ -244,6 +233,13 @@ public class Hotel {
     public void setReview(Set<Review> review) {
         this.review = review;
     }
+    public HotelOwner getHotelOwner() {
+		return hotelOwner;
+	}
+
+	public void setHotelOwner(HotelOwner hotelOwner) {
+		this.hotelOwner = hotelOwner;
+	}
 
     @Override
     public String toString() {

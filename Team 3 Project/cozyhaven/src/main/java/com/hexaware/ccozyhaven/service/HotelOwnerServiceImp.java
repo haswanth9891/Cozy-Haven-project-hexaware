@@ -3,12 +3,6 @@ package com.hexaware.ccozyhaven.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +12,6 @@ import com.hexaware.ccozyhaven.dto.HotelOwnerDTO;
 
 import com.hexaware.ccozyhaven.entities.Hotel;
 import com.hexaware.ccozyhaven.entities.HotelOwner;
-import com.hexaware.ccozyhaven.entities.User;
 import com.hexaware.ccozyhaven.exceptions.AuthorizationException;
 import com.hexaware.ccozyhaven.exceptions.DataAlreadyPresentException;
 import com.hexaware.ccozyhaven.exceptions.HotelOwnerNotFoundException;
@@ -33,9 +26,6 @@ import jakarta.transaction.Transactional;
  * Service description: Provides business logic related to the HotelOwner entity.
  * It contains methods for registering a new HotelOwner, logging in, updating details, etc.
  */
-
-
-
 
 @Service
 @Transactional

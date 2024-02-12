@@ -66,40 +66,6 @@ public class HotelOwner {
 		super();
 	}
 	
-	
-
-	
-
-
-
-
-
-
-	public String getUsername() {
-		return username;
-	}
-
-
-
-
-
-
-
-
-
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-
-
-
-
-
-
-
-
 
 	public HotelOwner(Long hotelOwnerId,
 			@NotBlank(message = "Username cannot be blank") @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters") String hotelOwnerName,
@@ -120,36 +86,21 @@ public class HotelOwner {
 
 
 
+	public String getUsername() {
+		return username;
+	}
 
-
-
-
-
-
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
 	public String getRole() {
 		return role;
 	}
 
-
-
 	public void setRole(String role) {
 		this.role = role;
 	}
-
-
-
-	
-
-
-
-	
-
-
-
-	
-
-	
 
 
 	public Long getHotelOwnerId() {

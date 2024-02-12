@@ -47,11 +47,6 @@ public class AdministratorDTO {
 	}
 
 
-
-
-
-
-
 	public Long getAdminId() {
 		return adminId;
 	}

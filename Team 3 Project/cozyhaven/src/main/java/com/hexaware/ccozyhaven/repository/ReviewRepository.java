@@ -15,14 +15,10 @@ import com.hexaware.ccozyhaven.entities.User;
  * It extends JpaRepository to leverage Spring Data JPA features.
  */
 
-
-
 @Repository
 public interface ReviewRepository  extends JpaRepository<Review, Long>{
+	
 	List<Review> findAllByHotel(Hotel hotel);
 	List<Review> findAllByUser(User user);
-
-	
-
 
 }

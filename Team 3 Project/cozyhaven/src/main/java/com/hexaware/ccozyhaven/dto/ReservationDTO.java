@@ -107,6 +107,14 @@ public class ReservationDTO {
 	public void setReservationStatus(String reservationStatus) {
 		this.reservationStatus = reservationStatus;
 	}
+
+
+	@Override
+	public String toString() {
+		return "ReservationDTO [reservationId=" + reservationId + ", checkInDate=" + checkInDate + ", checkOutDate="
+				+ checkOutDate + ", numberOfAdults=" + numberOfAdults + ", numberOfChildren=" + numberOfChildren
+				+ ", totalAmount=" + totalAmount + ", reservationStatus=" + reservationStatus + "]";
+	}
 	
 	
 	

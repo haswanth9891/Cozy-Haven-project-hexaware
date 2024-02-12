@@ -20,10 +20,6 @@ import jakarta.transaction.Transactional;
  * It contains methods for registering a new Hotel, logging in, updating details, etc.
  */
 
-
-
-
-
 @Service
 @Transactional
 public class HotelServiceImp implements IHotelService{

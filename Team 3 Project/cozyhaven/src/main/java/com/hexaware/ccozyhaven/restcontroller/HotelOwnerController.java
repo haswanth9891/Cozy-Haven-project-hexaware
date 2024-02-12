@@ -35,8 +35,6 @@ import com.hexaware.ccozyhaven.service.JwtService;
  * It contains methods for registering a new HotelOwner, logging in, updating details, etc.
  */
 
-
-
 @RestController
 @RequestMapping("/api/hotelowner")
 public class HotelOwnerController {

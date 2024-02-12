@@ -8,10 +8,10 @@ import jakarta.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 /*
@@ -20,8 +20,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
  * Entity description: contains properties related to user , getter and setters , 
  * constructors and relevant validations and mappings
 */
-
-
 
 
 @Entity
@@ -71,30 +69,10 @@ public class User {
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private Set<Review> reviews = new HashSet<>();
-
-	
-	public String getRole() {
-		return role;
-	}
-
-	public void setRole(String role) {
-		this.role = role;
-	}
 	
 	public User() {
 		super();
 	}
-
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	
 
 	public User(Long userId,
 			@NotBlank(message = "Username is required") @Pattern(regexp = "^[a-zA-Z0-9_]+$", message = "Username should contain only alphanumeric characters and underscores") String username,
@@ -131,6 +109,14 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getEmail() {
@@ -196,7 +182,18 @@ public class User {
 	public void setReviews(Set<Review> reviews) {
 		this.reviews = reviews;
 	}
+   
+	public String getRole() {
+		return role;
+	}
 
+	public void setRole(String role) {
+		this.role = role;
+	}
+	
+	
+	
+	
 	@Override
 	public String toString() {
 		return "User [userId=" + userId + ", password=" + password + ", email=" + email + ", firstName=" + firstName

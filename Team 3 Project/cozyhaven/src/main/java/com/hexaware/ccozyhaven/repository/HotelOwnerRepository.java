@@ -19,6 +19,5 @@ public interface HotelOwnerRepository extends JpaRepository<HotelOwner, Long>{
 	
 	@Query("select h from HotelOwner h where h.email=?1")
 	Optional<HotelOwner> findByEmail(String email);
-
 	Optional<HotelOwner> findByUsername(String username);
 }
