@@ -28,6 +28,7 @@ import com.hexaware.ccozyhaven.exceptions.InvalidCancellationException;
 import com.hexaware.ccozyhaven.exceptions.ReservationNotFoundException;
 import com.hexaware.ccozyhaven.exceptions.UserNotFoundException;
 import com.hexaware.ccozyhaven.service.IAdministratorService;
+
 import com.hexaware.ccozyhaven.service.JwtService;
 
 import jakarta.validation.Valid;
@@ -45,18 +46,23 @@ public class AdministratorController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdministratorController.class);
 
 	@Autowired
-	private IAdministratorService administratorService;
-
-	@Autowired
 	JwtService jwtService;
 
 	@Autowired
 	AuthenticationManager authenticationManager;
 
+	private final IAdministratorService administratorService;
+
+	@Autowired
+	public AdministratorController(IAdministratorService administratorService) {
+		this.administratorService = administratorService;
+	}
+
 	@PostMapping("/add-admin")
-	//@PreAuthorize("hasAuthority('ADMIN')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public String createNewAdmin(@RequestBody @Valid AdministratorDTO adminDTO) throws DataAlreadyPresentException {
-		LOGGER.info("Request received to create new Admin: " + adminDTO);
+		LOGGER.info("Request received to create new Admin: {}", adminDTO);
+
 		long adminId = administratorService.register(adminDTO);
 
 		if (adminId != 0) {
@@ -68,8 +74,9 @@ public class AdministratorController {
 
 	@PostMapping("/login")
 	public String login(@RequestBody @Valid AuthRequest authRequest) {
-		LOGGER.info("Request received to login as user: " + authRequest.getUsername() + ", Password: "
-				+ authRequest.getPassword());
+		LOGGER.info("Request received to login as user: {}, Password: {}", authRequest.getUsername(),
+				authRequest.getPassword());
+
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
 
@@ -79,7 +86,7 @@ public class AdministratorController {
 
 			token = jwtService.generateToken(authRequest.getUsername());
 
-			LOGGER.info("Tokent : " + token);
+			LOGGER.info("Tokent : {}", token);
 
 		} else {
 
@@ -112,16 +119,16 @@ public class AdministratorController {
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public List<User> viewAllUsers() {
 		LOGGER.info("Received request to view all users");
-		List<User> users = administratorService.viewAllUser();
-		return users;
+		return administratorService.viewAllUser();
+
 	}
 
 	@GetMapping("/getall-hotelowners")
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public List<HotelOwner> viewAllHotelOwners() {
 		LOGGER.info("Received request to view all hotel owners");
-		List<HotelOwner> hotelOwners = administratorService.viewAllHotelOwner();
-		return hotelOwners;
+		return administratorService.viewAllHotelOwner();
+
 	}
 
 	@DeleteMapping("/manage-room-reservation/{reservationId}")

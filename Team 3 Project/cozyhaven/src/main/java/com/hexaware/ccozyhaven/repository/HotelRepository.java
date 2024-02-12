@@ -22,8 +22,15 @@ import com.hexaware.ccozyhaven.entities.Room;
 @Repository
 public interface HotelRepository extends JpaRepository<Hotel,Long>{
 	
+	List<Hotel> findByLocation(String location);
+	
+	List<Hotel> findByHotelName(String hotelName);
+	
 	
 	@Query("SELECT room FROM Room room WHERE room.hotel.id = :hotelId AND room.availabilityStatus = true")
     List<Room> findAvailableRoomsInHotel(@Param("hotelId") Long hotelId);
+
+
+	
 
 }

@@ -3,22 +3,20 @@ package com.hexaware.ccozyhaven.service;
 
 import java.util.List;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 
-
 import com.hexaware.ccozyhaven.dto.ReviewDTO;
 import com.hexaware.ccozyhaven.entities.Hotel;
 import com.hexaware.ccozyhaven.entities.Review;
 import com.hexaware.ccozyhaven.entities.User;
-import com.hexaware.ccozyhaven.exceptions.AuthorizationException;
+
 import com.hexaware.ccozyhaven.exceptions.HotelNotFoundException;
 import com.hexaware.ccozyhaven.exceptions.ReviewNotFoundException;
-import com.hexaware.ccozyhaven.exceptions.UnauthorizedAccessException;
+
 import com.hexaware.ccozyhaven.exceptions.UserNotFoundException;
 import com.hexaware.ccozyhaven.repository.HotelRepository;
 import com.hexaware.ccozyhaven.repository.ReviewRepository;
@@ -77,30 +75,26 @@ public class ReviewServiceImp implements IReviewService {
 
 	@Override
 
-	public void updateReviewById(Long reviewId, ReviewDTO reviewDTO)
-			throws ReviewNotFoundException, AuthorizationException, UnauthorizedAccessException {
+	public void updateReviewById(Long reviewId, ReviewDTO reviewDTO) throws ReviewNotFoundException {
 		LOGGER.info("Updating review with ID {}", reviewId);
 		Review existingReview = getReviewById(reviewId);
 
-		
+		existingReview.setRating(reviewDTO.getRating());
+		existingReview.setReviewText(reviewDTO.getReviewText());
+		existingReview.setReviewDate(reviewDTO.getReviewDate());
 
-			existingReview.setRating(reviewDTO.getRating());
-			existingReview.setReviewText(reviewDTO.getReviewText());
-			existingReview.setReviewDate(reviewDTO.getReviewDate());
+		reviewRepository.save(existingReview);
+		LOGGER.info("Review updated successfully");
 
-			reviewRepository.save(existingReview);
-			LOGGER.info("Review updated successfully");
-		
 	}
 
 	@Override
-	public void deleteReviewById(Long reviewId)
-			throws ReviewNotFoundException, AuthorizationException, UnauthorizedAccessException {
+	public void deleteReviewById(Long reviewId) throws ReviewNotFoundException {
 		LOGGER.info("Deleting review with ID {}", reviewId);
 
 		Review reviewToDelete = getReviewById(reviewId);
+		reviewRepository.deleteById(reviewId);
 
-		
 	}
 
 	@Override

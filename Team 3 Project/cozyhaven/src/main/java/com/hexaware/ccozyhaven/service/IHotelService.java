@@ -7,11 +7,16 @@ import com.hexaware.ccozyhaven.entities.Room;
 import com.hexaware.ccozyhaven.exceptions.HotelNotFoundException;
 
 public interface IHotelService {
-	//list all hotels
+	
+	
 	public List<Hotel> getAllHotels();
-	//get hotel Details By Id
+	
 	public Hotel getHotelDetailsById(Long hotelId) throws HotelNotFoundException;
-	//get all available rooms in hotel
+	
 	List<Room> getAllAvailableRoomsInHotel(Long hotelId);
+	
+	public List<Hotel> findHotelsByLocation(String location);
+	
+	public List<Hotel> findHotelsByHotelName(String hotelName);
 
 }

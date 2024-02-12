@@ -30,6 +30,7 @@ import com.hexaware.ccozyhaven.repository.RoomRepository;
 import com.hexaware.ccozyhaven.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
+
 /*
  * Author: Nafisa
  * 
@@ -48,6 +49,8 @@ public class ReservationServiceImp implements IReservationService {
 	private UserRepository userRepository;
 	@Autowired
 	private RoomRepository roomRepository;
+	
+	private static String roomNotFound = "Room not found with id: ";
 
 	@Override
 	public List<Reservation> viewReservationByHotelId(Long hotelId) {
@@ -63,20 +66,20 @@ public class ReservationServiceImp implements IReservationService {
 
 	}
 
-
 	@Override
-	
+
 	public boolean reservationRoom(Long userId, List<BookedRoomDTO> bookedRooms, LocalDate checkInDate,
-			LocalDate checkOutDate) throws RoomNotAvailableException, RoomNotFoundException, UserNotFoundException, InconsistentHotelException {
+			LocalDate checkOutDate)
+			throws RoomNotAvailableException, RoomNotFoundException, UserNotFoundException, InconsistentHotelException {
 		LOGGER.info("Making a reservation for user with ID: {} and rooms", userId);
-		
-		 Set<Long> uniqueRoomIds = new HashSet<>();
-		    for (BookedRoomDTO bookedRoom : bookedRooms) {
-		        Long roomId = bookedRoom.getRoomId();
-		        if (!uniqueRoomIds.add(roomId)) {
-		            throw new IllegalArgumentException("Duplicate room ID found: " + roomId);
-		        }
-		    }
+
+		Set<Long> uniqueRoomIds = new HashSet<>();
+		for (BookedRoomDTO bookedRoom : bookedRooms) {
+			Long roomId = bookedRoom.getRoomId();
+			if (!uniqueRoomIds.add(roomId)) {
+				throw new IllegalArgumentException("Duplicate room ID found: " + roomId);
+			}
+		}
 
 		for (BookedRoomDTO bookedRoom : bookedRooms) {
 			if (!isRoomAvailable(bookedRoom.getRoomId(), checkInDate, checkOutDate)) {
@@ -113,17 +116,19 @@ public class ReservationServiceImp implements IReservationService {
 
 		Set<Room> rooms = new HashSet<>();
 
-		//setting reservation in each room and checking if every room is from same hotel
+		// setting reservation in each room and checking if every room is from same
+		// hotel
 		for (BookedRoomDTO bookedRoom : bookedRooms) {
+			
 			Room room = roomRepository.findById(bookedRoom.getRoomId())
-					.orElseThrow(() -> new RoomNotFoundException("Room not found with id: " + bookedRoom.getRoomId()));
+					.orElseThrow(() -> new RoomNotFoundException(roomNotFound + bookedRoom.getRoomId()));
 			room.getReservations().add(reservation);
 			rooms.add(room);
-			 if (firstHotel == null) {
-		            firstHotel = room.getHotel();
-		        } else if (!firstHotel.equals(room.getHotel())) {
-		            throw new InconsistentHotelException("Rooms from different hotels cannot be booked together.");
-		        }
+			if (firstHotel == null) {
+				firstHotel = room.getHotel();
+			} else if (!firstHotel.equals(room.getHotel())) {
+				throw new InconsistentHotelException("Rooms from different hotels cannot be booked together.");
+			}
 		}
 		reservation.setRooms(rooms);
 
@@ -142,6 +147,7 @@ public class ReservationServiceImp implements IReservationService {
 			throws RoomNotFoundException {
 		LOGGER.info("Checking room availability with ID: {}", roomId);
 		Optional<Room> optionalRoom = roomRepository.findById(roomId);
+		
 
 		if (optionalRoom.isPresent()) {
 			Room room = optionalRoom.get();
@@ -151,15 +157,13 @@ public class ReservationServiceImp implements IReservationService {
 
 			return overlappingReservations.isEmpty();
 		} else {
-			throw new RoomNotFoundException("Room not found with id: " + roomId);
+			throw new RoomNotFoundException(roomNotFound + roomId);
 		}
 	}
 
 	public double calculateTotalFare(Long roomId, int numberOfAdults, int numberOfChildren)
 			throws RoomNotFoundException {
-		if (numberOfAdults <= 0) {
-			throw new IllegalArgumentException("Number of adults must be greater than zero.");
-		}
+		validateNumberOfAdults(numberOfAdults);
 
 		Optional<Room> optionalRoom = roomRepository.findById(roomId);
 
@@ -168,7 +172,7 @@ public class ReservationServiceImp implements IReservationService {
 			double baseFare = room.getBaseFare();
 
 			int maxCapacity = calculateMaxCapacity(room);
-			int occupancy = room.getMaxOccupancy() ;
+			int occupancy = room.getMaxOccupancy();
 
 			int totalPeople = numberOfAdults + numberOfChildren;
 			if (totalPeople > maxCapacity) {
@@ -177,35 +181,51 @@ public class ReservationServiceImp implements IReservationService {
 			double additionalCharge = 0;
 			if (totalPeople > occupancy) {
 
-				if (numberOfAdults == occupancy) {
-					for (int i = 1; i <= numberOfChildren; i++) {
-						additionalCharge += baseFare * 0.4;
-					}
-
-				} else if (numberOfAdults > occupancy) {
-					int remainingAdults = 0;
-					remainingAdults = numberOfAdults - occupancy;
-					for (int i = 1; i <= remainingAdults; i++) {
-						additionalCharge += baseFare * 0.6;
-					}
-					for (int i = 1; i <= numberOfChildren; i++) {
-						additionalCharge += baseFare * 0.4;
-					}
-				} else {
-					int remainingChildren = 0;
-					remainingChildren = maxCapacity - occupancy;
-					for (int i = 1; i <= remainingChildren; i++) {
-						additionalCharge += baseFare * 0.4;
-					}
-
-				}
+				additionalCharge = calculateAdditionalCharge(numberOfAdults, numberOfChildren, totalPeople, occupancy,
+						maxCapacity, baseFare);
 			}
 
 			double totalFare = baseFare + additionalCharge;
 			return totalFare;
 		} else {
-			throw new RoomNotFoundException("Room not found with id: " + roomId);
+			
+			throw new RoomNotFoundException(roomNotFound + roomId);
 		}
+	}
+
+	private void validateNumberOfAdults(int numberOfAdults) {
+		if (numberOfAdults <= 0) {
+			throw new IllegalArgumentException("Number of adults must be greater than zero.");
+		}
+	}
+
+	private double calculateAdditionalCharge(int numberOfAdults, int numberOfChildren, int totalPeople, int occupancy,
+			int maxCapacity, double baseFare) {
+		double additionalCharge = 0;
+
+		if (numberOfAdults == occupancy) {
+			for (int i = 1; i <= numberOfChildren; i++) {
+				additionalCharge += baseFare * 0.4;
+			}
+
+		} else if (numberOfAdults > occupancy) {
+			int remainingAdults = 0;
+			remainingAdults = numberOfAdults - occupancy;
+			for (int i = 1; i <= remainingAdults; i++) {
+				additionalCharge += baseFare * 0.6;
+			}
+			for (int i = 1; i <= numberOfChildren; i++) {
+				additionalCharge += baseFare * 0.4;
+			}
+		} else {
+			int remainingChildren = 0;
+			remainingChildren = maxCapacity - totalPeople;
+			for (int i = 1; i <= remainingChildren; i++) {
+				additionalCharge += baseFare * 0.4;
+			}
+
+		}
+		return additionalCharge;
 	}
 
 	private int calculateMaxCapacity(Room room) {
@@ -226,8 +246,8 @@ public class ReservationServiceImp implements IReservationService {
 		LOGGER.info("Calculating refund amount for reservation with ID: {}", reservationId);
 		Reservation reservation = reservationRepository.findById(reservationId)
 				.orElseThrow(() -> new ReservationNotFoundException("Reservation not found with id: " + reservationId));
-
-		if ("CANCELLED".equals(reservation.getReservationStatus())) {
+		String reservationStatus = "CANCELLED";
+		if (reservationStatus.equals(reservation.getReservationStatus())) {
 
 			if (!reservation.isRefundProcessed()) {
 
@@ -256,20 +276,18 @@ public class ReservationServiceImp implements IReservationService {
 		return reservationRepository.findByUserId(userId);
 	}
 
-
-
 	@Override
 	public void cancelReservationAndRequestRefund(Long userId, Long reservationId)
-	
+
 			throws InvalidCancellationException, ReservationNotFoundException {
 		LOGGER.info("Cancelling reservation with refund request for ID: {} for user with ID: {}", reservationId,
 				userId);
 		Reservation reservation = reservationRepository.findByReservationIdAndUser_UserId(reservationId, userId)
 				.orElseThrow(() -> new ReservationNotFoundException("Reservation not found with id: " + reservationId));
+		String reservationStatus = "CANCELLED";
+		if (reservation.getReservationStatus() != reservationStatus) {
 
-		if (reservation.getReservationStatus() != "CANCELLED") {
-
-			reservation.setReservationStatus("CANCELLED");
+			reservation.setReservationStatus(reservationStatus);
 			reservationRepository.save(reservation);
 		} else {
 			throw new InvalidCancellationException("Reservation is already cancelled.");

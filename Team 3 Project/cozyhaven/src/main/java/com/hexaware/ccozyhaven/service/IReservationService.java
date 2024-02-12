@@ -21,13 +21,10 @@ public interface IReservationService {
 	public double refundAmount(Long reservationId)
 			throws RefundProcessedException, InvalidRefundException, ReservationNotFoundException;
 
-
 	boolean reservationRoom(Long userId, List<BookedRoomDTO> bookedRooms, LocalDate checkInDate, LocalDate checkOutDate)
 			throws RoomNotAvailableException, RoomNotFoundException, UserNotFoundException, InconsistentHotelException;
 
 	public List<Reservation> getUserReservations(Long userId);
-
-//	public void cancelReservation(Long userId, Long reservationId) throws ReservationNotFoundException;
 
 	public void cancelReservationAndRequestRefund(Long userId, Long reservationId)
 			throws InvalidCancellationException, ReservationNotFoundException;
@@ -35,9 +32,5 @@ public interface IReservationService {
 	List<Reservation> viewValidReservationByHotelId(Long hotelId);
 
 	boolean isRoomAvailable(Long roomId, LocalDate checkInDate, LocalDate checkOutDate) throws RoomNotFoundException;
-
-	
-
-	
 
 }

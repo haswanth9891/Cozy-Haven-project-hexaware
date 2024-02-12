@@ -2,9 +2,7 @@ package com.hexaware.ccozyhaven.dto;
 
 import java.util.Date;
 
-import jakarta.persistence.Column;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
+
 /*
  * Author: Haswanth
  * 

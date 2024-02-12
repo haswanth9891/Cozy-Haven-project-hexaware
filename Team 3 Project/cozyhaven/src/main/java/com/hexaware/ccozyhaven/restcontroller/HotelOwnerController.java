@@ -21,12 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hexaware.ccozyhaven.dto.HotelOwnerDTO;
 import com.hexaware.ccozyhaven.dto.AuthRequest;
 
-import com.hexaware.ccozyhaven.exceptions.AuthorizationException;
 import com.hexaware.ccozyhaven.exceptions.DataAlreadyPresentException;
 import com.hexaware.ccozyhaven.exceptions.HotelOwnerNotFoundException;
-import com.hexaware.ccozyhaven.exceptions.UnauthorizedAccessException;
 
 import com.hexaware.ccozyhaven.service.IHotelOwnerService;
+
 import com.hexaware.ccozyhaven.service.JwtService;
 /*
  * Author: Nafisa
@@ -41,8 +40,12 @@ public class HotelOwnerController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(HotelOwnerController.class);
 
+	private final IHotelOwnerService hotelOwnerService;
+
 	@Autowired
-	private IHotelOwnerService hotelOwnerService;
+	public HotelOwnerController(IHotelOwnerService hotelOwnerService) {
+		this.hotelOwnerService = hotelOwnerService;
+	}
 
 	@Autowired
 	JwtService jwtService;
@@ -52,7 +55,7 @@ public class HotelOwnerController {
 
 	@PostMapping("/register")
 	public String registerCustomer(@RequestBody HotelOwnerDTO hotelOwnerDTO) throws DataAlreadyPresentException {
-		LOGGER.info("Request Received to register new Hotel Owner: " + hotelOwnerDTO);
+		LOGGER.info("Request Received to register new Hotel Owner: {}",  hotelOwnerDTO);
 		long hotelOwnerId = hotelOwnerService.registerHotelOwner(hotelOwnerDTO);
 
 		if (hotelOwnerId != 0) {
@@ -71,7 +74,7 @@ public class HotelOwnerController {
 		if (authentication.isAuthenticated()) {
 			token = jwtService.generateToken(loginDto.getUsername());
 			if (token != null) {
-				LOGGER.info("Token for Hotel Owner: " + token);
+				LOGGER.info("Token for Hotel Owner: {}", token);
 			} else {
 				LOGGER.warn("Token not generated");
 			}
@@ -84,8 +87,7 @@ public class HotelOwnerController {
 	@PutMapping("/update/{hotelOwnerId}")
 	@PreAuthorize("hasAuthority('HOTEL_OWNER')")
 	public ResponseEntity<String> updateHotelOwner(@PathVariable Long hotelOwnerId,
-			@RequestBody HotelOwnerDTO updatedHotelOwnerDTO)
-			throws AuthorizationException, UnauthorizedAccessException {
+			@RequestBody HotelOwnerDTO updatedHotelOwnerDTO) {
 		try {
 			hotelOwnerService.updateHotelOwnerWithHotel(hotelOwnerId, updatedHotelOwnerDTO);
 			return new ResponseEntity<>("HotelOwner updated successfully", HttpStatus.OK);
@@ -97,8 +99,7 @@ public class HotelOwnerController {
 
 	@DeleteMapping("/delete/{hotelOwnerId}")
 	@PreAuthorize("hasAuthority('HOTEL_OWNER')")
-	public ResponseEntity<String> deleteHotelOwner(@PathVariable Long hotelOwnerId)
-			throws AuthorizationException, UnauthorizedAccessException {
+	public ResponseEntity<String> deleteHotelOwner(@PathVariable Long hotelOwnerId) {
 		try {
 			LOGGER.info("delete hotel owner");
 			hotelOwnerService.deleteHotelOwner(hotelOwnerId);

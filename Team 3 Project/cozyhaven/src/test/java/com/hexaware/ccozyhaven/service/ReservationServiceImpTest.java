@@ -39,16 +39,12 @@ class ReservationServiceImpTest {
 	@Autowired
 	ReservationRepository reservationRepository;
 	
-	@Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private RoomRepository roomRepository;
+	
 
 	@Test
 	void testViewReservationByHotelId() {
 
-		Long hotelId = 3L;
+		Long hotelId = 1L;
 		List<Reservation> reservations = reservationService.viewReservationByHotelId(hotelId);
 		assertNotNull(reservations);
 		assertFalse(reservations.isEmpty());
@@ -57,6 +53,7 @@ class ReservationServiceImpTest {
 		}
 	}
 
+	@Test
 	void testViewValidReservationByHotelId() {
 
 		Long hotelId = 1L;
@@ -69,37 +66,28 @@ class ReservationServiceImpTest {
 		}
 	}
 
-	@Disabled
+	
 	@Test
 	void testReservationRoom() throws RoomNotAvailableException, RoomNotFoundException, UserNotFoundException, InconsistentHotelException {
 	    // Arrange: Prepare test data
-	    Long userId = 2L;
+	    Long userId = 1L;
 
 	    List<BookedRoomDTO> bookedRooms = new ArrayList<>();
 	    
-		Long roomId = 5L;
+		Long roomId = 3L;
 		int numberOfAdults = 2;
 		int numberOfChildren = 1;
 
 	    LocalDate checkInDate = LocalDate.now();
 	    LocalDate checkOutDate = LocalDate.now().plusDays(7);
 
-	    // Create a User
-	    User user = new User();
-	    user.setUserId(userId);
-	    // Save the user to the in-memory database
-	    userRepository.save(user);
+	    
 
-	    // Create a Room
-	    Room room = new Room();
-	    // Save the room to the in-memory database
-	    roomRepository.save(room);
-
-	    // Act: Call the method to be tested
+	    
 	    try {
 	        boolean reservationResult = reservationService.reservationRoom(userId, bookedRooms, checkInDate, checkOutDate);
 
-	        // Assert: Validate the result
+	        
 	        assertTrue(reservationResult, "Reservation should be successful");
 	    } catch (Exception e) {
 	        fail("Exception occurred: " + e.getMessage());
@@ -108,14 +96,14 @@ class ReservationServiceImpTest {
 
 	@Test
 	void testGetUserReservations() {
-		Long userId = 3L;
+		Long userId = 1L;
 		List<Reservation> reservations = reservationService.getUserReservations(userId);
 		assertNotNull(reservations);
 	}
 
 	
 
-	@Disabled
+	
 	@Test
 	void testCancelReservationAndRequestRefund() {
 		Long userId = 1L;
@@ -123,11 +111,12 @@ class ReservationServiceImpTest {
 		assertDoesNotThrow(() -> reservationService.cancelReservationAndRequestRefund(userId, reservationId));
 	}
 
-	@Disabled
+	
 	@Test
 	void testRefundAmount() throws RefundProcessedException, InvalidRefundException, ReservationNotFoundException {
-		Long reservationId = 5L;
+		Long reservationId = 1L;
 		Reservation reservation = reservationRepository.findById(reservationId).orElseThrow();
+		reservation.setReservationStatus("CANCELLED");
 
 		double refundedAmount = reservationService.refundAmount(reservationId);
 

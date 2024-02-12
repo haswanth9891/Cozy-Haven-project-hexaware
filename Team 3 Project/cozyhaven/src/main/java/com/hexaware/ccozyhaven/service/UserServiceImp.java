@@ -6,13 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-
 import com.hexaware.ccozyhaven.dto.UserDTO;
 
 import com.hexaware.ccozyhaven.entities.User;
-import com.hexaware.ccozyhaven.exceptions.AuthorizationException;
+
 import com.hexaware.ccozyhaven.exceptions.DataAlreadyPresentException;
-import com.hexaware.ccozyhaven.exceptions.UnauthorizedAccessException;
+
 import com.hexaware.ccozyhaven.exceptions.UserNotFoundException;
 
 import com.hexaware.ccozyhaven.repository.UserRepository;
@@ -31,9 +30,6 @@ public class UserServiceImp implements IUserService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImp.class);
 
-	
-
-
 	@Autowired
 	PasswordEncoder passwordEncoder;
 
@@ -50,7 +46,6 @@ public class UserServiceImp implements IUserService {
 	@Override
 	public Long register(UserDTO userDTO) throws DataAlreadyPresentException {
 
-		
 		User user = new User();
 		user.setFirstName(userDTO.getUserFirstName());
 		user.setLastName(userDTO.getUserLastName());
@@ -73,55 +68,52 @@ public class UserServiceImp implements IUserService {
 	}
 
 	@Override
-	
-	public User updateUser(Long userId, UserDTO updatedUserDTO) throws UserNotFoundException, AuthorizationException, UnauthorizedAccessException {
+
+	public User updateUser(Long userId, UserDTO updatedUserDTO)
+			throws UserNotFoundException {
 		LOGGER.info("Updating user with ID {}", userId);
-		
 
-			User existingUser = userRepository.findById(userId)
-					.orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
+		User existingUser = userRepository.findById(userId)
+				.orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
 
-			existingUser.setEmail(updatedUserDTO.getEmail());
+		existingUser.setEmail(updatedUserDTO.getEmail());
 
-			existingUser.setFirstName(updatedUserDTO.getUserFirstName());
+		existingUser.setFirstName(updatedUserDTO.getUserFirstName());
 
-			existingUser.setLastName(updatedUserDTO.getUserLastName());
-			existingUser.setContactNumber(updatedUserDTO.getContactNumber());
-			existingUser.setUsername(updatedUserDTO.getUsername());
-			existingUser.setPassword(updatedUserDTO.getPassword());
-			existingUser.setGender(updatedUserDTO.getGender());
-			existingUser.setAddress(updatedUserDTO.getAddress());
+		existingUser.setLastName(updatedUserDTO.getUserLastName());
+		existingUser.setContactNumber(updatedUserDTO.getContactNumber());
+		existingUser.setUsername(updatedUserDTO.getUsername());
+		existingUser.setPassword(passwordEncoder.encode(updatedUserDTO.getPassword()));
+		existingUser.setGender(updatedUserDTO.getGender());
+		existingUser.setAddress(updatedUserDTO.getAddress());
 
-			LOGGER.info("User updated successfully");
-			return userRepository.save(existingUser);
-		
-		}
+		LOGGER.info("User updated successfully");
+		return userRepository.save(existingUser);
 
-	
-	
-	@Override
-	
-	public String deleteUser(Long userId) throws UserNotFoundException, AuthorizationException, UnauthorizedAccessException {
-	    LOGGER.info("Deleting user with ID {}", userId);
-	    try {
-	        // Delete the user
-	        userRepository.deleteById(userId);
-
-	        LOGGER.info("User with ID {} deleted successfully", userId);
-	        return "User with ID " + userId + " deleted successfully";
-	    
-	    } catch (Exception e) {
-	        LOGGER.error("Error deleting user with ID {}: {}", userId, e.getMessage());
-	        return "Error deleting user with ID " + userId + ": " + e.getMessage();
-	    }
-
-	   
 	}
 
 	@Override
-    public User findById(Long userId) { 
-        return userRepository.findById(userId).orElse(null);
-    }
 
-	
+	public String deleteUser(Long userId) throws UserNotFoundException {
+		LOGGER.info("Deleting user with ID {}", userId);
+		try {
+
+			userRepository.deleteById(userId);
+
+			LOGGER.info("User with ID {} deleted successfully", userId);
+			return "User with ID " + userId + " deleted successfully";
+
+		} catch (Exception e) {
+			LOGGER.error("Error deleting user with ID {}: {}", userId, e.getMessage());
+			return "Error deleting user with ID " + userId + ": " + e.getMessage();
+		}
+
+	}
+
+	@Override
+	public User findById(Long userId) throws UserNotFoundException {
+		return userRepository.findById(userId)
+				.orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
+	}
+
 }

@@ -8,7 +8,6 @@ import jakarta.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -21,7 +20,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
  * constructors and relevant validations and mappings
 */
 
-
 @Entity
 @Table(name = "User_Details")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "userId")
@@ -31,7 +29,7 @@ public class User {
 	@Column(name = "user_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long userId;
-	
+
 	@NotBlank(message = "Username is required")
 	@Pattern(regexp = "^[a-zA-Z0-9_]+$", message = "Username should contain only alphanumeric characters and underscores")
 	private String username;
@@ -61,15 +59,13 @@ public class User {
 
 	private String role;
 
-	
-
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	@JsonIgnoreProperties("user")
 	private Set<Reservation> reservations = new HashSet<>();
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private Set<Review> reviews = new HashSet<>();
-	
+
 	public User() {
 		super();
 	}
@@ -110,7 +106,7 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+
 	public String getUsername() {
 		return username;
 	}
@@ -182,7 +178,7 @@ public class User {
 	public void setReviews(Set<Review> reviews) {
 		this.reviews = reviews;
 	}
-   
+
 	public String getRole() {
 		return role;
 	}
@@ -190,10 +186,7 @@ public class User {
 	public void setRole(String role) {
 		this.role = role;
 	}
-	
-	
-	
-	
+
 	@Override
 	public String toString() {
 		return "User [userId=" + userId + ", password=" + password + ", email=" + email + ", firstName=" + firstName

@@ -12,135 +12,126 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.hexaware.ccozyhaven.dto.RoomDTO;
 import com.hexaware.ccozyhaven.entities.Room;
-import com.hexaware.ccozyhaven.exceptions.AuthorizationException;
+
 import com.hexaware.ccozyhaven.exceptions.HotelNotFoundException;
 import com.hexaware.ccozyhaven.exceptions.HotelOwnerMismatchException;
 import com.hexaware.ccozyhaven.exceptions.RoomNotFoundException;
-import com.hexaware.ccozyhaven.exceptions.UnauthorizedAccessException;
+
 import com.hexaware.ccozyhaven.repository.ReservationRepository;
 import com.hexaware.ccozyhaven.repository.RoomRepository;
 
 import jakarta.transaction.Transactional;
+
 @SpringBootTest
 @Transactional
 class RoomServiceImpTest {
-	
-	
+
 	@Autowired
-    private RoomServiceImp roomService;
+	private RoomServiceImp roomService;
 
-    @Autowired
-    private RoomRepository roomRepository;
+	@Autowired
+	private RoomRepository roomRepository;
 
-    @Autowired
-    private ReservationRepository reservationRepository;
+	@Test
 
-    @Test
-    @Disabled
-    void testAddRoomToHotel() throws HotelNotFoundException, HotelOwnerMismatchException, UnauthorizedAccessException {
-        RoomDTO roomDTO = new RoomDTO();
-        roomDTO.setRoomSize("Standard");
-        roomDTO.setBedType("double bed");
-        roomDTO.setMaxOccupancy(2);
-        roomDTO.setBaseFare(100.0);
-        roomDTO.setAC(true);
-        roomDTO.setAvailabilityStatus(true);
+	void testAddRoomToHotel() throws HotelNotFoundException, HotelOwnerMismatchException {
+		RoomDTO roomDTO = new RoomDTO();
+		roomDTO.setRoomSize("40 m²/430 ft²");
+		roomDTO.setBedType("double bed");
+		roomDTO.setMaxOccupancy(2);
+		roomDTO.setBaseFare(100.0);
+		roomDTO.setAC(true);
+		roomDTO.setAvailabilityStatus(true);
 
-        Long hotelId = 1L;
+		Long hotelId = 1L;
 
-        Room savedRoom = roomService.addRoomToHotel(roomDTO, hotelId);
+		Room savedRoom = roomService.addRoomToHotel(roomDTO, hotelId);
 
-        assertNotNull(savedRoom);
-        assertNotNull(savedRoom.getRoomId());
-        assertEquals(roomDTO.getRoomSize(), savedRoom.getRoomSize());
-        assertEquals(roomDTO.getBedType(), savedRoom.getBedType());
-        assertEquals(roomDTO.getMaxOccupancy(), savedRoom.getMaxOccupancy());
-        assertEquals(roomDTO.getBaseFare(), savedRoom.getBaseFare());
-        assertEquals(roomDTO.isAC(), savedRoom.isAC());
-        assertEquals(roomDTO.isAvailabilityStatus(), savedRoom.isAvailabilityStatus());
-    }
+		assertNotNull(savedRoom);
+		assertNotNull(savedRoom.getRoomId());
+		assertEquals(roomDTO.getRoomSize(), savedRoom.getRoomSize());
+		assertEquals(roomDTO.getBedType(), savedRoom.getBedType());
+		assertEquals(roomDTO.getMaxOccupancy(), savedRoom.getMaxOccupancy());
+		assertEquals(roomDTO.getBaseFare(), savedRoom.getBaseFare());
+		assertEquals(roomDTO.isAC(), savedRoom.isAC());
+		assertEquals(roomDTO.isAvailabilityStatus(), savedRoom.isAvailabilityStatus());
+	}
 
-    @Test
-    void testEditRoom() throws RoomNotFoundException, UnauthorizedAccessException, AuthorizationException {
-       
-        RoomDTO updatedRoomDTO = new RoomDTO();
-        updatedRoomDTO.setRoomSize("Deluxe");
-        updatedRoomDTO.setBedType("king size");
-        updatedRoomDTO.setMaxOccupancy(3);
-        updatedRoomDTO.setBaseFare(150.0);
-        updatedRoomDTO.setAC(true);
-        updatedRoomDTO.setAvailabilityStatus(false);
+	@Test
+	void testEditRoom() throws RoomNotFoundException {
 
-        Long roomId = 3L;
+		Long roomId = 3L;
 
-        
-        Room editedRoom = roomService.editRoom(roomId, updatedRoomDTO);
+		RoomDTO updatedRoomDTO = new RoomDTO();
+		updatedRoomDTO.setRoomSize("55 m²/592 ft²");
+		updatedRoomDTO.setBedType("king size");
+		updatedRoomDTO.setMaxOccupancy(4);
+		updatedRoomDTO.setBaseFare(150.0);
+		updatedRoomDTO.setAC(true);
+		updatedRoomDTO.setAvailabilityStatus(false);
 
-       
-        assertNotNull(editedRoom);
-        assertEquals(updatedRoomDTO.getRoomSize(), editedRoom.getRoomSize());
-        assertEquals(updatedRoomDTO.getBedType(), editedRoom.getBedType());
-        assertEquals(updatedRoomDTO.getMaxOccupancy(), editedRoom.getMaxOccupancy());
-        assertEquals(updatedRoomDTO.getBaseFare(), editedRoom.getBaseFare());
-        assertEquals(updatedRoomDTO.isAC(), editedRoom.isAC());
-        assertEquals(updatedRoomDTO.isAvailabilityStatus(), editedRoom.isAvailabilityStatus());
-    }
+		Room editedRoom = roomService.editRoom(roomId, updatedRoomDTO);
 
+		assertNotNull(editedRoom);
+		assertEquals(updatedRoomDTO.getRoomSize(), editedRoom.getRoomSize());
+		assertEquals(updatedRoomDTO.getBedType(), editedRoom.getBedType());
+		assertEquals(updatedRoomDTO.getMaxOccupancy(), editedRoom.getMaxOccupancy());
+		assertEquals(updatedRoomDTO.getBaseFare(), editedRoom.getBaseFare());
+		assertEquals(updatedRoomDTO.isAC(), editedRoom.isAC());
+		assertEquals(updatedRoomDTO.isAvailabilityStatus(), editedRoom.isAvailabilityStatus());
+	}
 
-    @Test
-    void testRemoveRoom() throws RoomNotFoundException, UnauthorizedAccessException, AuthorizationException {
-       
-        Long roomIdToRemove = 3L;
+	@Test
+	void testRemoveRoom() throws RoomNotFoundException {
 
-     
-        roomService.removeRoom(roomIdToRemove);
+		Long roomIdToRemove = 3L;
 
-        assertThrows(RoomNotFoundException.class, () -> roomRepository.findById(roomIdToRemove).orElseThrow(() -> new RoomNotFoundException("Room not found with id: " + roomIdToRemove)));
-    }
+		roomService.removeRoom(roomIdToRemove);
 
-    @Test
-    void testSearchRooms() {
-      
-        String location = "Location XYZ";
-        LocalDate checkInDate = LocalDate.of(2024, 2, 10);
-        LocalDate checkOutDate = LocalDate.of(2024, 2, 15);
+		assertThrows(RoomNotFoundException.class, () -> roomRepository.findById(roomIdToRemove)
+				.orElseThrow(() -> new RoomNotFoundException("Room not found with id: " + roomIdToRemove)));
+	}
 
-       
-        List<Room> availableRooms = roomService.searchRooms(location, checkInDate, checkOutDate);
+	@Test
+	void testSearchRooms() {
 
-        assertNotNull(availableRooms);
-        assertFalse(availableRooms.isEmpty());
-        
-    }
+		String location = "Hyderabad";
+		LocalDate checkInDate = LocalDate.of(2024, 4, 10);
+		LocalDate checkOutDate = LocalDate.of(2024, 4, 15);
 
+		List<Room> availableRooms = roomService.searchRooms(location, checkInDate, checkOutDate);
+
+		assertNotNull(availableRooms);
+		assertFalse(availableRooms.isEmpty());
+
+	}
 
 	@Test
 	void testIsRoomAvailable() throws RoomNotFoundException {
-	    
-	    Long roomId = 3L;
-	    LocalDate checkInDate = LocalDate.of(2024, 3, 20);
-	    LocalDate checkOutDate = LocalDate.of(2024, 3, 25);
 
-	  
-	    boolean isAvailable = roomService.isRoomAvailable(roomId, checkInDate, checkOutDate);
+		Long roomId = 3L;
+		LocalDate checkInDate = LocalDate.of(2024, 3, 20);
+		LocalDate checkOutDate = LocalDate.of(2024, 3, 25);
 
-	    // Assert
-	    assertTrue(isAvailable);
-	    
+		boolean isAvailable = roomService.isRoomAvailable(roomId, checkInDate, checkOutDate);
+
+		// Assert
+		assertTrue(isAvailable);
+
 	}
+
 	@Test
 	void testCalculateTotalFare() throws RoomNotFoundException {
-	   
-	    Long roomId = 3L;
-	    int numberOfAdults = 2;
-	    int numberOfChildren = 2;
 
-	    
-	    double totalFare = roomService.calculateTotalFare(roomId, numberOfAdults, numberOfChildren);
+		Long roomId = 3L;
+		int numberOfAdults = 2;
+		int numberOfChildren = 3;
 
-	    // Assert
-	    assertTrue(totalFare > 0);
-	    
+		double totalFare = roomService.calculateTotalFare(roomId, numberOfAdults, numberOfChildren);
+
+		assertTrue(totalFare > 0);
+		assertEquals(280, totalFare);
+
 	}
 
 }

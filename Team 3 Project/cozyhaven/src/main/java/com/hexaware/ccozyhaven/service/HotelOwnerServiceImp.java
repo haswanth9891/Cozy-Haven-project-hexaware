@@ -6,16 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-
 import com.hexaware.ccozyhaven.dto.HotelDTO;
 import com.hexaware.ccozyhaven.dto.HotelOwnerDTO;
 
 import com.hexaware.ccozyhaven.entities.Hotel;
 import com.hexaware.ccozyhaven.entities.HotelOwner;
-import com.hexaware.ccozyhaven.exceptions.AuthorizationException;
+
 import com.hexaware.ccozyhaven.exceptions.DataAlreadyPresentException;
 import com.hexaware.ccozyhaven.exceptions.HotelOwnerNotFoundException;
-import com.hexaware.ccozyhaven.exceptions.UnauthorizedAccessException;
+
 import com.hexaware.ccozyhaven.repository.HotelOwnerRepository;
 import com.hexaware.ccozyhaven.repository.HotelRepository;
 
@@ -51,8 +50,6 @@ public class HotelOwnerServiceImp implements IHotelOwnerService {
 
 	@Override
 	public Long registerHotelOwner(HotelOwnerDTO hotelOwnerDTO) throws DataAlreadyPresentException {
-
-		
 
 		LOGGER.info("Adding hotel owner with hotel: {}", hotelOwnerDTO);
 
@@ -102,9 +99,9 @@ public class HotelOwnerServiceImp implements IHotelOwnerService {
 	}
 
 	@Override
-	
+
 	public void updateHotelOwnerWithHotel(Long hotelOwnerId, HotelOwnerDTO updatedHotelOwnerDTO)
-			throws HotelOwnerNotFoundException, AuthorizationException, UnauthorizedAccessException {
+			throws HotelOwnerNotFoundException {
 
 		LOGGER.info("Updating hotel owner with ID: {}", hotelOwnerId);
 		HotelOwner existingHotelOwner = hotelOwnerRepository.findById(hotelOwnerId)
@@ -116,6 +113,7 @@ public class HotelOwnerServiceImp implements IHotelOwnerService {
 		existingHotelOwner.setEmail(updatedHotelOwner.getEmail());
 		existingHotelOwner.setGender(updatedHotelOwner.getGender());
 		existingHotelOwner.setUsername(updatedHotelOwner.getUsername());
+		existingHotelOwner.setPassword(updatedHotelOwner.getPassword());
 		existingHotelOwner.setAddress(updatedHotelOwner.getAddress());
 
 		HotelDTO updatedHotelDTO = updatedHotelOwnerDTO.getHotelDTO();
@@ -136,9 +134,8 @@ public class HotelOwnerServiceImp implements IHotelOwnerService {
 	}
 
 	@Override
-	
-	public String deleteHotelOwner(Long hotelOwnerId)
-			throws HotelOwnerNotFoundException, AuthorizationException, UnauthorizedAccessException {
+
+	public String deleteHotelOwner(Long hotelOwnerId) throws HotelOwnerNotFoundException {
 		LOGGER.info("Deleting hotel owner with ID: {}", hotelOwnerId);
 		HotelOwner hotelOwnerToDelete = hotelOwnerRepository.findById(hotelOwnerId)
 				.orElseThrow(() -> new HotelOwnerNotFoundException("HotelOwner not found with id: " + hotelOwnerId));
@@ -148,7 +145,5 @@ public class HotelOwnerServiceImp implements IHotelOwnerService {
 
 		return "Hotel Owner with ID: " + hotelOwnerId + "deleted succesfully";
 	}
-
-	
 
 }

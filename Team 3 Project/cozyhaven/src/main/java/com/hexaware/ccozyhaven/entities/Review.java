@@ -25,8 +25,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
  * constructors and relevant validations and mappings
 */
 
-
-
 @Entity
 @Table(name = "Review_Details")
 public class Review {

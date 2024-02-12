@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hexaware.ccozyhaven.dto.ReviewDTO;
 import com.hexaware.ccozyhaven.entities.Review;
-import com.hexaware.ccozyhaven.exceptions.AuthorizationException;
+
 import com.hexaware.ccozyhaven.exceptions.HotelNotFoundException;
 import com.hexaware.ccozyhaven.exceptions.ReviewNotFoundException;
-import com.hexaware.ccozyhaven.exceptions.UnauthorizedAccessException;
+
 import com.hexaware.ccozyhaven.exceptions.UserNotFoundException;
 import com.hexaware.ccozyhaven.service.IReviewService;
 
@@ -34,15 +34,17 @@ import jakarta.validation.Valid;
  * It contains methods for registering a new Review, logging in, updating details, etc.
  */
 
-
-
 @RestController
 @RequestMapping("/api/review")
 public class ReviewController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ReviewController.class);
 
+	private final IReviewService reviewService;
+
 	@Autowired
-	private IReviewService reviewService;
+	public ReviewController(IReviewService reviewService) {
+		this.reviewService = reviewService;
+	}
 
 	@PostMapping("/add/{userId}/{hotelId}")
 	@PreAuthorize("hasAuthority('USER')")
@@ -70,11 +72,11 @@ public class ReviewController {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	@PutMapping("/update/{reviewId}")
 	@PreAuthorize("hasAuthority('USER')")
-	public ResponseEntity<String> updateReviewById(@PathVariable Long reviewId, @RequestBody @Valid ReviewDTO reviewDTO)
-			throws AuthorizationException, UnauthorizedAccessException {
+	public ResponseEntity<String> updateReviewById(@PathVariable Long reviewId,
+			@RequestBody @Valid ReviewDTO reviewDTO) {
 		try {
 			reviewService.updateReviewById(reviewId, reviewDTO);
 			LOGGER.info("Review with ID {} updated successfully", reviewId);
@@ -85,11 +87,9 @@ public class ReviewController {
 		}
 	}
 
-	
-
 	@DeleteMapping("/delete/{reviewId}")
 	@PreAuthorize("hasAuthority('USER')")
-	public ResponseEntity<String> deleteReviewById(@PathVariable Long reviewId) throws AuthorizationException, UnauthorizedAccessException {
+	public ResponseEntity<String> deleteReviewById(@PathVariable Long reviewId) {
 		try {
 			reviewService.deleteReviewById(reviewId);
 			LOGGER.info("Review with ID {} deleted successfully", reviewId);

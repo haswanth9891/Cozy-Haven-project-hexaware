@@ -34,20 +34,7 @@ public class HotelOwnerDTO {
 
 	}
 
-	public HotelOwnerDTO(Long hotelOwnerId, String hotelOwnerName, String username,
-			@Size(min = 6, max = 20) String password, @Email String email, String gender, String address,
-			HotelDTO hotelDTO, String role) {
-		super();
-		this.hotelOwnerId = hotelOwnerId;
-		this.hotelOwnerName = hotelOwnerName;
-		this.username = username;
-		this.password = password;
-		this.email = email;
-		this.gender = gender;
-		this.address = address;
-		this.hotelDTO = hotelDTO;
-		this.role = role;
-	}
+
 
 	public String getUsername() {
 		return username;

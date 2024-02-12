@@ -10,16 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 
-
 import com.hexaware.ccozyhaven.dto.RoomDTO;
 
 import com.hexaware.ccozyhaven.entities.Reservation;
 import com.hexaware.ccozyhaven.entities.Room;
-import com.hexaware.ccozyhaven.exceptions.AuthorizationException;
+
 import com.hexaware.ccozyhaven.exceptions.HotelNotFoundException;
 import com.hexaware.ccozyhaven.exceptions.HotelOwnerMismatchException;
 import com.hexaware.ccozyhaven.exceptions.RoomNotFoundException;
-import com.hexaware.ccozyhaven.exceptions.UnauthorizedAccessException;
+
 import com.hexaware.ccozyhaven.repository.HotelRepository;
 import com.hexaware.ccozyhaven.repository.ReservationRepository;
 import com.hexaware.ccozyhaven.repository.RoomRepository;
@@ -49,10 +48,9 @@ public class RoomServiceImp implements IRoomService {
 
 	@Override
 	public Room addRoomToHotel(RoomDTO roomDTO, Long hotelId)
-			throws HotelNotFoundException, HotelOwnerMismatchException, UnauthorizedAccessException {
+			throws HotelNotFoundException, HotelOwnerMismatchException{
 		LOGGER.info("Adding room to hotel");
 
-		
 		Room room = new Room();
 		room.setRoomSize(roomDTO.getRoomSize());
 		room.setBedType(roomDTO.getBedType());
@@ -70,40 +68,34 @@ public class RoomServiceImp implements IRoomService {
 
 	@Override
 	public Room editRoom(Long roomId, RoomDTO updatedRoomDTO)
-			throws RoomNotFoundException, UnauthorizedAccessException, AuthorizationException {
+			throws RoomNotFoundException {
 		LOGGER.info("Editing room with ID {}", roomId);
-		
-			Room existingRoom = roomRepository.findById(roomId)
-					.orElseThrow(() -> new RoomNotFoundException("Room not found with id: " + roomId));
 
-			// Check if the hotel owner is the owner of the room
-			
+		Room existingRoom = roomRepository.findById(roomId)
+				.orElseThrow(() -> new RoomNotFoundException("Room not found with id: " + roomId));
 
-			existingRoom.setRoomSize(updatedRoomDTO.getRoomSize());
-			existingRoom.setBedType(updatedRoomDTO.getBedType());
-			existingRoom.setMaxOccupancy(updatedRoomDTO.getMaxOccupancy());
-			existingRoom.setBaseFare(updatedRoomDTO.getBaseFare());
-			existingRoom.setAC(updatedRoomDTO.isAC());
-			existingRoom.setAvailabilityStatus(updatedRoomDTO.isAvailabilityStatus());
+		existingRoom.setRoomSize(updatedRoomDTO.getRoomSize());
+		existingRoom.setBedType(updatedRoomDTO.getBedType());
+		existingRoom.setMaxOccupancy(updatedRoomDTO.getMaxOccupancy());
+		existingRoom.setBaseFare(updatedRoomDTO.getBaseFare());
+		existingRoom.setAC(updatedRoomDTO.isAC());
+		existingRoom.setAvailabilityStatus(updatedRoomDTO.isAvailabilityStatus());
 
-			LOGGER.info("Room with ID {} edited successfully", roomId);
-			return roomRepository.save(existingRoom);
-		
-		}
+		LOGGER.info("Room with ID {} edited successfully", roomId);
+		return roomRepository.save(existingRoom);
 
-	
+	}
 
 	@Override
-	public void removeRoom(Long roomId) throws RoomNotFoundException, UnauthorizedAccessException, AuthorizationException {
+	public void removeRoom(Long roomId)
+			throws RoomNotFoundException{
 		LOGGER.info("Removing room with ID {}", roomId);
-		
-			Room roomToDelete = roomRepository.findById(roomId)
-					.orElseThrow(() -> new RoomNotFoundException("Room not found with id: " + roomId));
 
+		Room roomToDelete = roomRepository.findById(roomId)
+				.orElseThrow(() -> new RoomNotFoundException("Room not found with id: " + roomId));
 
-			roomRepository.delete(roomToDelete);
-			LOGGER.info("Room with ID {} removed successfully", roomId);
-		
+		roomRepository.delete(roomToDelete);
+		LOGGER.info("Room with ID {} removed successfully", roomId);
 
 	}
 
@@ -142,10 +134,7 @@ public class RoomServiceImp implements IRoomService {
 	@Override
 	public double calculateTotalFare(Long roomId, int numberOfAdults, int numberOfChildren)
 			throws RoomNotFoundException {
-		LOGGER.info("Calculating total fare for room with ID {}", roomId);
-		if (numberOfAdults <= 0) {
-			throw new IllegalArgumentException("Number of adults must be greater than zero.");
-		}
+		validateNumberOfAdults(numberOfAdults);
 
 		Optional<Room> optionalRoom = roomRepository.findById(roomId);
 
@@ -154,7 +143,7 @@ public class RoomServiceImp implements IRoomService {
 			double baseFare = room.getBaseFare();
 
 			int maxCapacity = calculateMaxCapacity(room);
-			int occupancy = room.getMaxOccupancy() + 1;
+			int occupancy = room.getMaxOccupancy();
 
 			int totalPeople = numberOfAdults + numberOfChildren;
 			if (totalPeople > maxCapacity) {
@@ -163,36 +152,50 @@ public class RoomServiceImp implements IRoomService {
 			double additionalCharge = 0;
 			if (totalPeople > occupancy) {
 
-				if (numberOfAdults == occupancy) {
-					for (int i = 1; i <= numberOfChildren; i++) {
-						additionalCharge += baseFare * 0.4;
-					}
-
-				} else if (numberOfAdults > occupancy) {
-					int remainingAdults = 0;
-					remainingAdults = numberOfAdults - occupancy;
-					for (int i = 1; i <= remainingAdults; i++) {
-						additionalCharge += baseFare * 0.6;
-					}
-					for (int i = 1; i <= numberOfChildren; i++) {
-						additionalCharge += baseFare * 0.4;
-					}
-				} else {
-					int remainingChildren = 0;
-					remainingChildren = maxCapacity - occupancy;
-					for (int i = 1; i <= remainingChildren; i++) {
-						additionalCharge += baseFare * 0.4;
-					}
-
-				}
+				additionalCharge = calculateAdditionalCharge(numberOfAdults, numberOfChildren, totalPeople, occupancy,
+						maxCapacity, baseFare);
 			}
 
 			double totalFare = baseFare + additionalCharge;
-			LOGGER.info("Total fare calculated successfully: {}", totalFare);
 			return totalFare;
 		} else {
 			throw new RoomNotFoundException("Room not found with id: " + roomId);
 		}
+	}
+
+	private void validateNumberOfAdults(int numberOfAdults) {
+		if (numberOfAdults <= 0) {
+			throw new IllegalArgumentException("Number of adults must be greater than zero.");
+		}
+	}
+
+	private double calculateAdditionalCharge(int numberOfAdults, int numberOfChildren, int totalPeople, int occupancy,
+			int maxCapacity, double baseFare) {
+		double additionalCharge = 0;
+
+		if (numberOfAdults == occupancy) {
+			for (int i = 1; i <= numberOfChildren; i++) {
+				additionalCharge += baseFare * 0.4;
+			}
+
+		} else if (numberOfAdults > occupancy) {
+			int remainingAdults = 0;
+			remainingAdults = numberOfAdults - occupancy;
+			for (int i = 1; i <= remainingAdults; i++) {
+				additionalCharge += baseFare * 0.6;
+			}
+			for (int i = 1; i <= numberOfChildren; i++) {
+				additionalCharge += baseFare * 0.4;
+			}
+		} else {
+			int remainingChildren = 0;
+			remainingChildren = maxCapacity - totalPeople;
+			for (int i = 1; i <= remainingChildren; i++) {
+				additionalCharge += baseFare * 0.4;
+			}
+
+		}
+		return additionalCharge;
 	}
 
 	private int calculateMaxCapacity(Room room) {

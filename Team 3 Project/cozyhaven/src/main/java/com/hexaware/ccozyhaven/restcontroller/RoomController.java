@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hexaware.ccozyhaven.dto.RoomDTO;
 import com.hexaware.ccozyhaven.entities.Room;
-import com.hexaware.ccozyhaven.exceptions.AuthorizationException;
+
 import com.hexaware.ccozyhaven.exceptions.HotelNotFoundException;
 import com.hexaware.ccozyhaven.exceptions.HotelOwnerMismatchException;
 import com.hexaware.ccozyhaven.exceptions.RoomNotFoundException;
-import com.hexaware.ccozyhaven.exceptions.UnauthorizedAccessException;
+
 import com.hexaware.ccozyhaven.service.IRoomService;
 /*
  * Author: Haswanth
@@ -33,39 +33,41 @@ import com.hexaware.ccozyhaven.service.IRoomService;
  * It contains methods for registering a new Room, logging in, updating details, etc.
  */
 
-
 @RestController
 @RequestMapping("/api/room")
 public class RoomController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(RoomController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RoomController.class);
 
+	private final IRoomService roomService;
 
 	@Autowired
-	private IRoomService roomService;
+	public RoomController(IRoomService roomService) {
+		this.roomService = roomService;
+	}
 
 	@PostMapping("/add")
 	@PreAuthorize("hasAuthority('HOTEL_OWNER')")
-    public Room addRoomsToHotel(@RequestBody RoomDTO roomDTO, @RequestParam Long hotelId) throws HotelNotFoundException, HotelOwnerMismatchException, UnauthorizedAccessException {
+	public Room addRoomsToHotel(@RequestBody RoomDTO roomDTO, @RequestParam Long hotelId)
+			throws HotelNotFoundException, HotelOwnerMismatchException {
 		LOGGER.info("Received request to add a room to the hotel with ID: {}", hotelId);
-        Room addedRoom = roomService.addRoomToHotel(roomDTO, hotelId);
-        LOGGER.info("Room added successfully");
-        return addedRoom;
-    }
+		Room addedRoom = roomService.addRoomToHotel(roomDTO, hotelId);
+		LOGGER.info("Room added successfully");
+		return addedRoom;
+	}
 
 	@PutMapping("/edit/{roomId}")
 	@PreAuthorize("hasAuthority('HOTEL_OWNER')")
-	public Room editRoom(@PathVariable Long roomId, @RequestBody RoomDTO updatedRoomDTO)
-			throws RoomNotFoundException, UnauthorizedAccessException, AuthorizationException {
-		 LOGGER.info("Received request to edit room with ID: {}", roomId);
+	public Room editRoom(@PathVariable Long roomId, @RequestBody RoomDTO updatedRoomDTO) throws RoomNotFoundException {
+		LOGGER.info("Received request to edit room with ID: {}", roomId);
 		Room editedRoom = roomService.editRoom(roomId, updatedRoomDTO);
-		 LOGGER.info("Room edited successfully");
+		LOGGER.info("Room edited successfully");
 		return editedRoom;
 	}
 
 	@DeleteMapping("/remove/{roomId}")
 	@PreAuthorize("hasAuthority('HOTEL_OWNER')")
-	public String removeRoom(@PathVariable Long roomId) throws RoomNotFoundException, UnauthorizedAccessException, AuthorizationException {
-		 LOGGER.info("Received request to remove room with ID: {}", roomId);
+	public String removeRoom(@PathVariable Long roomId) throws RoomNotFoundException {
+		LOGGER.info("Received request to remove room with ID: {}", roomId);
 		roomService.removeRoom(roomId);
 		LOGGER.info("Room removed successfully");
 		return "Room removed successfully";
@@ -74,8 +76,8 @@ public class RoomController {
 	@GetMapping("/search")
 	public List<Room> searchRooms(@RequestParam String location, @RequestParam LocalDate checkInDate,
 			@RequestParam LocalDate checkOutDate) {
-		 LOGGER.info("Received request to search rooms in location: {} for the date range: {} to {}", location,
-	                checkInDate, checkOutDate);
+		LOGGER.info("Received request to search rooms in location: {} for the date range: {} to {}", location,
+				checkInDate, checkOutDate);
 
 		return roomService.searchRooms(location, checkInDate, checkOutDate);
 	}
@@ -85,14 +87,16 @@ public class RoomController {
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkInDate,
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOutDate)
 			throws RoomNotFoundException {
-		 LOGGER.info("Checking room availability for room ID {} in the date range: {} to {}", roomId, checkInDate, checkOutDate);
+		LOGGER.info("Checking room availability for room ID {} in the date range: {} to {}", roomId, checkInDate,
+				checkOutDate);
 		return roomService.isRoomAvailable(roomId, checkInDate, checkOutDate);
 	}
 
 	@GetMapping("/calculateTotalFare/{roomId}")
 	public double calculateTotalFare(@PathVariable Long roomId, @RequestParam int numberOfAdults,
 			@RequestParam int numberOfChildren) throws RoomNotFoundException {
-		 LOGGER.info("Calculating total fare for room ID {} with {} adults and {} children", roomId, numberOfAdults, numberOfChildren);
+		LOGGER.info("Calculating total fare for room ID {} with {} adults and {} children", roomId, numberOfAdults,
+				numberOfChildren);
 		return roomService.calculateTotalFare(roomId, numberOfAdults, numberOfChildren);
 	}
 

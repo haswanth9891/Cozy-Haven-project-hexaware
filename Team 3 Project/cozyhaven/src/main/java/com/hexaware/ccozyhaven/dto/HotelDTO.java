@@ -25,19 +25,7 @@ public class HotelDTO {
 		
 	}
 
-	public HotelDTO(Long hotelId, String hotelName, String location, boolean hasDining, boolean hasParking,
-			boolean hasFreeWiFi, boolean hasRoomService, boolean hasSwimmingPool, boolean hasFitnessCenter) {
-		super();
-		this.hotelId = hotelId;
-		this.hotelName = hotelName;
-		this.location = location;
-		this.hasDining = hasDining;
-		this.hasParking = hasParking;
-		this.hasFreeWiFi = hasFreeWiFi;
-		this.hasRoomService = hasRoomService;
-		this.hasSwimmingPool = hasSwimmingPool;
-		this.hasFitnessCenter = hasFitnessCenter;
-	}
+
 
 	public Long getHotelId() {
 		return hotelId;

@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hexaware.ccozyhaven.dto.BookedRoomDTO;
 import com.hexaware.ccozyhaven.entities.Reservation;
-import com.hexaware.ccozyhaven.exceptions.HotelNotFoundException;
+
 import com.hexaware.ccozyhaven.exceptions.InconsistentHotelException;
 import com.hexaware.ccozyhaven.exceptions.InvalidCancellationException;
 import com.hexaware.ccozyhaven.exceptions.InvalidRefundException;
@@ -30,6 +30,7 @@ import com.hexaware.ccozyhaven.exceptions.RoomNotAvailableException;
 import com.hexaware.ccozyhaven.exceptions.RoomNotFoundException;
 import com.hexaware.ccozyhaven.exceptions.UserNotFoundException;
 import com.hexaware.ccozyhaven.service.IReservationService;
+
 /*
  * Author: Nafisa
  * 
@@ -40,80 +41,77 @@ import com.hexaware.ccozyhaven.service.IReservationService;
 @RestController
 @RequestMapping("/api/reservation")
 public class ReservationController {
-	
-	 private static final Logger LOGGER = LoggerFactory.getLogger(ReservationController.class);
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(ReservationController.class);
+
+	private final IReservationService reservationService;
 
 	@Autowired
-	private IReservationService reservationService;
+	public ReservationController(IReservationService reservationService) {
+		this.reservationService = reservationService;
+	}
 
-	 @GetMapping("/get-by-hotel/{hotelId}")
-	 @PreAuthorize("hasAnyAuthority('HOTEL_OWNER', 'ADMIN')")
-	    public List<Reservation> viewReservationByHotelId(@PathVariable Long hotelId) throws HotelNotFoundException {
-		 LOGGER.info("Received request to view reservations by hotel ID: {}", hotelId);
-	        List<Reservation> reservations = reservationService.viewReservationByHotelId(hotelId);
-			return reservations;
-	    }
-	 @GetMapping("/valid-get-by-hotel/{hotelId}")
-	 @PreAuthorize("hasAnyAuthority('HOTEL_OWNER', 'ADMIN')")
-	    public List<Reservation> viewValidReservationByHotelId(@PathVariable Long hotelId) throws HotelNotFoundException {
-		 LOGGER.info("Received request to view valid reservations by hotel ID: {}", hotelId);
-	        List<Reservation> reservations = reservationService.viewValidReservationByHotelId(hotelId);
-			return reservations;
-	    }
+	@GetMapping("/get-by-hotel/{hotelId}")
+	@PreAuthorize("hasAnyAuthority('HOTEL_OWNER', 'ADMIN')")
+	public List<Reservation> viewReservationByHotelId(@PathVariable Long hotelId) {
+		LOGGER.info("Received request to view reservations by hotel ID: {}", hotelId);
+		return reservationService.viewReservationByHotelId(hotelId);
 
-	 
+	}
+
+	@GetMapping("/valid-get-by-hotel/{hotelId}")
+	@PreAuthorize("hasAnyAuthority('HOTEL_OWNER', 'ADMIN')")
+	public List<Reservation> viewValidReservationByHotelId(@PathVariable Long hotelId) {
+		LOGGER.info("Received request to view valid reservations by hotel ID: {}", hotelId);
+		return reservationService.viewValidReservationByHotelId(hotelId);
+
+	}
+
 	@GetMapping("/refundAmount/{reservationId}")
 	@PreAuthorize("hasAuthority('HOTEL_OWNER')")
 	public Double refundAmount(@PathVariable Long reservationId)
 			throws RefundProcessedException, InvalidRefundException, ReservationNotFoundException {
-		 LOGGER.info("Received request to get refund amount for reservation ID: {}", reservationId);
-		Double refundedAmount = reservationService.refundAmount(reservationId);
-		return  refundedAmount;
+		LOGGER.info("Received request to get refund amount for reservation ID: {}", reservationId);
+		return reservationService.refundAmount(reservationId);
+
 	}
-	
+
 	@GetMapping("/get-by-user/{userId}")
 	@PreAuthorize("hasAuthority('HOTEL_OWNER','ADMIN','USER')")
 	public List<Reservation> getUserReservations(@PathVariable Long userId) {
-		 LOGGER.info("Received request to view reservations by user ID: {}", userId);
-        return reservationService.getUserReservations(userId);
-    }
-    
+		LOGGER.info("Received request to view reservations by user ID: {}", userId);
+		return reservationService.getUserReservations(userId);
+	}
 
-    
-    @DeleteMapping("/cancel-and-refund/{userId}/{reservationId}")
-    @PreAuthorize("hasAuthority('USER')")
-    public void cancelReservationAndRequestRefund(@PathVariable Long userId, @PathVariable Long reservationId)
-            throws InvalidCancellationException, ReservationNotFoundException {
-    	 LOGGER.info("Received request to cancel and refund reservation with ID: {} for user ID: {}", reservationId, userId);
-    	reservationService.cancelReservationAndRequestRefund(userId, reservationId);
-    }
-    
-    
-   
-    @PostMapping("/make-reservation")
-    @PreAuthorize("hasAuthority('USER')")
-    public ResponseEntity<String> reserveRooms(
-            @RequestParam Long userId,
-            @RequestBody List<BookedRoomDTO> bookedRooms,
-            @RequestParam String checkInDate,
-            @RequestParam String checkOutDate) {
+	@DeleteMapping("/cancel-and-refund/{userId}/{reservationId}")
+	@PreAuthorize("hasAuthority('USER')")
+	public void cancelReservationAndRequestRefund(@PathVariable Long userId, @PathVariable Long reservationId)
+			throws InvalidCancellationException, ReservationNotFoundException {
+		LOGGER.info("Received request to cancel and refund reservation with ID: {} for user ID: {}", reservationId,
+				userId);
+		reservationService.cancelReservationAndRequestRefund(userId, reservationId);
+	}
 
-        try {
-            LocalDate checkIn = LocalDate.parse(checkInDate);
-            LocalDate checkOut = LocalDate.parse(checkOutDate);
+	@PostMapping("/make-reservation")
+	@PreAuthorize("hasAuthority('USER')")
+	public ResponseEntity<String> reserveRooms(@RequestParam Long userId, @RequestBody List<BookedRoomDTO> bookedRooms,
+			@RequestParam String checkInDate, @RequestParam String checkOutDate) {
 
-            boolean reservationSuccess = reservationService.reservationRoom(userId, bookedRooms, checkIn, checkOut);
+		try {
+			LocalDate checkIn = LocalDate.parse(checkInDate);
+			LocalDate checkOut = LocalDate.parse(checkOutDate);
 
-            if (reservationSuccess) {
-                return new ResponseEntity<>("Reservation successful", HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>("Reservation failed", HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        } catch (RoomNotAvailableException | RoomNotFoundException | UserNotFoundException | InconsistentHotelException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    } 
-    
-   
+			boolean reservationSuccess = reservationService.reservationRoom(userId, bookedRooms, checkIn, checkOut);
+
+			if (reservationSuccess) {
+				return new ResponseEntity<>("Reservation successful", HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>("Reservation failed", HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		} catch (RoomNotAvailableException | RoomNotFoundException | UserNotFoundException
+				| InconsistentHotelException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
 
 }

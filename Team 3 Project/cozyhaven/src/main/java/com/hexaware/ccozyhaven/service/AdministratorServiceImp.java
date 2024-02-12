@@ -36,19 +36,19 @@ public class AdministratorServiceImp implements IAdministratorService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdministratorServiceImp.class);
 
-	
+	private final AdministratorRepository adminRepository;
+	private final UserRepository userRepository;
+	private final HotelOwnerRepository hotelOwnerRepository;
+	private final ReservationRepository reservationRepository;
 
 	@Autowired
-	private AdministratorRepository adminRepository;
-
-	@Autowired
-	private UserRepository userRepository;
-
-	@Autowired
-	private HotelOwnerRepository hotelOwnerRepository;
-
-	@Autowired
-	private ReservationRepository reservationRepository;
+	public AdministratorServiceImp(AdministratorRepository adminRepository, UserRepository userRepository,
+			HotelOwnerRepository hotelOwnerRepository, ReservationRepository reservationRepository) {
+		this.adminRepository = adminRepository;
+		this.userRepository = userRepository;
+		this.hotelOwnerRepository = hotelOwnerRepository;
+		this.reservationRepository = reservationRepository;
+	}
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -68,7 +68,7 @@ public class AdministratorServiceImp implements IAdministratorService {
 		admin.setAdminLastName(adminDTO.getAdminLastName());
 		admin.setEmail(adminDTO.getEmail());
 		admin.setRole("ADMIN");
-		
+
 		adminRepository.save(admin);
 
 		return admin.getAdminId();
@@ -116,7 +116,7 @@ public class AdministratorServiceImp implements IAdministratorService {
 		Reservation reservation = reservationRepository.findById(reservationId)
 				.orElseThrow(() -> new ReservationNotFoundException("Reservation not found with id: " + reservationId));
 
-		if (reservation.getReservationStatus() != "CANCELLED") {
+		if (!"CANCELLED".equals(reservation.getReservationStatus())) {
 
 			reservationRepository.delete(reservation);
 		} else {

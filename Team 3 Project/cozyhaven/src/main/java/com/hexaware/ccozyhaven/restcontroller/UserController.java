@@ -3,8 +3,7 @@ package com.hexaware.ccozyhaven.restcontroller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,10 +22,11 @@ import com.hexaware.ccozyhaven.dto.AuthRequest;
 import com.hexaware.ccozyhaven.dto.UserDTO;
 
 import com.hexaware.ccozyhaven.entities.User;
-import com.hexaware.ccozyhaven.exceptions.AuthorizationException;
+
 import com.hexaware.ccozyhaven.exceptions.DataAlreadyPresentException;
-import com.hexaware.ccozyhaven.exceptions.UnauthorizedAccessException;
+
 import com.hexaware.ccozyhaven.exceptions.UserNotFoundException;
+
 import com.hexaware.ccozyhaven.service.IUserService;
 import com.hexaware.ccozyhaven.service.JwtService;
 
@@ -38,14 +38,10 @@ import jakarta.validation.Valid;
  * It contains methods for registering a new User, logging in, updating details, etc.
  */
 
-
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
-
-	@Autowired
-	private IUserService userService;
 
 	@Autowired
 	JwtService jwtService;
@@ -53,9 +49,16 @@ public class UserController {
 	@Autowired
 	AuthenticationManager authenticationManager;
 
+	private final IUserService userService;
+
+	@Autowired
+	public UserController(IUserService userService) {
+		this.userService = userService;
+	}
+
 	@PostMapping("/register")
 	public String registerUser(@RequestBody UserDTO userDTO) throws DataAlreadyPresentException {
-		LOGGER.info("Request Received to register new Customer: " + userDTO);
+		LOGGER.info("Request Received to register new Customer: {}", userDTO);
 		long userId = userService.register(userDTO);
 
 		if (userId != 0) {
@@ -66,40 +69,37 @@ public class UserController {
 	}
 
 	@PostMapping("/login")
-    public String  authenticateAndGetTokent(@RequestBody  AuthRequest authRequest) {
-		 
-		
-		 
-		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
-		 
-		String token = null;
-		
-				if(authentication.isAuthenticated()) {
-					
-				  // call generate token method from jwtService class
-					
-			token =		jwtService.generateToken(authRequest.getUsername());
-					
-			LOGGER.info("Tokent : "+token);
-					
-				}
-				else {
-					
-					LOGGER.info("invalid");
-					
-					 throw new UsernameNotFoundException("UserName or Password in Invalid / Invalid Request");
-					
-				}
-		
-				return token;
-		 
-	 }
+	public String authenticateAndGetTokent(@RequestBody AuthRequest authRequest) {
 
+		Authentication authentication = authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+
+		String token = null;
+
+		if (authentication.isAuthenticated()) {
+
+			// call generate token method from jwtService class
+
+			token = jwtService.generateToken(authRequest.getUsername());
+
+			LOGGER.info("Tokent : {}", token);
+
+		} else {
+
+			LOGGER.info("invalid");
+
+			throw new UsernameNotFoundException("UserName or Password in Invalid / Invalid Request");
+
+		}
+
+		return token;
+
+	}
 
 	@PutMapping("/update/{userId}")
 	@PreAuthorize("hasAuthority('USER')")
 	public User updateUser(@PathVariable Long userId, @RequestBody @Valid UserDTO userDTO)
-			throws UserNotFoundException, AuthorizationException, UnauthorizedAccessException {
+			throws UserNotFoundException {
 		LOGGER.info("Received request to update user with ID: {}", userId);
 
 		return userService.updateUser(userId, userDTO);
@@ -108,11 +108,9 @@ public class UserController {
 
 	@DeleteMapping("/delete/{userId}")
 	@PreAuthorize("hasAuthority('USER')")
-	public String deleteUser(@PathVariable Long userId)
-			throws UserNotFoundException, AuthorizationException, UnauthorizedAccessException {
+	public String deleteUser(@PathVariable Long userId) throws UserNotFoundException {
 		return userService.deleteUser(userId);
-		
-		
+
 	}
 
 }

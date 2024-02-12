@@ -20,7 +20,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
  * constructors and relevant validations and mappings
 */
 
-
 @Entity
 @Table(name = "Room_Details")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "roomId")
@@ -53,13 +52,11 @@ public class Room {
 	@Column(name = "is_ac")
 	private boolean isAC;
 
-	
-	
 	@Column(name = "availability_status")
 	private boolean availabilityStatus;
 
-	 @ManyToMany(mappedBy = "rooms")
-	 private Set<Reservation> reservations = new HashSet<>();
+	@ManyToMany(mappedBy = "rooms")
+	private Set<Reservation> reservations = new HashSet<>();
 
 	@ManyToOne
 	@JoinColumn(name = "hotel_id")
@@ -70,7 +67,6 @@ public class Room {
 		super();
 	}
 
-	
 	public Room(Long roomId,
 			@NotBlank(message = "Room size is required") @Size(max = 20, message = "Room size must be at most 20 characters") String roomSize,
 			@NotBlank(message = "Bed type is required") @Size(max = 20, message = "Bed type must be at most 20 characters") @Pattern(regexp = "single bed|double bed|king size", message = "Invalid bed type") String bedType,
@@ -89,8 +85,6 @@ public class Room {
 		this.hotel = hotel;
 	}
 
-
-
 	public Room(
 			@NotBlank(message = "Room size is required") @Size(max = 20, message = "Room size must be at most 20 characters") String roomSize,
 			@NotBlank(message = "Bed type is required") @Size(max = 20, message = "Bed type must be at most 20 characters") @Pattern(regexp = "single bed|double bed|king size", message = "Invalid bed type") String bedType,
@@ -107,9 +101,6 @@ public class Room {
 		this.reservations = reservations;
 		this.hotel = hotel;
 	}
-
-
-
 
 	public Long getRoomId() {
 		return roomId;
@@ -151,19 +142,13 @@ public class Room {
 		this.baseFare = baseFare;
 	}
 
-	
-
 	public Set<Reservation> getReservations() {
 		return reservations;
 	}
 
-
-
 	public void setReservations(Set<Reservation> reservations) {
 		this.reservations = reservations;
 	}
-
-
 
 	public Hotel getHotel() {
 		return hotel;
@@ -189,15 +174,11 @@ public class Room {
 		this.availabilityStatus = availabilityStatus;
 	}
 
-
-
 	@Override
 	public String toString() {
 		return "Room [roomId=" + roomId + ", roomSize=" + roomSize + ", bedType=" + bedType + ", maxOccupancy="
 				+ maxOccupancy + ", baseFare=" + baseFare + ", isAC=" + isAC + ", availabilityStatus="
 				+ availabilityStatus + ", reservations=" + reservations + ", hotel=" + hotel + "]";
 	}
-
-	
 
 }

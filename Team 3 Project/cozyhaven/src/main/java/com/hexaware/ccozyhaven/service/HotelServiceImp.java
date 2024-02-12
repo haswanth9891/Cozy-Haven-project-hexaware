@@ -50,5 +50,14 @@ public class HotelServiceImp implements IHotelService{
 		return hotelRepository.findAvailableRoomsInHotel(hotelId);
 	}
 	
+	@Override
+	public List<Hotel> findHotelsByLocation(String location) {
+        return hotelRepository.findByLocation(location);
+    }
+	
+	public List<Hotel> findHotelsByHotelName(String hotelName) {
+        return hotelRepository.findByHotelName(hotelName);
+    }
+	
 
 }

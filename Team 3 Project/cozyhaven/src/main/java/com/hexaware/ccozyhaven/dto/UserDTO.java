@@ -1,6 +1,5 @@
 package com.hexaware.ccozyhaven.dto;
 
-import jakarta.validation.constraints.Size;
 /*
  * Author: Haswanth
  * 
@@ -10,37 +9,20 @@ import jakarta.validation.constraints.Size;
 
 public class UserDTO {
 
-    
-    private Long userId;   
+	private Long userId;
 	private String userFirstName;
-	private String userLastName;	
-	private String username;	
-    private String password;
-    private String email;   
-    private String contactNumber;
-    private String gender;
-    private String address;
-    
-    private String role;
-	
+	private String userLastName;
+	private String username;
+	private String password;
+	private String email;
+	private String contactNumber;
+	private String gender;
+	private String address;
+
+	private String role;
+
 	public UserDTO() {
 		super();
-	}
-
-	
-	public UserDTO(Long userId, String userFirstName, String userLastName, String username, String password,
-			String email, String contactNumber, String gender, String address, String role) {
-		super();
-		this.userId = userId;
-		this.userFirstName = userFirstName;
-		this.userLastName = userLastName;
-		this.username = username;
-		this.password = password;
-		this.email = email;
-		this.contactNumber = contactNumber;
-		this.gender = gender;
-		this.address = address;
-		this.role = role;
 	}
 
 	public Long getUserId() {
@@ -66,6 +48,7 @@ public class UserDTO {
 	public void setUserLastName(String userLastName) {
 		this.userLastName = userLastName;
 	}
+
 	public String getUsername() {
 		return username;
 	}
@@ -73,8 +56,7 @@ public class UserDTO {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	
-	
+
 	public String getPassword() {
 		return password;
 	}
@@ -90,7 +72,6 @@ public class UserDTO {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
 
 	public String getContactNumber() {
 		return contactNumber;
@@ -131,11 +112,4 @@ public class UserDTO {
 				+ contactNumber + ", gender=" + gender + ", address=" + address + ", role=" + role + "]";
 	}
 
-
-
-	
-	
-	
-
-    
 }

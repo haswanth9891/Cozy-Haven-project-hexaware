@@ -19,8 +19,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
  * constructors and relevant validations and mappings
 */
 
-
-
 @Entity
 @Table(name = "Reservation_Details")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "reservationId")

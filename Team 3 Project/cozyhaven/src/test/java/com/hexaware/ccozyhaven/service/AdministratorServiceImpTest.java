@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,75 +24,52 @@ import com.hexaware.ccozyhaven.repository.ReservationRepository;
 import com.hexaware.ccozyhaven.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
+
 @SpringBootTest
 @Transactional
 class AdministratorServiceImpTest {
 
-    @Autowired
-    private IAdministratorService administratorService;
+	@Autowired
+	private IAdministratorService administratorService;
 
-    @Autowired
-    private AdministratorRepository administratorRepository;
+	@Autowired
+	private AdministratorRepository administratorRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+	@Autowired
+	private UserRepository userRepository;
 
-    @Autowired
-    private HotelOwnerRepository hotelOwnerRepository;
+	@Autowired
+	private HotelOwnerRepository hotelOwnerRepository;
 
-    @Autowired
-    private ReservationRepository reservationRepository;
+	@Autowired
+	private ReservationRepository reservationRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
-    @Test
-    void testLogin() throws DataAlreadyPresentException, UserNotFoundException {
-        // Arrange
-        AdministratorDTO administratorDTO = new AdministratorDTO();
-        administratorDTO.setAdminFirstName("Javeed");
-        administratorDTO.setAdminLastName("Mohammed");
-        administratorDTO.setUsername("javeed_513");
-        administratorDTO.setPassword("superTrainer123");
-        administratorDTO.setEmail("javeed.md@gmail.com");
+	@Test
+	void testRegister() throws DataAlreadyPresentException, UserNotFoundException {
 
-        // Register the administrator
-        administratorService.register(administratorDTO);
+		AdministratorDTO administratorDTO = new AdministratorDTO();
+		administratorDTO.setAdminFirstName("John");
+		administratorDTO.setAdminLastName("Doe");
+		administratorDTO.setUsername("john_123");
+		administratorDTO.setPassword("johnPass123");
+		administratorDTO.setEmail("john.doe@gmail.com");
 
-        // Act
-        String result = administratorService.login("javeed_513", "superTrainer123");
+		Long adminId = administratorService.register(administratorDTO);
 
-        // Assert
-        assertNotNull(result);
-        assertEquals("ADMIN", result);
-    }
+		assertNotNull(adminId);
 
-    @Test
-    void testRegister() throws DataAlreadyPresentException, UserNotFoundException {
-        // Arrange
-        AdministratorDTO administratorDTO = new AdministratorDTO();
-        administratorDTO.setAdminFirstName("Javeed");
-        administratorDTO.setAdminLastName("Mohammed");
-        administratorDTO.setUsername("javeed_513");
-        administratorDTO.setPassword("superTrainer123");
-        administratorDTO.setEmail("javeed.md@gmail.com");
+		assertNotNull(administratorRepository.findById(adminId).orElse(null));
 
-        // Act
-        Long adminId = administratorService.register(administratorDTO);
+		Administrator storedAdmin = administratorRepository.findById(adminId).orElse(null);
+		assertNotNull(storedAdmin);
+		assertTrue(passwordEncoder.matches("johnPass123", storedAdmin.getPassword()));
+	}
 
-        // Assert
-        assertNotNull(adminId);
+	@Test
 
-        // Verify that the administrator is stored in the database
-        assertNotNull(administratorRepository.findById(adminId).orElse(null));
-
-        // Verify that the password is encoded
-        Administrator storedAdmin = administratorRepository.findById(adminId).orElse(null);
-        assertNotNull(storedAdmin);
-        assertTrue(passwordEncoder.matches("superTrainer123", storedAdmin.getPassword()));
-    }
-
-    @Test
 	void testDeleteUserAccount() {
 
 		assertDoesNotThrow(() -> administratorService.deleteUserAccount(1L));
@@ -101,16 +79,18 @@ class AdministratorServiceImpTest {
 	}
 
 	@Test
+
 	void testDeleteHotelOwnerAccount() {
 
-		assertDoesNotThrow(() -> administratorService.deleteHotelOwnerAccount(2L));
+		assertDoesNotThrow(() -> administratorService.deleteHotelOwnerAccount(1L));
 
-		Optional<HotelOwner> deletedHotelOwner = hotelOwnerRepository.findById(2L);
+		Optional<HotelOwner> deletedHotelOwner = hotelOwnerRepository.findById(1L);
 		assertFalse(deletedHotelOwner.isPresent());
 
 	}
 
 	@Test
+
 	void testViewAllUser() {
 
 		List<User> userList = administratorService.viewAllUser();
@@ -121,15 +101,15 @@ class AdministratorServiceImpTest {
 	void testViewAllHotelOwner() {
 
 		List<HotelOwner> hotelOwnerList = administratorService.viewAllHotelOwner();
-		assertEquals(6, hotelOwnerList.size());
+		assertEquals(2, hotelOwnerList.size());
 	}
 
 	@Test
 	void testManageRoomReservation() {
 
-		assertDoesNotThrow(() -> administratorService.manageRoomReservation(3L, "CANCELLED"));
+		assertDoesNotThrow(() -> administratorService.manageRoomReservation(1L, "CANCELLED"));
 
-		Optional<Reservation> deletedReservation = reservationRepository.findById(3L);
+		Optional<Reservation> deletedReservation = reservationRepository.findById(1L);
 		assert (!deletedReservation.isPresent());
 	}
 

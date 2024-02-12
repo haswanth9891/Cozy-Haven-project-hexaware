@@ -17,7 +17,6 @@ import jakarta.validation.constraints.Size;
  * constructors and relevant validations and mappings
 */
 
-
 @Entity
 @Table(name = "HotelOwner_Details")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "hotelOwnerId")
@@ -31,7 +30,7 @@ public class HotelOwner {
 	@NotBlank(message = "Username cannot be blank")
 	@Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
 	private String hotelOwnerName;
-	
+
 	@NotBlank(message = "Username is required")
 	@Pattern(regexp = "^[a-zA-Z0-9_]+$", message = "Username should contain only alphanumeric characters and underscores")
 	private String username;
@@ -51,21 +50,17 @@ public class HotelOwner {
 
 	@NotBlank(message = "Address is required")
 	private String address;
-	
+
 	private String role = "HOTEL_OWNER";
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "hotel_id")
 	@JsonBackReference
 	private Hotel hotel = new Hotel();
-	
-	
-	
 
 	public HotelOwner() {
 		super();
 	}
-	
 
 	public HotelOwner(Long hotelOwnerId,
 			@NotBlank(message = "Username cannot be blank") @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters") String hotelOwnerName,
@@ -84,8 +79,6 @@ public class HotelOwner {
 		this.address = address;
 	}
 
-
-
 	public String getUsername() {
 		return username;
 	}
@@ -101,7 +94,6 @@ public class HotelOwner {
 	public void setRole(String role) {
 		this.role = role;
 	}
-
 
 	public Long getHotelOwnerId() {
 		return hotelOwnerId;
@@ -160,14 +152,11 @@ public class HotelOwner {
 		this.address = address;
 	}
 
-
-
 	@Override
 	public String toString() {
 		return "HotelOwner [hotelOwnerId=" + hotelOwnerId + ", hotelOwnerName=" + hotelOwnerName + ", password="
 				+ password + ", email=" + email + ", gender=" + gender + ", address=" + address + ", hotel=" + hotel
 				+ ", role=" + role + "]";
 	}
-
 
 }

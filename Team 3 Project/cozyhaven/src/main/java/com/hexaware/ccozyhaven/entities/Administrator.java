@@ -22,46 +22,38 @@ import jakarta.validation.constraints.Size;
 @Table(name = "Administrator_Details")
 public class Administrator {
 
-    @Id
-    @Column(name = "admin_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long adminId;
-
+	@Id
+	@Column(name = "admin_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long adminId;
 
 	@Column(name = "firstName")
 	private String adminFirstName;
-	
+
 	@Column(name = "lastName")
 	private String adminLastName;
-	
 
-    @NotBlank(message = "Username is required")
-    @Pattern(regexp = "^[a-zA-Z0-9_-]+$", message = "Username must contain only letters, numbers, underscores, and hyphens")
-    @Column(name = "UserName", nullable = false, unique = true)
-    private String username;
+	@NotBlank(message = "Username is required")
+	@Pattern(regexp = "^[a-zA-Z0-9_-]+$", message = "Username must contain only letters, numbers, underscores, and hyphens")
+	@Column(name = "UserName", nullable = false, unique = true)
+	private String username;
 
+	@NotBlank(message = "Password cannot be blank")
+	@Size(min = 6, message = "Password must be at least 6 characters")
+	@Column(name = "password")
+	private String password;
 
-    @NotBlank(message = "Password cannot be blank")
-    @Size(min = 6, message = "Password must be at least 6 characters")
-    @Column(name = "password")
-    private String password;
-    
-    @NotBlank(message = "Password cannot be blank")
-    @Email(message = "Password cannot be blank")
-    @Column(name = "email")
-    private String email;
-    
-    
-    
-    @Column(columnDefinition = "varchar(5) default 'Admin'",nullable=false)
+	@NotBlank(message = "Password cannot be blank")
+	@Email(message = "Password cannot be blank")
+	@Column(name = "email")
+	private String email;
+
+	@Column(columnDefinition = "varchar(5) default 'Admin'", nullable = false)
 	private String role;
-    
 
 	public Administrator() {
 		super();
 	}
-
-    
 
 	public Administrator(Long adminId, String adminFirstName, String adminLastName,
 			@NotBlank(message = "Username is required") @Pattern(regexp = "^[a-zA-Z0-9_-]+$", message = "Username must contain only letters, numbers, underscores, and hyphens") String username,
@@ -78,48 +70,33 @@ public class Administrator {
 		this.role = role;
 	}
 
-
 	public String getAdminFirstName() {
 		return adminFirstName;
 	}
-
 
 	public void setAdminFirstName(String adminFirstName) {
 		this.adminFirstName = adminFirstName;
 	}
 
-
 	public String getAdminLastName() {
 		return adminLastName;
 	}
-
-
-
 
 	public void setAdminLastName(String adminLastName) {
 		this.adminLastName = adminLastName;
 	}
 
-
-
-
 	public String getUsername() {
 		return username;
 	}
-
-
-
 
 	public void setUsername(String username) {
 		this.username = username;
 	}
 
-
 	public String getRole() {
 		return role;
 	}
-
-
 
 	public void setRole(String role) {
 		this.role = role;
@@ -132,8 +109,6 @@ public class Administrator {
 	public void setAdminId(Long adminId) {
 		this.adminId = adminId;
 	}
-
-	
 
 	public String getPassword() {
 		return password;
@@ -151,8 +126,6 @@ public class Administrator {
 		this.email = email;
 	}
 
-
-
 	@Override
 	public String toString() {
 		return "Administrator [adminId=" + adminId + ", adminFirstName=" + adminFirstName + ", adminLastName="
@@ -160,8 +133,4 @@ public class Administrator {
 				+ role + "]";
 	}
 
-	
-
-	
 }
-
