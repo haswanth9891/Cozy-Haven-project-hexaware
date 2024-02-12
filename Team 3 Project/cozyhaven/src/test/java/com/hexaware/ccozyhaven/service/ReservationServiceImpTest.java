@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -122,6 +123,15 @@ class ReservationServiceImpTest {
 
 		assertTrue(reservation.isRefundProcessed());
 		assertNotNull(reservationRepository.findById(reservationId));
+	}
+	
+	@Test
+	void testManageRoomReservation() {
+
+		assertDoesNotThrow(() -> reservationService.manageRoomReservation(1L, "CANCELLED"));
+
+		Optional<Reservation> deletedReservation = reservationRepository.findById(1L);
+		assert (!deletedReservation.isPresent());
 	}
 
 }

@@ -36,22 +36,17 @@ public class ReviewServiceImp implements IReviewService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ReviewServiceImp.class);
 
-	 private final ReviewRepository reviewRepository;
-	    private final UserRepository userRepository;
-	    private final HotelRepository hotelRepository;
-	
-	
-	 @Autowired
-	    public ReviewServiceImp(
-	            ReviewRepository reviewRepository,
-	            UserRepository userRepository,
-	            HotelRepository hotelRepository
-	    ) {
-	        this.reviewRepository = reviewRepository;
-	        this.userRepository = userRepository;
-	        this.hotelRepository = hotelRepository;
-	    }
+	private final ReviewRepository reviewRepository;
+	private final UserRepository userRepository;
+	private final HotelRepository hotelRepository;
 
+	@Autowired
+	public ReviewServiceImp(ReviewRepository reviewRepository, UserRepository userRepository,
+			HotelRepository hotelRepository) {
+		this.reviewRepository = reviewRepository;
+		this.userRepository = userRepository;
+		this.hotelRepository = hotelRepository;
+	}
 
 	@Override
 	public void addReviewWithUserAndHotel(ReviewDTO reviewDTO, Long userId, Long hotelId)
@@ -100,7 +95,6 @@ public class ReviewServiceImp implements IReviewService {
 	public void deleteReviewById(Long reviewId) throws ReviewNotFoundException {
 		LOGGER.info("Deleting review with ID {}", reviewId);
 
-		Review reviewToDelete = getReviewById(reviewId);
 		reviewRepository.deleteById(reviewId);
 
 	}

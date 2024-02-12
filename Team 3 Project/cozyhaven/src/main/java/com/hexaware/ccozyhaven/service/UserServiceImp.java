@@ -35,10 +35,10 @@ public class UserServiceImp implements IUserService {
 
 	private final UserRepository userRepository;
 
-    @Autowired
-    public  UserServiceImp(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+	@Autowired
+	public UserServiceImp(UserRepository userRepository) {
+		this.userRepository = userRepository;
+	}
 
 	@Override
 	public boolean login(String username, String password) {
@@ -74,8 +74,7 @@ public class UserServiceImp implements IUserService {
 
 	@Override
 
-	public User updateUser(Long userId, UserDTO updatedUserDTO)
-			throws UserNotFoundException {
+	public User updateUser(Long userId, UserDTO updatedUserDTO) throws UserNotFoundException {
 		LOGGER.info("Updating user with ID {}", userId);
 
 		User existingUser = userRepository.findById(userId)

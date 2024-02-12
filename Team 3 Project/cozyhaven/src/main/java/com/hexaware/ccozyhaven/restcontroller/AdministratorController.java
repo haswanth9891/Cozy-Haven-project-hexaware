@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hexaware.ccozyhaven.dto.AdministratorDTO;
@@ -24,8 +24,7 @@ import com.hexaware.ccozyhaven.dto.AuthRequest;
 import com.hexaware.ccozyhaven.entities.HotelOwner;
 import com.hexaware.ccozyhaven.entities.User;
 import com.hexaware.ccozyhaven.exceptions.DataAlreadyPresentException;
-import com.hexaware.ccozyhaven.exceptions.InvalidCancellationException;
-import com.hexaware.ccozyhaven.exceptions.ReservationNotFoundException;
+
 import com.hexaware.ccozyhaven.exceptions.UserNotFoundException;
 import com.hexaware.ccozyhaven.service.IAdministratorService;
 
@@ -129,17 +128,6 @@ public class AdministratorController {
 		LOGGER.info("Received request to view all hotel owners");
 		return administratorService.viewAllHotelOwner();
 
-	}
-
-	@DeleteMapping("/manage-room-reservation/{reservationId}")
-	@PreAuthorize("hasAuthority('ADMIN')")
-	public String manageRoomReservation(@PathVariable Long reservationId,
-			@RequestParam(name = "reservationStatus") String reservationStatus)
-			throws ReservationNotFoundException, InvalidCancellationException {
-		LOGGER.info("Received request to manage room reservation with ID: {} and status: {}", reservationId,
-				reservationStatus);
-		administratorService.manageRoomReservation(reservationId, reservationStatus);
-		return "Room reservation managed successfully";
 	}
 
 }

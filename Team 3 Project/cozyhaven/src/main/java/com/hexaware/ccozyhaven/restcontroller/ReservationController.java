@@ -113,5 +113,16 @@ public class ReservationController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@DeleteMapping("/manage-room-reservation/{reservationId}")
+	@PreAuthorize("hasAuthority('ADMIN','HOTEL_OWNER')")
+	public String manageRoomReservation(@PathVariable Long reservationId,
+			@RequestParam(name = "reservationStatus") String reservationStatus)
+			throws ReservationNotFoundException, InvalidCancellationException {
+		LOGGER.info("Received request to manage room reservation with ID: {} and status: {}", reservationId,
+				reservationStatus);
+		reservationService.manageRoomReservation(reservationId, reservationStatus);
+		return "Room reservation managed successfully";
+	}
 
 }

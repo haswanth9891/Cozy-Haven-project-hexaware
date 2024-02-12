@@ -11,15 +11,14 @@ import org.springframework.stereotype.Service;
 import com.hexaware.ccozyhaven.dto.AdministratorDTO;
 import com.hexaware.ccozyhaven.entities.Administrator;
 import com.hexaware.ccozyhaven.entities.HotelOwner;
-import com.hexaware.ccozyhaven.entities.Reservation;
+
 import com.hexaware.ccozyhaven.entities.User;
 import com.hexaware.ccozyhaven.exceptions.DataAlreadyPresentException;
-import com.hexaware.ccozyhaven.exceptions.InvalidCancellationException;
-import com.hexaware.ccozyhaven.exceptions.ReservationNotFoundException;
+
 import com.hexaware.ccozyhaven.exceptions.UserNotFoundException;
 import com.hexaware.ccozyhaven.repository.AdministratorRepository;
 import com.hexaware.ccozyhaven.repository.HotelOwnerRepository;
-import com.hexaware.ccozyhaven.repository.ReservationRepository;
+
 import com.hexaware.ccozyhaven.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
@@ -39,15 +38,14 @@ public class AdministratorServiceImp implements IAdministratorService {
 	private final AdministratorRepository adminRepository;
 	private final UserRepository userRepository;
 	private final HotelOwnerRepository hotelOwnerRepository;
-	private final ReservationRepository reservationRepository;
 
 	@Autowired
 	public AdministratorServiceImp(AdministratorRepository adminRepository, UserRepository userRepository,
-			HotelOwnerRepository hotelOwnerRepository, ReservationRepository reservationRepository) {
+			HotelOwnerRepository hotelOwnerRepository) {
 		this.adminRepository = adminRepository;
 		this.userRepository = userRepository;
 		this.hotelOwnerRepository = hotelOwnerRepository;
-		this.reservationRepository = reservationRepository;
+
 	}
 
 	@Autowired
@@ -107,22 +105,6 @@ public class AdministratorServiceImp implements IAdministratorService {
 		LOGGER.info("Viewing all hotel owners");
 
 		return hotelOwnerRepository.findAll();
-	}
-
-	@Override
-	public void manageRoomReservation(Long reservationId, String reservationStatus)
-			throws ReservationNotFoundException, InvalidCancellationException {
-		LOGGER.info("Managing room reservation with ID: {}", reservationId);
-		Reservation reservation = reservationRepository.findById(reservationId)
-				.orElseThrow(() -> new ReservationNotFoundException("Reservation not found with id: " + reservationId));
-
-		if (!"CANCELLED".equals(reservation.getReservationStatus())) {
-
-			reservationRepository.delete(reservation);
-		} else {
-			LOGGER.warn("Invalid cancellation request for already cancelled reservation");
-			throw new InvalidCancellationException("Reservation is already cancelled.");
-		}
 	}
 
 }

@@ -104,13 +104,6 @@ class AdministratorServiceImpTest {
 		assertEquals(2, hotelOwnerList.size());
 	}
 
-	@Test
-	void testManageRoomReservation() {
-
-		assertDoesNotThrow(() -> administratorService.manageRoomReservation(1L, "CANCELLED"));
-
-		Optional<Reservation> deletedReservation = reservationRepository.findById(1L);
-		assert (!deletedReservation.isPresent());
-	}
+	
 
 }

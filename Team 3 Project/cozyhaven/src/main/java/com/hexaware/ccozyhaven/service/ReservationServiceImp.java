@@ -42,22 +42,21 @@ import jakarta.transaction.Transactional;
 public class ReservationServiceImp implements IReservationService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ReservationServiceImp.class);
+	private static String reservationStatusCancelled = "CANCELLED";
+	private String reservationNotFound = "Reservation not found with id: ";
 
-	 private final ReservationRepository reservationRepository;
-	    private final UserRepository userRepository;
-	    private final RoomRepository roomRepository;
+	private final ReservationRepository reservationRepository;
+	private final UserRepository userRepository;
+	private final RoomRepository roomRepository;
 
-	    @Autowired
-	    public ReservationServiceImp(
-	            ReservationRepository reservationRepository,
-	            UserRepository userRepository,
-	            RoomRepository roomRepository
-	    ) {
-	        this.reservationRepository = reservationRepository;
-	        this.userRepository = userRepository;
-	        this.roomRepository = roomRepository;
-	    }
-	
+	@Autowired
+	public ReservationServiceImp(ReservationRepository reservationRepository, UserRepository userRepository,
+			RoomRepository roomRepository) {
+		this.reservationRepository = reservationRepository;
+		this.userRepository = userRepository;
+		this.roomRepository = roomRepository;
+	}
+
 	private static String roomNotFound = "Room not found with id: ";
 
 	@Override
@@ -127,7 +126,7 @@ public class ReservationServiceImp implements IReservationService {
 		// setting reservation in each room and checking if every room is from same
 		// hotel
 		for (BookedRoomDTO bookedRoom : bookedRooms) {
-			
+
 			Room room = roomRepository.findById(bookedRoom.getRoomId())
 					.orElseThrow(() -> new RoomNotFoundException(roomNotFound + bookedRoom.getRoomId()));
 			room.getReservations().add(reservation);
@@ -155,10 +154,8 @@ public class ReservationServiceImp implements IReservationService {
 			throws RoomNotFoundException {
 		LOGGER.info("Checking room availability with ID: {}", roomId);
 		Optional<Room> optionalRoom = roomRepository.findById(roomId);
-		
 
 		if (optionalRoom.isPresent()) {
-			Room room = optionalRoom.get();
 
 			List<Reservation> overlappingReservations = reservationRepository.findOverlappingReservations(roomId,
 					checkInDate, checkOutDate);
@@ -193,10 +190,10 @@ public class ReservationServiceImp implements IReservationService {
 						maxCapacity, baseFare);
 			}
 
-			double totalFare = baseFare + additionalCharge;
-			return totalFare;
+			return baseFare + additionalCharge;
+
 		} else {
-			
+
 			throw new RoomNotFoundException(roomNotFound + roomId);
 		}
 	}
@@ -253,9 +250,9 @@ public class ReservationServiceImp implements IReservationService {
 			throws RefundProcessedException, InvalidRefundException, ReservationNotFoundException {
 		LOGGER.info("Calculating refund amount for reservation with ID: {}", reservationId);
 		Reservation reservation = reservationRepository.findById(reservationId)
-				.orElseThrow(() -> new ReservationNotFoundException("Reservation not found with id: " + reservationId));
-		String reservationStatus = "CANCELLED";
-		if (reservationStatus.equals(reservation.getReservationStatus())) {
+				.orElseThrow(() -> new ReservationNotFoundException(reservationNotFound + reservationId));
+
+		if (reservationStatusCancelled.equals(reservation.getReservationStatus())) {
 
 			if (!reservation.isRefundProcessed()) {
 
@@ -291,16 +288,32 @@ public class ReservationServiceImp implements IReservationService {
 		LOGGER.info("Cancelling reservation with refund request for ID: {} for user with ID: {}", reservationId,
 				userId);
 		Reservation reservation = reservationRepository.findByReservationIdAndUser_UserId(reservationId, userId)
-				.orElseThrow(() -> new ReservationNotFoundException("Reservation not found with id: " + reservationId));
-		String reservationStatus = "CANCELLED";
-		if (!reservation.getReservationStatus().equals(reservationStatus)) {
+				.orElseThrow(() -> new ReservationNotFoundException(reservationNotFound + reservationId));
 
-			reservation.setReservationStatus(reservationStatus);
+		if (!reservation.getReservationStatus().equals(reservationStatusCancelled)) {
+
+			reservation.setReservationStatus(reservationStatusCancelled);
 			reservationRepository.save(reservation);
 		} else {
 			throw new InvalidCancellationException("Reservation is already cancelled.");
 		}
 		LOGGER.info("Reservation cancelled with refund request successfully");
+	}
+
+	@Override
+	public void manageRoomReservation(Long reservationId, String reservationStatus)
+			throws ReservationNotFoundException, InvalidCancellationException {
+		LOGGER.info("Managing room reservation with ID: {}", reservationId);
+		Reservation reservation = reservationRepository.findById(reservationId)
+				.orElseThrow(() -> new ReservationNotFoundException(reservationNotFound + reservationId));
+
+		if (!reservationStatusCancelled.equals(reservation.getReservationStatus())) {
+
+			reservationRepository.delete(reservation);
+		} else {
+			LOGGER.warn("Invalid cancellation request for already cancelled reservation");
+			throw new InvalidCancellationException("Reservation is already cancelled.");
+		}
 	}
 
 }
