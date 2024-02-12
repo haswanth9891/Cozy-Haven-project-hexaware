@@ -32,5 +32,8 @@ public interface IReservationService {
 	List<Reservation> viewValidReservationByHotelId(Long hotelId);
 
 	boolean isRoomAvailable(Long roomId, LocalDate checkInDate, LocalDate checkOutDate) throws RoomNotFoundException;
+	
+	void manageRoomReservation(Long reservationId, String reservationStatus)
+			throws ReservationNotFoundException, InvalidCancellationException;
 
 }

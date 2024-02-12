@@ -8,8 +8,7 @@ import com.hexaware.ccozyhaven.dto.AdministratorDTO;
 import com.hexaware.ccozyhaven.entities.HotelOwner;
 import com.hexaware.ccozyhaven.entities.User;
 import com.hexaware.ccozyhaven.exceptions.DataAlreadyPresentException;
-import com.hexaware.ccozyhaven.exceptions.InvalidCancellationException;
-import com.hexaware.ccozyhaven.exceptions.ReservationNotFoundException;
+
 import com.hexaware.ccozyhaven.exceptions.UserNotFoundException;
 
 @Repository
@@ -31,9 +30,8 @@ public interface IAdministratorService {
 	// View all hotel owner accounts
 	List<HotelOwner> viewAllHotelOwner();
 
-	// Manage room reservation in hotel by the user
-	void manageRoomReservation(Long reservationId, String reservationStatus)
-			throws ReservationNotFoundException, InvalidCancellationException;
+	
+	
 
 	
 
