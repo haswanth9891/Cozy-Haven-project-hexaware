@@ -23,6 +23,8 @@ public interface IReservationService {
 
 	boolean reservationRoom(Long userId, List<BookedRoomDTO> bookedRooms, LocalDate checkInDate, LocalDate checkOutDate)
 			throws RoomNotAvailableException, RoomNotFoundException, UserNotFoundException, InconsistentHotelException;
+	
+	
 
 	public List<Reservation> getUserReservations(Long userId);
 

@@ -13,15 +13,16 @@ import com.hexaware.ccozyhaven.exceptions.UserNotFoundException;
 
 @Repository
 public interface IAdministratorService {
+	
      // login
 	String login(String username, String password);
     // register
 	Long register(AdministratorDTO adminDto) throws DataAlreadyPresentException;
 
-	// Delete user account by user ID
+	// delete user account by user ID
 	void deleteUserAccount(Long userId) throws UserNotFoundException;
 
-	// Delete hotel owner account by hotel owner ID
+	// delete hotel owner account by hotel owner ID
 	void deleteHotelOwnerAccount(Long hotelOwnerId) throws UserNotFoundException;
 
 	// View all user accounts
