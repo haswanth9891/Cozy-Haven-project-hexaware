@@ -78,7 +78,7 @@ public class ReservationServiceImp implements IReservationService {
 			LocalDate checkOutDate)
 			throws RoomNotAvailableException, RoomNotFoundException, UserNotFoundException, InconsistentHotelException {
 		LOGGER.info("Making a reservation for user with ID: {} and rooms", userId);
-
+		
 		Set<Long> uniqueRoomIds = new HashSet<>();
 		for (BookedRoomDTO bookedRoom : bookedRooms) {
 			Long roomId = bookedRoom.getRoomId();
@@ -152,6 +152,9 @@ public class ReservationServiceImp implements IReservationService {
 	public boolean isRoomAvailable(Long roomId, LocalDate checkInDate, LocalDate checkOutDate)
 			throws RoomNotFoundException {
 		LOGGER.info("Checking room availability with ID: {}", roomId);
+		if (checkInDate.isAfter(checkOutDate)) {
+			throw new IllegalArgumentException("Check-in date must be before or equal to check-out date");
+		}
 		Optional<Room> optionalRoom = roomRepository.findById(roomId);
 
 		if (optionalRoom.isPresent()) {

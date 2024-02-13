@@ -119,6 +119,9 @@ public class RoomServiceImp implements IRoomService {
 	public boolean isRoomAvailable(Long roomId, LocalDate checkInDate, LocalDate checkOutDate)
 			throws RoomNotFoundException {
 		LOGGER.info("Checking room availability with ID {}", roomId);
+		if (checkInDate.isAfter(checkOutDate)) {
+			throw new IllegalArgumentException("Check-in date must be before or equal to check-out date");
+		}
 		Optional<Room> optionalRoom = roomRepository.findById(roomId);
 
 		if (optionalRoom.isPresent()) {

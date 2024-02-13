@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hexaware.ccozyhaven.dto.BookedRoomDTO;
 import com.hexaware.ccozyhaven.dto.RoomDTO;
+import com.hexaware.ccozyhaven.dto.SearchDTO;
 import com.hexaware.ccozyhaven.entities.Room;
 
 import com.hexaware.ccozyhaven.exceptions.HotelNotFoundException;
@@ -33,6 +35,8 @@ import com.hexaware.ccozyhaven.service.IRoomService;
  * It contains methods for registering a new Room, logging in, updating details, etc.
  */
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/room")
 public class RoomController {
@@ -45,9 +49,9 @@ public class RoomController {
 		this.roomService = roomService;
 	}
 
-	@PostMapping("/add")
+	@PostMapping("/add/{hotelId}")
 	@PreAuthorize("hasAuthority('HOTEL_OWNER')")
-	public Room addRoomsToHotel(@RequestBody RoomDTO roomDTO, @RequestParam Long hotelId)
+	public Room addRoomsToHotel(@RequestBody RoomDTO roomDTO, @PathVariable Long hotelId)
 			throws HotelNotFoundException, HotelOwnerMismatchException {
 		LOGGER.info("Received request to add a room to the hotel with ID: {}", hotelId);
 		Room addedRoom = roomService.addRoomToHotel(roomDTO, hotelId);
@@ -74,30 +78,28 @@ public class RoomController {
 	}
 
 	@GetMapping("/search")
-	public List<Room> searchRooms(@RequestParam String location, @RequestParam LocalDate checkInDate,
-			@RequestParam LocalDate checkOutDate) {
-		LOGGER.info("Received request to search rooms in location: {} for the date range: {} to {}", location,
-				checkInDate, checkOutDate);
+	public List<Room> searchRooms(@RequestBody @Valid SearchDTO  searchDTO) {
+		LOGGER.info("Received request to search rooms in location: {} for the date range: {} to {}", searchDTO.getLocation(),
+				searchDTO.getCheckInDate(), searchDTO.getCheckOutDate());
 
-		return roomService.searchRooms(location, checkInDate, checkOutDate);
+		return roomService.searchRooms(searchDTO.getLocation(), searchDTO.getCheckInDate(), searchDTO.getCheckOutDate());
 	}
 
 	@GetMapping("/availability/{roomId}")
-	public boolean isRoomAvailable(@PathVariable Long roomId,
-			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkInDate,
-			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOutDate)
+	public boolean isRoomAvailable(@PathVariable Long roomId, @RequestBody @Valid SearchDTO searchDTO)
 			throws RoomNotFoundException {
-		LOGGER.info("Checking room availability for room ID {} in the date range: {} to {}", roomId, checkInDate,
-				checkOutDate);
-		return roomService.isRoomAvailable(roomId, checkInDate, checkOutDate);
+		LOGGER.info("Checking room availability for room ID {} in the date range: {} to {}", roomId, searchDTO.getCheckInDate(),
+				searchDTO.getCheckInDate());
+		return roomService.isRoomAvailable(roomId, searchDTO.getCheckInDate(),
+				searchDTO.getCheckInDate());
 	}
 
-	@GetMapping("/calculateTotalFare/{roomId}")
-	public double calculateTotalFare(@PathVariable Long roomId, @RequestParam int numberOfAdults,
-			@RequestParam int numberOfChildren) throws RoomNotFoundException {
-		LOGGER.info("Calculating total fare for room ID {} with {} adults and {} children", roomId, numberOfAdults,
-				numberOfChildren);
-		return roomService.calculateTotalFare(roomId, numberOfAdults, numberOfChildren);
+	@GetMapping("/calculate-fare-room")
+	public double calculateTotalFare(@RequestBody  BookedRoomDTO bookedRoomDTO) throws RoomNotFoundException {
+		LOGGER.info("Calculating total fare for room ID {} with {} adults and {} children", bookedRoomDTO.getRoomId(), bookedRoomDTO.getNumberOfAdults(),
+				bookedRoomDTO.getNumberOfChildren());
+		return roomService.calculateTotalFare( bookedRoomDTO.getRoomId(), bookedRoomDTO.getNumberOfAdults(),
+				bookedRoomDTO.getNumberOfChildren());
 	}
 
 }
