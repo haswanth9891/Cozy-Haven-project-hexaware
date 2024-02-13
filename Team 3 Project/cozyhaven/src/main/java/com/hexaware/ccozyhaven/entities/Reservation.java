@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -26,7 +27,6 @@ public class Reservation {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-
 	@Column(name = "reservation_id")
 	private Long reservationId;
 
@@ -63,13 +63,17 @@ public class Reservation {
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")
-
 	private User user;
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "hotel_id")
 	private Hotel hotel;
+	
+	@OneToOne(mappedBy = "reservation",cascade = CascadeType.ALL)
+	@JsonBackReference
+	private Payment payment;
 
+	
 	public Reservation() {
 		super();
 	}
@@ -165,6 +169,14 @@ public class Reservation {
 
 	public void setRefundProcessed(boolean refundProcessed) {
 		this.refundProcessed = refundProcessed;
+	}
+
+	public Payment getPayment() {
+		return payment;
+	}
+
+	public void setPayment(Payment payment) {
+		this.payment = payment;
 	}
 
 	public Set<Room> getRooms() {

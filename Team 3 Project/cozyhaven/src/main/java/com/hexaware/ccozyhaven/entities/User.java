@@ -65,6 +65,10 @@ public class User {
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private Set<Review> reviews = new HashSet<>();
+	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	@JsonIgnoreProperties("user")
+	private Set<Payment> paymentSet = new HashSet<>();
 
 	public User() {
 		super();

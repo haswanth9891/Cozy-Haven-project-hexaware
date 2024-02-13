@@ -42,8 +42,7 @@ public class SecurityConfig {
 						"/api/hotel/available-rooms/{hotelId}", "/api/hotel/get/{hotelId}",
 						"/api/hotel/get/location/{location}", "/api/hotel/get-by-name/{hotelName}",
 						"/api/review/getall", "api/review/getall-by-hotel-id/{hotelId}", "/api/room/search",
-						"/api/room/availability/{roomId}", "/api/room/calculateTotalFare/{roomId}", "/swagger-ui/",
-						"/swagger-resources/")
+						"/api/room/availability/{roomId}", "/api/room/calculateTotalFare/{roomId}","/swagger-ui/", "/v3/api-docs/**")
 				.permitAll().and().authorizeHttpRequests().anyRequest().authenticated().and().sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 				.authenticationProvider(authenticationProvider())

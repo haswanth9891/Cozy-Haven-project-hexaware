@@ -74,7 +74,6 @@ public class ReservationServiceImp implements IReservationService {
 	}
 
 	@Override
-
 	public boolean reservationRoom(Long userId, List<BookedRoomDTO> bookedRooms, LocalDate checkInDate,
 			LocalDate checkOutDate)
 			throws RoomNotAvailableException, RoomNotFoundException, UserNotFoundException, InconsistentHotelException {
@@ -142,10 +141,10 @@ public class ReservationServiceImp implements IReservationService {
 		// setting hotel fetched from above
 		reservation.setHotel(firstHotel);
 
-		reservation.setReservationStatus("CONFIRMED");
+		reservation.setReservationStatus("PENDING");
 
 		reservationRepository.save(reservation);
-		LOGGER.info("Reservation made successfully");
+		LOGGER.info("Reservation is Pending, Complete the Payment");
 		return true;
 	}
 
@@ -290,7 +289,7 @@ public class ReservationServiceImp implements IReservationService {
 		Reservation reservation = reservationRepository.findByReservationIdAndUser_UserId(reservationId, userId)
 				.orElseThrow(() -> new ReservationNotFoundException(reservationNotFound + reservationId));
 
-		if (!reservation.getReservationStatus().equals(reservationStatusCancelled)) {
+		if (!reservation.getReservationStatus().equals(reservationStatusCancelled) && reservation.getPayment().getStatus().equals("SUCCESS")) {
 
 			reservation.setReservationStatus(reservationStatusCancelled);
 			reservationRepository.save(reservation);

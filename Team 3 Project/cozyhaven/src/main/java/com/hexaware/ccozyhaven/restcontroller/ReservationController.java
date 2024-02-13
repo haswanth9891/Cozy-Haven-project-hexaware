@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hexaware.ccozyhaven.dto.BookedRoomDTO;
+import com.hexaware.ccozyhaven.dto.MakeReservationDTO;
 import com.hexaware.ccozyhaven.entities.Reservation;
 
 import com.hexaware.ccozyhaven.exceptions.InconsistentHotelException;
@@ -94,17 +95,16 @@ public class ReservationController {
 
 	@PostMapping("/make-reservation")
 	@PreAuthorize("hasAuthority('USER')")
-	public ResponseEntity<String> reserveRooms(@RequestParam Long userId, @RequestBody List<BookedRoomDTO> bookedRooms,
-			@RequestParam String checkInDate, @RequestParam String checkOutDate) {
+	public ResponseEntity<String> reserveRooms( @RequestBody MakeReservationDTO makeReservationDTO) {
 
 		try {
-			LocalDate checkIn = LocalDate.parse(checkInDate);
-			LocalDate checkOut = LocalDate.parse(checkOutDate);
+			LocalDate checkIn = LocalDate.parse(makeReservationDTO.getCheckInDate());
+			LocalDate checkOut = LocalDate.parse(makeReservationDTO.getCheckOutDate());
 
-			boolean reservationSuccess = reservationService.reservationRoom(userId, bookedRooms, checkIn, checkOut);
+			boolean reservationSuccess = reservationService.reservationRoom(makeReservationDTO.getUserId(), makeReservationDTO.getBookedRoomDTO(), checkIn, checkOut);
 
 			if (reservationSuccess) {
-				return new ResponseEntity<>("Reservation successful", HttpStatus.OK);
+				return new ResponseEntity<>("Reservation is Pending, make Payment", HttpStatus.OK);
 			} else {
 				return new ResponseEntity<>("Reservation failed", HttpStatus.INTERNAL_SERVER_ERROR);
 			}
