@@ -16,7 +16,10 @@ import com.hexaware.ccozyhaven.repository.PaymentRepository;
 import com.hexaware.ccozyhaven.repository.ReservationRepository;
 import com.hexaware.ccozyhaven.repository.UserRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
+@Transactional
 public class PaymentServiceImp implements IPaymentService{
 	
 	private final PaymentRepository paymentRepository;
@@ -29,7 +32,10 @@ public class PaymentServiceImp implements IPaymentService{
         this.userRepository = userRepository;
         this.reservationRepository = reservationRepository;
     }
-
+   
+    
+    
+    @Override
     public Payment processPayment( PaymentDTO paymentDTO) throws ReservationNotFoundException, UserNotFoundException {
         // In a real-world scenario, this method would interact with a payment gateway API
         // Here, we simulate a successful payment by saving the payment details to the database
