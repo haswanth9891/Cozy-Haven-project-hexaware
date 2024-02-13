@@ -31,6 +31,7 @@ public class Reservation {
 	private Long reservationId;
 
 	@NotNull(message = "Check-in date cannot be null")
+	@Future(message = "Check-out date must be in the future")
 	@Column(name = "check_in_date")
 	private LocalDate checkInDate;
 

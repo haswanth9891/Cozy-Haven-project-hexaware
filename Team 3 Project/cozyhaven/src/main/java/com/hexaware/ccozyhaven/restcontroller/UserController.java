@@ -57,7 +57,7 @@ public class UserController {
 	}
 
 	@PostMapping("/register")
-	public String registerUser(@RequestBody UserDTO userDTO) throws DataAlreadyPresentException {
+	public String registerUser(@RequestBody @Valid UserDTO userDTO) throws DataAlreadyPresentException {
 		LOGGER.info("Request Received to register new Customer: {}", userDTO);
 		long userId = userService.register(userDTO);
 

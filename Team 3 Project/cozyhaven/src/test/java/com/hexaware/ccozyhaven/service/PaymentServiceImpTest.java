@@ -2,6 +2,8 @@ package com.hexaware.ccozyhaven.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,18 +43,14 @@ class PaymentServiceImpTest {
         // Given
         PaymentDTO paymentDTO = new PaymentDTO();
         paymentDTO.setUserId(1L);
-        paymentDTO.setReservationId(2L);
-        paymentDTO.setPaymentMethod("CreditCard");
+        paymentDTO.setReservationId(1L);
+        paymentDTO.setPaymentMethod("credit card");
 
-        User user = new User();
-        user.setUserId(1L);
+        
+        
+        
 
-        Reservation reservation = new Reservation();
-        reservation.setReservationId(2L);
-        reservation.setTotalAmount(100.0);
-
-        userRepository.save(user);
-        reservationRepository.save(reservation);
+       
 
         
         Payment result = paymentService.processPayment(paymentDTO);
