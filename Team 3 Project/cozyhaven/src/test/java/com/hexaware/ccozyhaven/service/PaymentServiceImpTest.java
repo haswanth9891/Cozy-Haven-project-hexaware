@@ -2,7 +2,8 @@ package com.hexaware.ccozyhaven.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.Optional;
+import java.time.LocalDateTime;
+
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ class PaymentServiceImpTest {
 	
 	
 	 @Autowired
-	    private PaymentRepository paymentRepository;
+	    private IPaymentService paymentService;
 
 	    @Autowired
 	    private UserRepository userRepository;
@@ -34,33 +35,49 @@ class PaymentServiceImpTest {
 	    private ReservationRepository reservationRepository;
 
 	    @Autowired
-	    private PaymentServiceImp paymentService;
-	
-	
+	    private PaymentRepository paymentRepository;
 
-	@Test
-	void testProcessPayment() throws UserNotFoundException, ReservationNotFoundException {
-        // Given
-        PaymentDTO paymentDTO = new PaymentDTO();
-        paymentDTO.setUserId(1L);
-        paymentDTO.setReservationId(1L);
-        paymentDTO.setPaymentMethod("credit card");
+	    @Test
+	    void testProcessPayment() throws ReservationNotFoundException, UserNotFoundException {
+	        // Arrange
+	        User user = new User();
+	        user.setUsername("testUser");
+	        user.setPassword("password");
+	        user.setEmail("test@example.com");
+	        user.setContactNumber("1234567890");
+	        user.setGender("Male");
+	        user.setAddress("Test Address");
+	        User savedUser = userRepository.save(user);
 
-        
-        
-        
+	        Reservation reservation = new Reservation();
+	        reservation.setUser(savedUser);
+	        reservation.setCheckInDate(null);
+	        reservation.setCheckOutDate(null);
+	        reservation.setNumberOfAdults(2);
+	        reservation.setNumberOfChildren(1);
+	        reservation.setTotalAmount(150.0);
+	        reservation.setReservationStatus("PENDING");
+	        Reservation savedReservation = reservationRepository.save(reservation);
 
-       
+	        PaymentDTO paymentDTO = new PaymentDTO();
+	        paymentDTO.setUserId(savedUser.getUserId());
+	        paymentDTO.setReservationId(savedReservation.getReservationId());
+	        paymentDTO.setPaymentMethod("Credit Card");
 
-        
-        Payment result = paymentService.processPayment(paymentDTO);
+	        // Act
+	        Payment payment = paymentService.processPayment(paymentDTO);
 
-        
-        assertEquals("CONFIRMED", result.getReservation().getReservationStatus());
-        assertEquals("SUCCESS", result.getStatus());
-        // Additional assertions can be added based on your requirements
-    }
+	        // Assert
+	        assertNotNull(payment.getTransactionID());
+	        assertEquals("SUCCESS", payment.getStatus());
+	        assertNotNull(payment.getPaymentDate());
 
-   
+	        Reservation updatedReservation = reservationRepository.findById(savedReservation.getReservationId()).orElse(null);
+	        assertNotNull(updatedReservation);
+	        assertEquals("CONFIRMED", updatedReservation.getReservationStatus());
+	        assertNotNull(updatedReservation.getPayment());
+	        assertEquals(payment.getAmount(), updatedReservation.getPayment().getAmount());
+	        assertEquals(payment.getPaymentMethod(), updatedReservation.getPayment().getPaymentMethod());
+	    }
 
 }
