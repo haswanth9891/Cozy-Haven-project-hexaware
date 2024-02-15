@@ -7,7 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -31,7 +31,8 @@ public class Review {
 
 	@Id
 	@Column(name = "review_id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "review_sequence")
+	@SequenceGenerator(name = "review_sequence", initialValue = 601, allocationSize = 1)
 	private Long reviewId;
 
 	@Min(value = 1, message = "Rating must be at least 1")

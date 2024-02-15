@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -24,7 +25,8 @@ public class Administrator {
 
 	@Id
 	@Column(name = "admin_id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	 @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "admin_sequence")
+    @SequenceGenerator(name = "admin_sequence", initialValue = 10001, allocationSize = 1)
 	private Long adminId;
 
 	@Column(name = "firstName")

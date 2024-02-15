@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -24,7 +25,8 @@ import jakarta.validation.constraints.Pattern;
 public class Payment {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "payment_sequence")
+	@SequenceGenerator(name = "payment_sequence", initialValue = 939031, allocationSize = 1)
 	private Long paymentId;
 	
 	@NotNull(message = "Amount is required")
