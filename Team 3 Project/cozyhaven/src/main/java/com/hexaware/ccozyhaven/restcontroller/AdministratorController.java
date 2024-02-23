@@ -1,6 +1,7 @@
 package com.hexaware.ccozyhaven.restcontroller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,11 +23,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hexaware.ccozyhaven.dto.AdministratorDTO;
 import com.hexaware.ccozyhaven.dto.AuthRequest;
+import com.hexaware.ccozyhaven.entities.Administrator;
 import com.hexaware.ccozyhaven.entities.HotelOwner;
 import com.hexaware.ccozyhaven.entities.User;
 import com.hexaware.ccozyhaven.exceptions.DataAlreadyPresentException;
 
 import com.hexaware.ccozyhaven.exceptions.UserNotFoundException;
+import com.hexaware.ccozyhaven.repository.AdministratorRepository;
 import com.hexaware.ccozyhaven.service.IAdministratorService;
 
 import com.hexaware.ccozyhaven.service.JwtService;
@@ -51,6 +54,9 @@ public class AdministratorController {
 
 	@Autowired
 	AuthenticationManager authenticationManager;
+	
+	@Autowired
+	AdministratorRepository adminRepository;
 
 	private final IAdministratorService administratorService;
 
@@ -75,29 +81,42 @@ public class AdministratorController {
 
 	@PostMapping("/login")
 	public String login(@RequestBody @Valid AuthRequest authRequest) {
-		LOGGER.info("Request received to login as user: {}, Password: {}", authRequest.getUsername(),
-				authRequest.getPassword());
-
-		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
-
+		Authentication authentication = 	authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+		 
 		String token = null;
+		
+				if(authentication.isAuthenticated()) {
+					
+				  // call generate token method from jwtService class
+					
+//			token =		jwtService.generateToken(authRequest.getUsername());
+//					
+//			log.info("Tokent : "+token);
+					 Optional<Administrator> admin = adminRepository.findByUsername(authRequest.getUsername());
 
-		if (authentication.isAuthenticated()) {
+				        if (admin.isPresent()) {
+				            String role = admin.get().getRole();
+				            Long customerId = admin.get().getAdminId();
 
-			token = jwtService.generateToken(authRequest.getUsername());
+				            // Call generateToken method from JwtService class with additional parameters
+				            token = jwtService.generateToken(authRequest.getUsername(), role, customerId);
 
-			LOGGER.info("Tokent : {}", token);
-
-		} else {
-
-			LOGGER.info("invalid");
-
-			throw new UsernameNotFoundException("UserName or Password in Invalid / Invalid Request");
-
-		}
-
-		return token;
+				            LOGGER.info("Token: " + token);
+				        } else {
+				            LOGGER.error("User not found in the database");
+				            // Handle the case where the user is not found in the database
+				        }
+					
+				}
+				else {
+					
+					LOGGER.info("invalid");
+					
+					 throw new UsernameNotFoundException("UserName or Password in Invalid / Invalid Request");
+					
+				}
+		
+				return token;
 	}
 
 	@DeleteMapping("/delete-user-account/{userId}")

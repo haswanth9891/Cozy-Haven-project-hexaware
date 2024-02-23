@@ -24,12 +24,14 @@ public class JwtService {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(JwtService.class);
 
-	public String createToken(Map<String, Object> claims, String username) {
+	public String createToken(Map<String, Object> claims, String username, String role, Long customerId) {
 
-		return Jwts.builder().setClaims(claims).setSubject(username).setIssuedAt(new Date(System.currentTimeMillis()))
-				.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30))
-				.signWith(getSignKey(), SignatureAlgorithm.HS256) // if decoding then encode=ing with signkey
-				.compact();
+		return Jwts.builder().setClaims(claims).setSubject(username)
+				.claim("role", role) // Add user role claim
+	            .claim("customerId", customerId) // Add customer ID claim
+				.setIssuedAt(new Date(System.currentTimeMillis()))
+				.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 2))
+				.signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
 
 	}
 
@@ -39,10 +41,12 @@ public class JwtService {
 		return Keys.hmacShaKeyFor(keyBytes);
 	}
 
-	public String generateToken(String username) {
-		LOGGER.info("generate Token");
+	public String generateToken(String username, String role, Long customerId) {
+
 		Map<String, Object> claims = new HashMap<>();
-		return createToken(claims, username);
+
+		return createToken(claims, username, role, customerId);//changed
+
 	}
 
 	private Claims extractAllClaims(String token) {

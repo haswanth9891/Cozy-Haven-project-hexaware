@@ -1,5 +1,7 @@
 package com.hexaware.ccozyhaven.restcontroller;
 
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +22,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hexaware.ccozyhaven.dto.HotelOwnerDTO;
+import com.hexaware.ccozyhaven.entities.HotelOwner;
+import com.hexaware.ccozyhaven.entities.User;
 import com.hexaware.ccozyhaven.dto.AuthRequest;
 
 import com.hexaware.ccozyhaven.exceptions.DataAlreadyPresentException;
 import com.hexaware.ccozyhaven.exceptions.HotelOwnerNotFoundException;
-
+import com.hexaware.ccozyhaven.repository.AdministratorRepository;
+import com.hexaware.ccozyhaven.repository.HotelOwnerRepository;
 import com.hexaware.ccozyhaven.service.IHotelOwnerService;
 
 import com.hexaware.ccozyhaven.service.JwtService;
@@ -54,6 +59,9 @@ public class HotelOwnerController {
 
 	@Autowired
 	AuthenticationManager authenticationManager;
+	
+	@Autowired
+	HotelOwnerRepository hotelOwnerRepository;
 
 	@PostMapping("/register")
 	public String registerCustomer(@RequestBody HotelOwnerDTO hotelOwnerDTO) throws DataAlreadyPresentException {
@@ -69,21 +77,43 @@ public class HotelOwnerController {
 	}
 
 	@PostMapping("/login")
-	public String authenticateAndGetToken(@RequestBody AuthRequest loginDto) {
+	public String authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
+		Authentication authentication = 	authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+		 
 		String token = null;
-		Authentication authentication = authenticationManager
-				.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword()));
-		if (authentication.isAuthenticated()) {
-			token = jwtService.generateToken(loginDto.getUsername());
-			if (token != null) {
-				LOGGER.info("Token for Hotel Owner: {}", token);
-			} else {
-				LOGGER.warn("Token not generated");
-			}
-		} else {
-			throw new UsernameNotFoundException("Username not found");
-		}
-		return token;
+		
+				if(authentication.isAuthenticated()) {
+					
+				  // call generate token method from jwtService class
+					
+//			token =		jwtService.generateToken(authRequest.getUsername());
+//					
+//			log.info("Tokent : "+token);
+					 Optional<HotelOwner> hotelOwner = hotelOwnerRepository.findByUsername(authRequest.getUsername());
+
+				        if (hotelOwner.isPresent()) {
+				            String role = hotelOwner.get().getRole();
+				            Long customerId = hotelOwner.get().getHotelOwnerId();
+
+				            // Call generateToken method from JwtService class with additional parameters
+				            token = jwtService.generateToken(authRequest.getUsername(), role, customerId);
+
+				            LOGGER.info("Token: " + token);
+				        } else {
+				            LOGGER.error("User not found in the database");
+				            // Handle the case where the user is not found in the database
+				        }
+					
+				}
+				else {
+					
+					LOGGER.info("invalid");
+					
+					 throw new UsernameNotFoundException("UserName or Password in Invalid / Invalid Request");
+					
+				}
+		
+				return token;
 	}
 
 	@PutMapping("/update/{hotelOwnerId}")

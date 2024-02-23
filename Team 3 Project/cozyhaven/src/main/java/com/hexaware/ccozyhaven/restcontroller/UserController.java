@@ -1,5 +1,7 @@
 package com.hexaware.ccozyhaven.restcontroller;
 
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +29,7 @@ import com.hexaware.ccozyhaven.entities.User;
 import com.hexaware.ccozyhaven.exceptions.DataAlreadyPresentException;
 
 import com.hexaware.ccozyhaven.exceptions.UserNotFoundException;
-
+import com.hexaware.ccozyhaven.repository.UserRepository;
 import com.hexaware.ccozyhaven.service.IUserService;
 import com.hexaware.ccozyhaven.service.JwtService;
 
@@ -51,6 +53,9 @@ public class UserController {
 
 	@Autowired
 	AuthenticationManager authenticationManager;
+	
+	@Autowired
+	UserRepository userRepository;
 
 	private final IUserService userService;
 
@@ -73,29 +78,42 @@ public class UserController {
 
 	@PostMapping("/login")
 	public String authenticateAndGetTokent(@RequestBody AuthRequest authRequest) {
-
-		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
-
+		Authentication authentication = 	authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+		 
 		String token = null;
+		
+				if(authentication.isAuthenticated()) {
+					
+				  // call generate token method from jwtService class
+					
+//			token =		jwtService.generateToken(authRequest.getUsername());
+//					
+//			log.info("Tokent : "+token);
+					 Optional<User> user = userRepository.findByUsername(authRequest.getUsername());
 
-		if (authentication.isAuthenticated()) {
+				        if (user.isPresent()) {
+				            String role = user.get().getRole();
+				            Long customerId = user.get().getUserId();
 
-			// call generate token method from jwtService class
+				            // Call generateToken method from JwtService class with additional parameters
+				            token = jwtService.generateToken(authRequest.getUsername(), role, customerId);
 
-			token = jwtService.generateToken(authRequest.getUsername());
-
-			LOGGER.info("Tokent : {}", token);
-
-		} else {
-
-			LOGGER.info("invalid");
-
-			throw new UsernameNotFoundException("UserName or Password in Invalid / Invalid Request");
-
-		}
-
-		return token;
+				            LOGGER.info("Token: " + token);
+				        } else {
+				            LOGGER.error("User not found in the database");
+				            // Handle the case where the user is not found in the database
+				        }
+					
+				}
+				else {
+					
+					LOGGER.info("invalid");
+					
+					 throw new UsernameNotFoundException("UserName or Password in Invalid / Invalid Request");
+					
+				}
+		
+				return token;
 
 	}
 

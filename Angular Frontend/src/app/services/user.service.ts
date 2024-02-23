@@ -10,12 +10,11 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  private baseUrl = 'https://localhost:8081/api/user';
+  private baseUrl = 'http://localhost:8081/api/user';
 
 
-  postCustomer(user: User): Observable<User> {
-    const url = `${this.baseUrl}/register`;
-    return this.http.post<User>(url, user)
+  postUser(user: User): Observable<User> {
+    return this.http.post<User>('http://localhost:8081/api/user/register', user)
       .pipe(
         catchError(this.handleError)
       );
@@ -27,10 +26,6 @@ export class UserService {
     }
     if (error.error instanceof ErrorEvent) {
       console.error('An error occurred:', error.error.message);
-    } else {
-      console.error(
-        `Backend returned code ${error.status}, ` +
-        `body was: ${error.error}`);
     }
     return throwError('An error occurred. Please try again later.');
   }

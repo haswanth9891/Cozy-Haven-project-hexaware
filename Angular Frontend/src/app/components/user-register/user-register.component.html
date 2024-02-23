@@ -13,22 +13,22 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="firstName">First Name:</label>
-                                        <input type="text" id="firstName" class="form-control"
-                                            formControlName="firstName" required>
-                                        <div class="error-message" *ngIf="isFieldValid('firstName')">
-                                            {{ getErrorMessage('firstName') }}
+                                        <label for="userFirstName">First Name:</label>
+                                        <input type="text" id="userFirstName" class="form-control"
+                                            formControlName="userFirstName" required>
+                                        <div class="error-message" *ngIf="isFieldValid('userFirstName')">
+                                            {{ getErrorMessage('userFirstName') }}
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="lastName">Last Name:</label>
-                                        <input type="text" id="lastName" class="form-control" formControlName="lastName"
-                                            required>
-                                        <div class="error-message" *ngIf="isFieldValid('lastName')">
-                                            {{ getErrorMessage('lastName') }}
+                                        <label for="userLastName">Last Name:</label>
+                                        <input type="text" id="userLastName" class="form-control"
+                                            formControlName="userLastName" required>
+                                        <div class="error-message" *ngIf="isFieldValid('userLastName')">
+                                            {{ getErrorMessage('userLastName') }}
                                         </div>
                                     </div>
                                 </div>
@@ -59,18 +59,18 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="contactInfo">Phone Number:</label>
-                                <input type="text" id="contactInfo" class="form-control" formControlName="contactInfo"
-                                    required>
-                                <div class="error-message" *ngIf="isFieldValid('contactInfo')">
-                                    {{ getErrorMessage('contactInfo') }}
+                                <label for="contactNumber">Phone Number:</label>
+                                <input type="text" id="contactNumber" class="form-control"
+                                    formControlName="contactNumber" required>
+                                <div class="error-message" *ngIf="isFieldValid('contactNumber')">
+                                    {{ getErrorMessage('contactNumber') }}
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="email">Email:</label>
                                 <input type="email" id="email" class="form-control" formControlName="email" required>
-                                <div class="error-message" *ngIf="isFieldValid('password')">
-                                    {{ getErrorMessage('password') }}
+                                <div class="error-message" *ngIf="isFieldValid('email')">
+                                    {{ getErrorMessage('email') }}
                                 </div>
                             </div>
                             <div class="form-group">

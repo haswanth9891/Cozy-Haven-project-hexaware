@@ -8,6 +8,13 @@ import { LoginComponent } from './components/login/login.component';
 import { HotelownerRegisterComponent } from './components/hotelowner-register/hotelowner-register.component';
 import { HotelComponent } from './components/hotel/hotel.component';
 import { AboutComponent } from './components/about/about.component';
+import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
+import { HotelownerDashboardComponent } from './components/hotelowner-dashboard/hotelowner-dashboard.component';
+import { UserDashboardComponent } from './components/user-dashboard/user-dashboard.component';
+
+import { ProfileComponent } from './components/profile/profile.component';
+import { HotelownerLoginComponent } from './components/hotelowner-login/hotelowner-login.component';
+import { AdminLoginComponent } from './components/admin-login/admin-login.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -19,8 +26,14 @@ const routes: Routes = [
   { path: 'hotel', component: HotelComponent },
   { path: 'about', component: AboutComponent },
 
-  { path: 'login', component: LoginComponent }
+  { path: 'login', component: LoginComponent },
+  { path: 'hotelowner-login', component: HotelownerLoginComponent },
+  { path: 'admin-login', component: AdminLoginComponent },
 
+  { path: 'user-dashboard', component: UserDashboardComponent },
+  { path: 'admindashboard', component: AdminDashboardComponent },
+  { path: 'hotelowner-dashboard', component: HotelownerDashboardComponent },
+  { path: "profile", component: ProfileComponent }
 ];
 
 @NgModule({
