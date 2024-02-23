@@ -21,6 +21,9 @@ import { UsersListComponent } from './components/users-list/users-list.component
 import { RoomComponent } from './components/room/room.component';
 import { HotelComponent } from './components/hotel/hotel.component';
 import { AboutComponent } from './components/about/about.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { HotelownerLoginComponent } from './components/hotelowner-login/hotelowner-login.component';
+import { AdminLoginComponent } from './components/admin-login/admin-login.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +43,10 @@ import { AboutComponent } from './components/about/about.component';
     UsersListComponent,
     RoomComponent,
     HotelComponent,
-    AboutComponent
+    AboutComponent,
+    ProfileComponent,
+    HotelownerLoginComponent,
+    AdminLoginComponent
 
   ],
   imports: [

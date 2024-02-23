@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { User } from 'src/app/model/user';
@@ -20,8 +20,8 @@ export class UserRegisterComponent {
     private router: Router
   ) {
     this.signupForm = this.formBuilder.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
+      userFirstName: ['', Validators.required],
+      userLastName: ['', Validators.required],
       username: ['', Validators.required],
       contactNumber: ['', Validators.required],
       email: ['', Validators.required],
@@ -46,10 +46,10 @@ export class UserRegisterComponent {
 
     const newUser: User = {
 
-      firstName: this.signupForm.value.firstName,
-      lastName: this.signupForm.value.lastName,
+      userFirstName: this.signupForm.value.userFirstName,
+      userLastName: this.signupForm.value.userLastName,
       username: this.signupForm.value.username,
-      contactNumber: this.signupForm.value.contactInfo,
+      contactNumber: this.signupForm.value.contactNumber,
       password: this.signupForm.value.password,
       email: this.signupForm.value.email,
       gender: this.signupForm.value.gender,
@@ -57,33 +57,31 @@ export class UserRegisterComponent {
 
     };
 
-    this.userService.postCustomer(newUser)
+    this.userService.postUser(newUser)
       .subscribe(
         user => {
           console.log('Inserted:', user);
 
           this.signupForm.reset();
-
-          // Save the first name in session storage
-          sessionStorage.setItem('firstName', user.firstName);
-
+          sessionStorage.setItem('userFirstName', user.userFirstName);
           alert('Registered successfully!');
+          this.router.navigate(['/login']);
 
-          this.router.navigate(['/profile']);
         },
         error => {
           console.log('Error:', error);
+          const errorMessage = error.message || 'An error occurred. Please try again later.';
+          alert(errorMessage);
         }
       );
+
   }
 
 
 
   isFieldValid(field: string) {
-    return (
-      !this.signupForm.get(field)?.valid &&
-      this.signupForm.get(field)?.touched
-    );
+    const control = this.signupForm.get(field);
+    return !control?.valid && control?.touched;
   }
 
 
