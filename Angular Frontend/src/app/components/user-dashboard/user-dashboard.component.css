@@ -1,6 +1,28 @@
+.navbar-brand img {
+    height: 40px;
+    width: auto;
+    margin-right: 10px;
+    border-radius: 50%;
+    box-shadow: 2px 2px 5px #b18800(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+.navbar-brand img:hover {
+    transform: rotate(360deg);
+}
+
+
+
+
+
+
 .navbar {
     background-color: #f8f9fa;
     padding: 10px;
+    width: 100%;
+    /* Set your desired width */
+    margin: 0 auto;
+    /* Center the navbar */
 }
 
 .navbar-brand {
@@ -9,14 +31,42 @@
     color: #b18800;
 }
 
-.navbar-nav .nav-link {
-    font-size: 16px;
-    color: #333;
-    margin-right: 10px;
+.navbar-nav li {
+    margin: 0 10px;
 }
 
-.navbar-nav .nav-link.active {
+.navbar-nav a {
+    text-decoration: none;
+    color: #333;
+    position: relative;
     font-weight: bold;
+    transition: color 0.3s;
+}
+
+/* Navbar Links Hover Effect */
+.navbar-nav a:hover {
+    color: #b18800;
+    /* Change this to your desired hover color */
+}
+
+/* Navbar Links Blow Effect */
+.navbar-nav a::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: #b18800;
+    /* Use the same color as hover */
+    bottom: 0;
+    left: 0;
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    transition: transform 0.3s ease-out;
+}
+
+.navbar-nav a:hover::before {
+    transform: scaleX(1);
+    transform-origin: bottom left;
 }
 
 .butt1 {

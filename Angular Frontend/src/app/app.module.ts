@@ -19,11 +19,19 @@ import { BookingListComponent } from './components/booking-list/booking-list.com
 import { HotelownerListComponent } from './components/hotelowner-list/hotelowner-list.component';
 import { UsersListComponent } from './components/users-list/users-list.component';
 import { RoomComponent } from './components/room/room.component';
-import { HotelComponent } from './components/hotel/hotel.component';
+
 import { AboutComponent } from './components/about/about.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { HotelownerLoginComponent } from './components/hotelowner-login/hotelowner-login.component';
 import { AdminLoginComponent } from './components/admin-login/admin-login.component';
+import { OurHotelsComponent } from './components/our-hotels/our-hotels.component';
+import { HotelListComponent } from './components/hotel-list/hotel-list.component';
+import { UserService } from './services/user.service';
+import { HotelownerService } from './services/hotelowner.service';
+import { HotelService } from './services/hotel.service';
+import { RoomService } from './services/room.service';
+import { SearchRoomsListComponent } from './components/search-rooms-list/search-rooms-list.component';
+import { ManageHotelownersComponent } from './components/manage-hotelowners/manage-hotelowners.component';
 
 @NgModule({
   declarations: [
@@ -42,11 +50,15 @@ import { AdminLoginComponent } from './components/admin-login/admin-login.compon
     HotelownerListComponent,
     UsersListComponent,
     RoomComponent,
-    HotelComponent,
+
     AboutComponent,
     ProfileComponent,
     HotelownerLoginComponent,
-    AdminLoginComponent
+    AdminLoginComponent,
+    OurHotelsComponent,
+    HotelListComponent,
+    SearchRoomsListComponent,
+    ManageHotelownersComponent
 
   ],
   imports: [
@@ -57,7 +69,7 @@ import { AdminLoginComponent } from './components/admin-login/admin-login.compon
     ReactiveFormsModule
 
   ],
-  providers: [],
+  providers: [UserService, HotelownerService, HotelService, RoomService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

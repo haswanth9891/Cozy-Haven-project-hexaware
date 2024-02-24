@@ -1,60 +1,113 @@
-body {
+.navbar-brand img {
+    height: 40px;
+    width: auto;
+    margin-right: 10px;
+    border-radius: 50%;
+    box-shadow: 2px 2px 5px #b18800(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+.navbar-brand img:hover {
+    transform: rotate(360deg);
+}
+
+
+
+
+
+
+.navbar {
     background-color: #f8f9fa;
-    font-family: Arial, sans-serif;
-}
-
-.container-fluid {
-    padding-top: 50px;
-}
-
-.header {
-    background-color: #343a40;
-    color: #fff;
-    padding: 20px;
-}
-
-.header h1 {
-    margin-top: 10px;
-}
-
-.sidebar {
-    background-color: #343a40;
-    color: #fff;
-    height: 100vh;
-    padding-top: 20px;
-}
-
-.sidebar ul {
-    padding-left: 0;
-}
-
-.sidebar li {
-    margin-bottom: 10px;
-}
-
-.sidebar a {
-    color: #fff;
     padding: 10px;
-    display: block;
+    width: 100%;
+    /* Set your desired width */
+    margin: 0 auto;
+    /* Center the navbar */
+}
+
+.navbar-brand {
+    font-size: 20px;
+    font-weight: bold;
+    color: #b18800;
+}
+
+.navbar-nav li {
+    margin: 0 10px;
+}
+
+.navbar-nav a {
     text-decoration: none;
-    transition: background-color 0.3s;
+    color: #333;
+    position: relative;
+    font-weight: bold;
+    transition: color 0.3s;
 }
 
-.sidebar a:hover {
-    background-color: #495057;
+/* Navbar Links Hover Effect */
+.navbar-nav a:hover {
+    color: #b18800;
+    /* Change this to your desired hover color */
 }
 
-.content {
-    padding: 20px;
-    background-color: #fff;
+/* Navbar Links Blow Effect */
+.navbar-nav a::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: #b18800;
+    /* Use the same color as hover */
+    bottom: 0;
+    left: 0;
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    transition: transform 0.3s ease-out;
 }
 
-/* Sections */
-.section {
-    display: none;
+.navbar-nav a:hover::before {
+    transform: scaleX(1);
+    transform-origin: bottom left;
 }
 
-.section.active {
-    display: block;
-    animation: fadeIn 0.5s ease-in-out forwards;
+.butt1 {
+    height: 40px;
+    width: 120px;
+    background-color: transparent;
+    color: #b18800;
+    border: 3px solid;
+    border-radius: 20px;
+    font-size: 19px;
+    font-weight: bold;
+    margin-right: 2px;
+}
+
+
+
+.butt1:hover {
+    opacity: 0.8;
+
+}
+
+.Top_most {
+    width: 100%;
+    height: auto;
+    position: relative;
+    z-index: -1;
+    filter: brightness(85%);
+}
+
+.landing-page {
+    position: relative;
+
+}
+
+.centered-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+    z-index: 1;
+    font-size: 24px;
 }

@@ -68,7 +68,7 @@ public class UserController {
 	public String registerUser(@RequestBody @Valid UserDTO userDTO) throws DataAlreadyPresentException {
 		LOGGER.info("Request Received to register new Customer: {}", userDTO);
 		long userId = userService.register(userDTO);
-
+        LOGGER.info(" " + userId);
 		if (userId != 0) {
 			return "User added successfully ";
 		} else {

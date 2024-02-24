@@ -1,9 +1,23 @@
 .background-image {
-
-    background-image: url('https://i0.wp.com/outoftownblog.com/wp-content/uploads/2020/02/Room-with-a-View-at-The-Chow-Kit-KL.jpg?fit=1200%2C800&ssl=1');
-    background-size: cover;
+    width: 100%;
+    /* Set width to 100% */
+    height: auto;
+    background-size: auto;
     background-position: center;
-    height: 400px;
+}
+
+.hero-home {
+    width: 100%;
+    /* Set the image width to 100% of its container */
+    height: auto;
+    /* Maintain the aspect ratio */
+    display: block;
+    /* Remove any extra spacing below the image */
+    position: relative;
+    /* Position the image absolutely within its container */
+    margin: auto;
+    /* Center the image horizontally and vertically */
+    object-fit: cover;
 }
 
 .wrapper {

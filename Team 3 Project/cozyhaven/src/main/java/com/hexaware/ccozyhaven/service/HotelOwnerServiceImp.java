@@ -57,8 +57,8 @@ public class HotelOwnerServiceImp implements IHotelOwnerService {
 		LOGGER.info("Adding hotel owner with hotel: {}", hotelOwnerDTO);
 
 		HotelOwner hotelOwner = convertHotelOwnerDTOToEntity(hotelOwnerDTO);
-		HotelDTO hotelDTO = hotelOwnerDTO.getHotelDTO();
-		Hotel hotel = convertHotelDTOToEntity(hotelDTO);
+		
+		Hotel hotel = convertHotelDTOToEntity(hotelOwnerDTO);
 		hotelOwner.setRole("HOTEL_OWNER");
 		hotel.setHotelOwner(hotelOwner);
 		hotelOwner.setHotel(hotel);
@@ -88,17 +88,17 @@ public class HotelOwnerServiceImp implements IHotelOwnerService {
 		return hotelOwner;
 	}
 
-	private Hotel convertHotelDTOToEntity(HotelDTO hotelDTO) {
+	private Hotel convertHotelDTOToEntity(HotelOwnerDTO hotelOwnerDTO) {
 		Hotel hotel = new Hotel();
 
-		hotel.setHotelName(hotelDTO.getHotelName());
-		hotel.setLocation(hotelDTO.getLocation());
-		hotel.setHasDining(hotelDTO.isHasDining());
-		hotel.setHasParking(hotelDTO.isHasParking());
-		hotel.setHasFreeWiFi(hotelDTO.isHasFreeWiFi());
-		hotel.setHasRoomService(hotelDTO.isHasRoomService());
-		hotel.setHasSwimmingPool(hotelDTO.isHasSwimmingPool());
-		hotel.setHasFitnessCenter(hotelDTO.isHasFitnessCenter());
+		hotel.setHotelName(hotelOwnerDTO.getHotelName());
+		hotel.setLocation(hotelOwnerDTO.getLocation());
+		hotel.setHasDining(hotelOwnerDTO.isHasDining());
+		hotel.setHasParking(hotelOwnerDTO.isHasParking());
+		hotel.setHasFreeWiFi(hotelOwnerDTO.isHasFreeWiFi());
+		hotel.setHasRoomService(hotelOwnerDTO.isHasRoomService());
+		hotel.setHasSwimmingPool(hotelOwnerDTO.isHasSwimmingPool());
+		hotel.setHasFitnessCenter(hotelOwnerDTO.isHasFitnessCenter());
 		return hotel;
 	}
 
@@ -120,17 +120,17 @@ public class HotelOwnerServiceImp implements IHotelOwnerService {
 		existingHotelOwner.setPassword(updatedHotelOwner.getPassword());
 		existingHotelOwner.setAddress(updatedHotelOwner.getAddress());
 
-		HotelDTO updatedHotelDTO = updatedHotelOwnerDTO.getHotelDTO();
+		
 		Hotel existingHotel = existingHotelOwner.getHotel();
 
-		existingHotel.setHotelName(updatedHotelDTO.getHotelName());
-		existingHotel.setLocation(updatedHotelDTO.getLocation());
-		existingHotel.setHasDining(updatedHotelDTO.isHasDining());
-		existingHotel.setHasParking(updatedHotelDTO.isHasParking());
-		existingHotel.setHasFreeWiFi(updatedHotelDTO.isHasFreeWiFi());
-		existingHotel.setHasRoomService(updatedHotelDTO.isHasRoomService());
-		existingHotel.setHasSwimmingPool(updatedHotelDTO.isHasSwimmingPool());
-		existingHotel.setHasFitnessCenter(updatedHotelDTO.isHasFitnessCenter());
+		existingHotel.setHotelName(updatedHotelOwnerDTO.getHotelName());
+		existingHotel.setLocation(updatedHotelOwnerDTO.getLocation());
+		existingHotel.setHasDining(updatedHotelOwnerDTO.isHasDining());
+		existingHotel.setHasParking(updatedHotelOwnerDTO.isHasParking());
+		existingHotel.setHasFreeWiFi(updatedHotelOwnerDTO.isHasFreeWiFi());
+		existingHotel.setHasRoomService(updatedHotelOwnerDTO.isHasRoomService());
+		existingHotel.setHasSwimmingPool(updatedHotelOwnerDTO.isHasSwimmingPool());
+		existingHotel.setHasFitnessCenter(updatedHotelOwnerDTO.isHasFitnessCenter());
 
 		hotelOwnerRepository.save(existingHotelOwner);
 

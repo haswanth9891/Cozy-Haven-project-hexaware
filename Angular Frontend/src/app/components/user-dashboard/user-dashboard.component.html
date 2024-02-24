@@ -1,6 +1,7 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
+            <img src="../assets/logo.jpg" alt="Cozy Haven Logo" height="40">
             COZY HAVEN</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
             aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -9,7 +10,7 @@
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    <a class="nav-link active" routerLink="/user-dashboard">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" routerLink="/mybooking">MyBooking</a>
@@ -40,22 +41,32 @@
                         <h2>Cozy Haven Hotels</h2>
                     </div>
                     <div class="card-body">
-                        <form>
-                            <div class="form-group">
-                                <label for="destination">Enter a destination or property</label>
-                                <input type="text" class="form-control" id="destination"
-                                    placeholder="Enter a destination or property">
-                            </div>
+                        <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
                             <div class="form-group">
                                 <label for="checkin">Check-in date</label>
-                                <input type="date" class="form-control" id="checkin">
+                                <input type="date" id="checkin" formControlName="checkin" class="form-control" />
+                                <div *ngIf="searchForm.get('checkin')?.errors?.['required'] && searchForm.get('checkin')?.touched"
+                                    class="error-message">Check-in date is required</div>
                             </div>
                             <div class="form-group">
                                 <label for="checkout">Check-out date</label>
-                                <input type="date" class="form-control" id="checkout">
+                                <input type="date" id="checkout" formControlName="checkout" class="form-control" />
+                                <div *ngIf="searchForm.get('checkout')?.errors?.['required'] && searchForm.get('checkout')?.touched"
+                                    class="error-message">Check-out date is required</div>
+                                <div *ngIf="searchForm.get('checkout')?.errors?.['min'] && searchForm.get('checkout')?.touched"
+                                    class="error-message">Check-out date should be after check-in date</div>
                             </div>
-                            <button type="submit" class="btn btn-primary">Search</button>
+                            <div class="form-group">
+                                <label for="destination">Destination or property</label>
+                                <input type="text" id="destination" formControlName="destination"
+                                    class="form-control" />
+                                <div *ngIf="searchForm.get('destination')?.errors?.['required'] && searchForm.get('destination')?.touched"
+                                    class="error-message">Destination or property is required</div>
+                            </div>
+                            <button type="submit" class="btn btn-primary" [disabled]="!searchForm.valid">Search</button>
                         </form>
+
+
 
                     </div>
 

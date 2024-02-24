@@ -25,7 +25,14 @@ public class HotelOwnerDTO {
 
 	private String gender;
 	private String address;
-	private HotelDTO hotelDTO = new HotelDTO();
+	private String hotelName;
+	private String location;
+	private boolean hasDining;
+	private boolean hasParking;
+	private boolean hasFreeWiFi;
+	private boolean hasRoomService;
+	private boolean hasSwimmingPool;
+	private boolean hasFitnessCenter;
 	
 	private String role;
 
@@ -94,13 +101,103 @@ public class HotelOwnerDTO {
 		this.address = address;
 	}
 
-	public HotelDTO getHotelDTO() {
-		return hotelDTO;
+	
+
+	public String getHotelName() {
+		return hotelName;
 	}
 
-	public void setHotelDTO(HotelDTO hotelDTO) {
-		this.hotelDTO = hotelDTO;
+
+
+	public void setHotelName(String hotelName) {
+		this.hotelName = hotelName;
 	}
+
+
+
+	public String getLocation() {
+		return location;
+	}
+
+
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+
+
+	public boolean isHasDining() {
+		return hasDining;
+	}
+
+
+
+	public void setHasDining(boolean hasDining) {
+		this.hasDining = hasDining;
+	}
+
+
+
+	public boolean isHasParking() {
+		return hasParking;
+	}
+
+
+
+	public void setHasParking(boolean hasParking) {
+		this.hasParking = hasParking;
+	}
+
+
+
+	public boolean isHasFreeWiFi() {
+		return hasFreeWiFi;
+	}
+
+
+
+	public void setHasFreeWiFi(boolean hasFreeWiFi) {
+		this.hasFreeWiFi = hasFreeWiFi;
+	}
+
+
+
+	public boolean isHasRoomService() {
+		return hasRoomService;
+	}
+
+
+
+	public void setHasRoomService(boolean hasRoomService) {
+		this.hasRoomService = hasRoomService;
+	}
+
+
+
+	public boolean isHasSwimmingPool() {
+		return hasSwimmingPool;
+	}
+
+
+
+	public void setHasSwimmingPool(boolean hasSwimmingPool) {
+		this.hasSwimmingPool = hasSwimmingPool;
+	}
+
+
+
+	public boolean isHasFitnessCenter() {
+		return hasFitnessCenter;
+	}
+
+
+
+	public void setHasFitnessCenter(boolean hasFitnessCenter) {
+		this.hasFitnessCenter = hasFitnessCenter;
+	}
+
+
 
 	public String getRole() {
 		return role;
@@ -110,12 +207,19 @@ public class HotelOwnerDTO {
 		this.role = role;
 	}
 
+
+
 	@Override
 	public String toString() {
 		return "HotelOwnerDTO [hotelOwnerId=" + hotelOwnerId + ", hotelOwnerName=" + hotelOwnerName + ", username="
 				+ username + ", password=" + password + ", email=" + email + ", gender=" + gender + ", address="
-				+ address + ", hotelDTO=" + hotelDTO + ", role=" + role + "]";
+				+ address + ", hotelName=" + hotelName + ", location=" + location + ", hasDining=" + hasDining
+				+ ", hasParking=" + hasParking + ", hasFreeWiFi=" + hasFreeWiFi + ", hasRoomService=" + hasRoomService
+				+ ", hasSwimmingPool=" + hasSwimmingPool + ", hasFitnessCenter=" + hasFitnessCenter + ", role=" + role
+				+ "]";
 	}
+
+	
 
 
 

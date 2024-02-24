@@ -64,15 +64,15 @@ public class HotelOwnerController {
 	HotelOwnerRepository hotelOwnerRepository;
 
 	@PostMapping("/register")
-	public String registerCustomer(@RequestBody HotelOwnerDTO hotelOwnerDTO) throws DataAlreadyPresentException {
+	public ResponseEntity<String> registerCustomer(@RequestBody HotelOwnerDTO hotelOwnerDTO) throws DataAlreadyPresentException {
 		LOGGER.info("Request Received to register new Hotel Owner: {}",  hotelOwnerDTO);
 		long hotelOwnerId = hotelOwnerService.registerHotelOwner(hotelOwnerDTO);
 
-		if (hotelOwnerId != 0) {
-			return "Hotel Owner added successfully ";
-		} else {
-			return "failed to add customer ";
-		}
+		 if (hotelOwnerId != 0) {
+		        return new ResponseEntity<>("Hotel Owner added successfully", HttpStatus.OK);
+		    } else {
+		        return new ResponseEntity<>("Failed to add hotel owner", HttpStatus.INTERNAL_SERVER_ERROR);
+		    }
 
 	}
 
