@@ -10,15 +10,12 @@ export class HotelownerService {
 
   constructor(private http: HttpClient) { }
 
-  private baseUrl = 'https://localhost:8081/api/hotelowner';
+  private baseUrl = 'http://localhost:8081/api/hotelowner';
 
 
-  postHotelOwner(hotelOwner: HotelOwner): Observable<HotelOwner> {
-    const url = `${this.baseUrl}/register`;
-    return this.http.post<HotelOwner>(url, hotelOwner)
-      .pipe(
-        catchError(this.handleError)
-      );
+  postHotelOwner(hotelOwner: HotelOwner): Observable<any> {
+    return this.http.post<HotelOwner>('http://localhost:8081/api/hotelowner/register', hotelOwner)
+
   }
 
   private handleError(error: HttpErrorResponse) {

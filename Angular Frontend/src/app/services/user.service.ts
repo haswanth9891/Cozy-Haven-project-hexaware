@@ -14,13 +14,16 @@ export class UserService {
 
 
   postUser(user: User): Observable<User> {
+    console.log(user);
     return this.http.post<User>('http://localhost:8081/api/user/register', user)
+
       .pipe(
         catchError(this.handleError)
       );
   }
 
   private handleError(error: HttpErrorResponse) {
+    console.log('Hi')
     if (error.status === 409) {
       return throwError('Conflict: User already exists');
     }

@@ -22,12 +22,13 @@ export class UserRegisterComponent {
     this.signupForm = this.formBuilder.group({
       userFirstName: ['', Validators.required],
       userLastName: ['', Validators.required],
-      username: ['', Validators.required],
-      contactNumber: ['', Validators.required],
-      email: ['', Validators.required],
+      username: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9_]+$/)]],
+      contactNumber: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
-      gender: ['', Validators.required],
+      gender: ['', [Validators.required, Validators.pattern(/^(male|female|non-binary)$/)]],
       address: ['', Validators.required]
+
 
 
     });
@@ -60,12 +61,13 @@ export class UserRegisterComponent {
     this.userService.postUser(newUser)
       .subscribe(
         user => {
-          console.log('Inserted:', user);
+          console.log("Hi");
+          // console.log('Inserted:', user);
 
-          this.signupForm.reset();
-          sessionStorage.setItem('userFirstName', user.userFirstName);
-          alert('Registered successfully!');
-          this.router.navigate(['/login']);
+          // this.signupForm.reset();
+          // sessionStorage.setItem('userFirstName', user.userFirstName);
+          // alert('Registered successfully!');
+          // this.router.navigate(['/login']);
 
         },
         error => {

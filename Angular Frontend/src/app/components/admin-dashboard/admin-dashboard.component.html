@@ -1,83 +1,68 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>Admin Dashboard</title>
-
-
-</head>
-
-<body>
-    <header class="header">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="text-center">
-                        <img src="asset/logo.jpg" alt="Logo">
-                        <h1>Cozy Haven</h1>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
-
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-3 sidebar">
-                <ul class="list-unstyled">
-                    <li class="active">
-                        <a data-section="profile">Profile</a>
-                    </li>
-                    <li>
-                        <a data-section="signup">Add Admin</a>
-                    </li>
-
-                    <li>
-                        <a href="#" data-section="manage-hotels">Manage Hotels</a>
-                    </li>
-                    <li>
-                        <a href="#" data-section="manage-bookings">Manage Bookings</a>
-                    </li>
-                    <li>
-                        <a href="#" data-section="manage-customers">Manage Users</a>
-                    </li>
-                    <li>
-                        <a href="#" data-section="logout">Log Out</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="col-lg-9 content">
-                <section id="profile" class="section active">
-                    <h2>Welcome to admin dashboard</h2>
-
-                </section>
-
-                <section id="signup" class="section">
-                    <h2>Add Admin</h2>
-
-                </section>
-
-
-                <section id="manage-hotels" class="section">
-                    <h2>Manage Hotels</h2>
-
-                </section>
-
-                <section id="manage-bookings" class="section">
-                    <h2>Manage Bookings</h2>
-
-                </section>
-
-                <section id="manage-users" class="section">
-                    <h2>Manage Customers</h2>
-
-                </section>
-            </div>
+        <a class="navbar-brand" href="#">
+            <img src="../assets/logo.jpg" alt="Cozy Haven Logo" height="40">
+            COZY HAVEN</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" routerLink="/admindashboard">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/addadmin">Add Admin</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/managehotelowners">Manage HotelOwners</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/manageusers">Manage Users</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/managebookings">Manage Bookings</a>
+                </li>
+            </ul>
         </div>
+
+        <div>
+            <button class="butt1">Log Out</button>
+        </div>
+
     </div>
-
-
-
-</body>
-
-</html>
+</nav>
+<div class="landing-page">
+    <img class="Top_most" src="../assets/admindashboard.jpg" alt="Landing Page Picture" />
+    <div class="centered-text">
+        <h1 class="animated-text">
+            <span>W</span>
+            <span>e</span>
+            <span>l</span>
+            <span>c</span>
+            <span>o</span>
+            <span>m</span>
+            <span>e</span>
+            <span> </span>
+            <span>T</span>
+            <span>o</span>
+            <span> </span>
+            <span>A</span>
+            <span>d</span>
+            <span>m</span>
+            <span>i</span>
+            <span>n</span>
+            <span> </span>
+            <span>D</span>
+            <span>a</span>
+            <span>s</span>
+            <span>h</span>
+            <span>b</span>
+            <span>o</span>
+            <span>a</span>
+            <span>r</span>
+            <span>d</span>
+        </h1>
+    </div>
+</div>
